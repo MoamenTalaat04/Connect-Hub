@@ -37,7 +37,7 @@ public class Profile_Managment {
         return profiles;
     }
 
-    public void saveProfiles(List<UserProfile> profiles) {
+    public void saveProfiles(List<User> profiles) {
         JSONArray profilesArray = new JSONArray();
             for (User user : profiles) {
             JSONObject saveProfile = new JSONObject();
