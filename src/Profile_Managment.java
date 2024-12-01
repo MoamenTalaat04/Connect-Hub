@@ -67,6 +67,7 @@ public class Profile_Managment {
         }
         saveProfiles(profiles);
     }
+
     public User getProfile(String userId) {
         List<User> profiles = loadProfiles();
         return profiles.stream().filter(p -> p.getUserId().equals(userId)).findFirst().orElse(null);
