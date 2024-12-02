@@ -1,11 +1,15 @@
 import java.time.LocalDateTime;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class Content {
     private String contentId;
     private String authorId;
     private String content;
     private String imagePath;
     private LocalDateTime timestamp;
+
+    public Content() {
+    }
 
     public Content(String content, String authorId, String contentId,String imagePath, LocalDateTime timestamp) {
         this.content = content;
