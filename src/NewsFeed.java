@@ -13,16 +13,15 @@ public class NewsFeed {
     // Add a new post
     public void addPost(String content, String imagePath) {
         contentCreation.createPost(friendManagement.getCurrentUser().getUserId(), content, imagePath);
-        System.out.println("Post added for " + friendManagement.getCurrentUser().getUserId());
+
     }
 
     // Add a new story
     public void addStory(String content, String imagePath) {
         contentCreation.createStory(friendManagement.getCurrentUser().getUserId(), content, imagePath);
-        System.out.println("Story added for " + friendManagement.getCurrentUser().getUserId());
     }
 
-    // Fetch posts from friends (using FriendManagement for friend handling)
+    // Fetch posts from friends
     public ArrayList<Posts> fetchPostsFromFriends() {
         ArrayList<Posts> friendPosts = new ArrayList<>();
         ArrayList<Posts> allPosts = contentCreation.readPosts();
