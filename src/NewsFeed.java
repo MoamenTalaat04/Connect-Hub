@@ -44,9 +44,8 @@ public class NewsFeed {
     // Fetch stories from friends of the current user
     public ArrayList<Stories> fetchStoriesFromFriends() {
         ArrayList<Stories> friendStories = new ArrayList<>();
-        ArrayList<Stories> allStories = contentCreation.readStories();
+        ArrayList<Stories> allStories = contentCreation.readStories();  // Get all active stories in the system
 
-        // Filter stories to include only those from the user's friends
         for (User friend : currentUser.getFriends()) {
             for (Stories story : allStories) {
                 if (story.getAuthorId().equals(friend.getUserId())) {
