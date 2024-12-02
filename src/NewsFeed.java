@@ -1,58 +1,92 @@
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 public class NewsFeed {
-    private ArrayList<User> allUsers;
+    private FriendManagement friendManagement;
     private mainContentCreation contentCreation;
-    private User currentUser;  // The current logged-in user
 
-    // Constructor to initialize NewsFeed with all users and the current user
-    public NewsFeed(ArrayList<User> allUsers, User currentUser) {
-        this.allUsers = allUsers;
+    // Constructor to initialize NewsFeed with current user and FriendManagement instance
+    public NewsFeed(FriendManagement friendManagement) {
+        this.friendManagement = friendManagement;
         this.contentCreation = new mainContentCreation();
-        this.currentUser = currentUser;
     }
 
-    // Add a new post for a user
-    public void addPost(User user, String content, String imagePath) {
-        contentCreation.createPost(user.getUserId(), content, imagePath);  // Create post and save
+    // Add a new post
+    public void addPost(String content, String imagePath) {
+        contentCreation.createPost(friendManagement.getCurrentUser().getUserId(), content, imagePath);
+        System.out.println("Post added for " + friendManagement.getCurrentUser().getUserId());
     }
 
-    // Add a new story for a user
-    public void addStory(User user, String content, String imagePath) {
-        contentCreation.createStory(user.getUserId(), content, imagePath);  // Create story and save
+    // Add a new story
+    public void addStory(String content, String imagePath) {
+        contentCreation.createStory(friendManagement.getCurrentUser().getUserId(), content, imagePath);
+        System.out.println("Story added for " + friendManagement.getCurrentUser().getUserId());
     }
 
-    // Fetch posts from friends of the current user
+    // Fetch posts from friends (using FriendManagement for friend handling)
     public ArrayList<Posts> fetchPostsFromFriends() {
         ArrayList<Posts> friendPosts = new ArrayList<>();
-        ArrayList<Posts> allPosts = contentCreation.readPosts();        // Get all posts in the system
+        ArrayList<Posts> allPosts = contentCreation.readPosts();
 
-        for (User friend : currentUser.getFriends()) {
+        // Filter posts to include only those from friends
+        for (User friend : friendManagement.getCurrentUser().getFriends()) {
             for (Posts post : allPosts) {
                 if (post.getAuthorId().equals(friend.getUserId())) {
                     friendPosts.add(post);
                 }
             }
         }
-        friendPosts.sort(Comparator.comparing(Posts::getTimestamp).reversed());     // Sort posts by timestamp (latest first)
+
+        // Sort posts by timestamp (latest first)
+        friendPosts.sort(Comparator.comparing(Posts::getTimestamp).reversed());
         return friendPosts;
     }
 
-    // Fetch stories from friends of the current user
+    // Fetch stories from friends (using FriendManagement for friend handling)
     public ArrayList<Stories> fetchStoriesFromFriends() {
         ArrayList<Stories> friendStories = new ArrayList<>();
-        ArrayList<Stories> allStories = contentCreation.readStories();  // Get all active stories in the system
+        ArrayList<Stories> allStories = contentCreation.readStories();
 
-        for (User friend : currentUser.getFriends()) {
+        // Filter stories to include only those from friends
+        for (User friend : friendManagement.getCurrentUser().getFriends()) {
             for (Stories story : allStories) {
                 if (story.getAuthorId().equals(friend.getUserId())) {
                     friendStories.add(story);
                 }
             }
         }
-        friendStories.sort(Comparator.comparing(Stories::getTimestamp).reversed());   // Sort stories by timestamp (latest first)
+
+        // Sort stories by timestamp (latest first)
+        friendStories.sort(Comparator.comparing(Stories::getTimestamp).reversed());
         return friendStories;
     }
-}
 
+    // Suggest friends to the current user
+    public ArrayList<User> suggestFriends() {
+        return friendManagement.suggestFriends();  // Using FriendManagement to suggest friends
+    }
+
+    // Display the newsfeed
+    public void displayNewsFeed() {
+        ArrayList<Posts> posts = fetchPostsFromFriends();
+        ArrayList<Stories> stories = fetchStoriesFromFriends();
+
+        // Display posts
+        System.out.println("Posts:");
+        for (Posts post : posts) {
+            System.out.println(post.getContent());
+        }
+
+        // Display stories
+        System.out.println("Stories:");
+        for (Stories story : stories) {
+            System.out.println(story.getContent());
+        }
+
+        // Display friend suggestions
+        System.out.println("Friend Suggestions:");
+        ArrayList<User> suggestions = suggestFriends();
+        for (User suggestion : suggestions) {
+            System.out.println(suggestion.getUsername());
+        }
+    }
+}
