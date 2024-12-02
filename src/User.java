@@ -8,11 +8,11 @@ import java.util.*;
         private String email;
         private String username;
         private String status;
-        private List<String> friends;
-        private List<String> blocked;
-        private List<String> pendingRequests;
+        private ArrayList<User> friends;
+        private ArrayList<User> blocked;
+        private ArrayList<User> pendingRequests;
 
-        public User(String userId, List<String> blocked, List<String> pendingRequests, List<String> friends, String status, String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath) {
+        public User(String userId, ArrayList<User> blocked, ArrayList<User> pendingRequests, ArrayList<User> friends, String status, String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath) {
 
             this.userId = userId;
             this.blocked = blocked != null ? blocked : new ArrayList<>();
@@ -92,27 +92,27 @@ import java.util.*;
             this.status = status;
         }
 
-        public List<String> getFriends() {
+        public ArrayList<User> getFriends() {
             return friends;
         }
 
-        public void setFriends(List<String> friends) {
+        public void setFriends(ArrayList<User> friends) {
             this.friends = friends;
         }
 
-        public List<String> getBlocked() {
+        public ArrayList<User> getBlocked() {
             return blocked;
         }
 
-        public void setBlocked(List<String> blocked) {
+        public void setBlocked(ArrayList<User> blocked) {
             this.blocked = blocked;
         }
 
-        public List<String> getPendingRequests() {
+        public ArrayList<User> getPendingRequests() {
             return pendingRequests;
         }
 
-        public void setPendingRequests(List<String> pendingRequests) {
+        public void setPendingRequests(ArrayList<User> pendingRequests) {
             this.pendingRequests = pendingRequests;
 }
     }

@@ -1,99 +1,61 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 
-public class Newsfeed {
-    private Map<String, User> usersMap;
+public class NewsFeed {
+    private ArrayList<User> allUsers;
+    private mainContentCreation contentCreation;
+    private User currentUser;  // The current logged-in user
 
-    public Newsfeed(Map<String, User> usersMap) {
-        this.usersMap = usersMap;
+    // Constructor to initialize NewsFeed with all users and the current user
+    public NewsFeed(ArrayList<User> allUsers, User currentUser) {
+        this.allUsers = allUsers;
+        this.contentCreation = new mainContentCreation();
+        this.currentUser = currentUser;
     }
 
-    // Add a post for a user
-    public void addPost(User user, String content) {
-        if (user == null) {
-            System.out.println("User does not exist.");
-            return;
-        }
-
-        Post post = new Post(user.getUserId(), content);
-        user.addPost(post);
-        System.out.println("Post added for " + user.getUserId() + ": " + content);
+    // Add a new post for a user
+    public void addPost(User user, String content, String imagePath) {
+        contentCreation.createPost(user.getUserId(), content, imagePath);  // Create post and save
+        System.out.println("Post added for " + user.getUserId());
     }
 
-    // Add a story for a user
-    public void addStory(User user, String content) {
-        if (user == null) {
-            System.out.println("User does not exist.");
-            return;
-        }
-
-        Story story = new Story(user.getUserId(), content);
-        user.addStory(story);
-        System.out.println("Story added for " + user.getUserId() + ": " + content);
+    // Add a new story for a user
+    public void addStory(User user, String content, String imagePath) {
+        contentCreation.createStory(user.getUserId(), content, imagePath);  // Create story and save
+        System.out.println("Story added for " + user.getUserId());
     }
 
-    // Fetch posts from friends for a user
-    public List<Post> fetchPostsFromFriends(User user) {
-        if (user == null) {
-            System.out.println("User does not exist.");
-            return Collections.emptyList();
-        }
+    // Fetch posts from friends of the current user
+    public ArrayList<Posts> fetchPostsFromFriends() {
+        ArrayList<Posts> friendPosts = new ArrayList<>();
+        ArrayList<Posts> allPosts = contentCreation.readPosts();        // Get all posts in the system
 
-        List<Post> newsfeed = new ArrayList<>();
-        // Fetch posts from friends
-        for (String friendId : user.getFriends()) {
-            User friend = usersMap.get(friendId);
-            if (friend != null) {
-                newsfeed.addAll(friend.getPosts());
-            }
-        }
-
-        // Sort posts by most recent timestamp
-        newsfeed.sort(Comparator.comparing(Post::getTimestamp).reversed());
-
-        return newsfeed;
-    }
-
-    // Fetch stories from friends for a user
-    public List<Story> fetchStoriesFromFriends(User user) {
-        if (user == null) {
-            System.out.println("User does not exist.");
-            return Collections.emptyList();
-        }
-
-        List<Story> newsfeed = new ArrayList<>();
-        // Fetch stories from friends
-        for (String friendId : user.getFriends()) {
-            User friend = usersMap.get(friendId);
-            if (friend != null) {
-                for (Story story : friend.getStories()) {
-                    if (!story.isExpired()) { // Only show non-expired stories
-                        newsfeed.add(story);
-                    }
+        for (User friend : currentUser.getFriends()) {
+            for (Posts post : allPosts) {
+                if (post.getAuthorId().equals(friend.getUserId())) {
+                    friendPosts.add(post);
                 }
             }
         }
-
-        // Sort stories by most recent timestamp
-        newsfeed.sort(Comparator.comparing(Story::getTimestamp).reversed());
-
-        return newsfeed;
+        friendPosts.sort(Comparator.comparing(Posts::getTimestamp).reversed());     // Sort posts by timestamp (latest first)
+        return friendPosts;
     }
 
-    // Display posts and stories for a user
-    public void displayNewsfeed(User user) {
-        List<Post> posts = fetchPostsFromFriends(user);
-        List<Story> stories = fetchStoriesFromFriends(user);
+    // Fetch stories from friends of the current user
+    public ArrayList<Stories> fetchStoriesFromFriends() {
+        ArrayList<Stories> friendStories = new ArrayList<>();
+        ArrayList<Stories> allStories = contentCreation.readStories();
 
-        System.out.println("Newsfeed for " + user.getUserId() + ":");
-        System.out.println("Posts:");
-        for (Post post : posts) {
-            System.out.println(post);
+        // Filter stories to include only those from the user's friends
+        for (User friend : currentUser.getFriends()) {
+            for (Stories story : allStories) {
+                if (story.getAuthorId().equals(friend.getUserId())) {
+                    friendStories.add(story);
+                }
+            }
         }
-
-        System.out.println("Stories:");
-        for (Story story : stories) {
-            System.out.println(story);
-        }
+        friendStories.sort(Comparator.comparing(Stories::getTimestamp).reversed());   // Sort stories by timestamp (latest first)
+        return friendStories;
     }
+}
 
-   }
