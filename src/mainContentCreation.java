@@ -1,4 +1,7 @@
+import com.github.cliftonlabs.json_simple.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.*;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +34,7 @@ public class mainContentCreation {
 
     }
 
-    private void saveContentToFile(Content content, String filePath) {
+    private void saveContentToFile(Content content, String filePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<Content> c = readContentFromFile(filePath,Content[].class);
         c.add(content);
