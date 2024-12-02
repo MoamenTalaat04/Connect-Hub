@@ -16,17 +16,28 @@ public class mainContentCreation {
     public void createPost(String authorId,String content, String imagePath )
     {
         try {
-            Posts post = new Posts(content, authorId, UUID.randomUUID().toString(), imagePath, LocalDateTime.now());
+            Posts post = new Posts(content, authorId, getNewPostId(), imagePath, LocalDateTime.now());
             saveContentToFile(post, "posts.json");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
     }
+
+    public String getNewPostId()
+    {
+        return String.valueOf(readPosts().size()+1);
+    }
+
+    public String getNewStoryId()
+    {
+        return String.valueOf(readStories().size()+1);
+    }
+
     public void createStory(String authorID,String content,String imagePath)
     {
         try {
-            Stories story = new Stories(content,authorID,UUID.randomUUID().toString(),imagePath,LocalDateTime.now());
+            Stories story = new Stories(content,authorID,getNewStoryId(),imagePath,LocalDateTime.now());
             saveContentToFile(story,"stories.json");
         } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -83,16 +94,8 @@ public class mainContentCreation {
 
     public ArrayList<Stories> readStories() {
         try {
-            ArrayList<Stories> stories = readContentFromFile(storiesFilePath, Stories[].class);
-            ArrayList<Stories> active = new ArrayList<>();
-            for(Stories story:stories)
-            {
-                if(!story.isExpired())
-                {
-                    active.add(story);
-                }
-            }
-            return active;
+            deleteExpiredStory();
+            return readContentFromFile(storiesFilePath, Stories[].class);
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
