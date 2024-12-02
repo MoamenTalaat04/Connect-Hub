@@ -16,13 +16,11 @@ public class NewsFeed {
     // Add a new post for a user
     public void addPost(User user, String content, String imagePath) {
         contentCreation.createPost(user.getUserId(), content, imagePath);  // Create post and save
-        System.out.println("Post added for " + user.getUserId());
     }
 
     // Add a new story for a user
     public void addStory(User user, String content, String imagePath) {
         contentCreation.createStory(user.getUserId(), content, imagePath);  // Create story and save
-        System.out.println("Story added for " + user.getUserId());
     }
 
     // Fetch posts from friends of the current user
