@@ -7,7 +7,7 @@ public class UserDatabase {
     private final String userDatabaseFile = "users.json";
     private final ObjectMapper mapper ;
     private ArrayList<User> users;
-    private Map accValidation;
+    private Map accValidation;//for login only
 
     public UserDatabase(String userDatabaseFile) {
         this.userDatabaseFile = userDatabaseFile;
