@@ -28,6 +28,24 @@ public class AccountManagement {
         }
         return stringBuilder.toString(); // returns the string that holds the encrypted password
     }
+    public void updateProfile(String userId, String profilePhoto, String coverPhoto, String bio, String password) {
+        List<User> profiles = loadProfiles();
+        for (User user : profiles) {
+            if (user.getUserId().equals(userId)) {
+                if (profilePhoto != null) user.setProfilePhotoPath(profilePhoto);
+                if (coverPhoto != null) user.setCoverPhotoPath(coverPhoto);
+                if (bio != null) user.setBio(bio);
+                if (password != null) user.setHashedPassword(PasswordUtils.hashPassword(password));
+                break;
+            }
+        }
+        saveProfiles(profiles);
+    }
+
+    public User getProfile(String userId) {
+        List<User> profiles = loadProfiles();
+        return profiles.stream().filter(p -> p.getUserId().equals(userId)).findFirst().orElse(null);
+    }
 
     private void loadUsers(){
         //when called ----> load users from database ---transform--> User obj ----store---> arrayList of User
