@@ -8,5 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="net.pwall.json.simple" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="libs" level="project" />
   </component>
 </module>
