@@ -1,29 +1,43 @@
+import java.io.IOException;
 import java.util.*;
 
 public class NewsFeed {
     private FriendManagement friendManagement;
-    private mainContentCreation contentCreation;
+    private MainContentCreation contentCreation;
     private User currentUser;
 
     public NewsFeed(FriendManagement friendManagement) {
         this.friendManagement = friendManagement;
-        this.contentCreation = new mainContentCreation();
+        this.contentCreation = new MainContentCreation();
         this.currentUser = friendManagement.getCurrentUser();
     }
 
     public void addPost(String content, String imagePath) {
-        contentCreation.createPost(currentUser.getUserId(), content, imagePath);
+        try {
+            contentCreation.createPost(currentUser.getUserId(), content, imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     public void addStory(String content, String imagePath) {
-        contentCreation.createStory(currentUser.getUserId(), content, imagePath);
+        try {
+            contentCreation.createStory(currentUser.getUserId(), content, imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Fetch posts from friends
     public ArrayList<Posts> fetchPostsFromFriends() {
         ArrayList<Posts> friendPosts = new ArrayList<>();
-        ArrayList<Posts> allPosts = contentCreation.readPosts();
+        ArrayList<Posts> allPosts = null;
+        try {
+            allPosts = contentCreation.readPosts();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Filter posts to include only those from friends
         for (User friend : currentUser.getFriends()) {
@@ -41,7 +55,12 @@ public class NewsFeed {
     // Fetch stories from friends (using FriendManagement for friend handling)
     public ArrayList<Stories> fetchStoriesFromFriends() {
         ArrayList<Stories> friendStories = new ArrayList<>();
-        ArrayList<Stories> allStories = contentCreation.readStories();
+        ArrayList<Stories> allStories = null;
+        try {
+            allStories = contentCreation.readActiveStories();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Filter stories to include only those from friends
         for (User friend : currentUser.getFriends()) {

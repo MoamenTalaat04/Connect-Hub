@@ -43,7 +43,7 @@ public class MainContentCreation {
         mapper.writeValue(new File(filePath), contents);
     }
 
-    private <T> List<T> readContentFromFile(String filePath, Class<T[]> type) throws IOException {
+    private <T> ArrayList<T> readContentFromFile(String filePath, Class<T[]> type) throws IOException {
         File file = new File(filePath);
         if (!file.exists()) return new ArrayList<>();
         T[] contentArray = mapper.readValue(file, type);
@@ -51,8 +51,8 @@ public class MainContentCreation {
     }
 
     public void deleteExpiredStories() throws IOException {
-        List<Stories> stories = readContentFromFile(storiesFilePath, Stories[].class);
-        List<Stories> activeStories = new ArrayList<>();
+        ArrayList<Stories> stories = readContentFromFile(storiesFilePath, Stories[].class);
+        ArrayList<Stories> activeStories = new ArrayList<>();
         for (Stories story : stories) {
             if (!story.isExpired()) {
                 activeStories.add(story);
@@ -61,11 +61,11 @@ public class MainContentCreation {
         mapper.writeValue(new File(storiesFilePath), activeStories);
     }
 
-    public List<Posts> readPosts() throws IOException {
+    public ArrayList<Posts> readPosts() throws IOException {
         return readContentFromFile(postsFilePath, Posts[].class);
     }
 
-    public List<Stories> readActiveStories() throws IOException {
+    public ArrayList<Stories> readActiveStories() throws IOException {
         try {
             deleteExpiredStories();
             return readContentFromFile(storiesFilePath,Stories[].class);
