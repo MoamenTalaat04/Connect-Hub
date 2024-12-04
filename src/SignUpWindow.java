@@ -83,9 +83,30 @@ public class SignUpWindow extends JFrame {
                  if (!(1900<=parsedYear ) || !(parsedYear<=2024))    JOptionPane.showMessageDialog(null, "Please Enter a Valid year for date of birth", "Invalid date of birth", JOptionPane.INFORMATION_MESSAGE);
                 else if (!(1<=parsedMonth)||!(parsedMonth<=12))      JOptionPane.showMessageDialog(null, "Please Enter a Valid month for date of birth", "Invalid date of birth", JOptionPane.INFORMATION_MESSAGE);
                 else if (!(1<=parsedDay)||!(parsedDay<=31))          JOptionPane.showMessageDialog(null, "Please Enter a Valid day for date of birth", "Invalid date of birth", JOptionPane.INFORMATION_MESSAGE);
-                else if (accountManagement.signUp(email,username,password,year+"/"+month+"/"+day,bio,profilePicPath,profileCoverPath)) System.out.println("User signed up successfully");
+                else if (accountManagement.signUp(email,username,password,year+"/"+month+"/"+day,bio,profilePicPath,profileCoverPath)) {
+                    System.out.println("User signed up successfully");
+                     try {
+                         new LoginWindow();
+                     } catch (IOException ex) {
+                         throw new RuntimeException(ex);
+                     }
+                     dispose();
+                 }
                 else JOptionPane.showMessageDialog(null, "Error in registration process", "Error 404", JOptionPane.INFORMATION_MESSAGE);
             }}
+        });
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    new LoginWindow();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                dispose();
+
+            }
         });
     }
 }
