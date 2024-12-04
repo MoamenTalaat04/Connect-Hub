@@ -42,7 +42,7 @@ public class MainContentCreation {
         mapper.writeValue(new File(filePath), contents);
     }
 
-    private <T> List<T> readContentFromFile(String filePath, Class<T[]> type) throws IOException {
+    private <T> ArrayList <T> readContentFromFile(String filePath, Class<T[]> type) throws IOException {
         File file = new File(filePath);
         if (!file.exists() || file.length() == 0) {
             mapper.writeValue(file, new ArrayList<>());
@@ -63,7 +63,7 @@ public class MainContentCreation {
         mapper.writeValue(new File(storiesFilePath), activeStories);
     }
 
-    public List<Posts> readPosts() throws IOException {
+    public ArrayList<Posts> readPosts() throws IOException {
         return readContentFromFile(postsFilePath, Posts[].class);
     }
 
