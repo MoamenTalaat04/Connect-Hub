@@ -78,7 +78,7 @@ public class AccountManagement {
             try{
                 ArrayList<User> users=userDatabase.readUsersFromFile();
                 String hashedPassword = hashPassword(password);
-                String id =""+users.size(); //generates unique id for each user
+                String id =""+(users.size()+1); //generates unique id for each user
                 User user =new User(id,null,null,null,"Online",dateOfBirth,userName,email,hashedPassword,coverPhotoPath,bio,profilePhotoPath);
                 userDatabase.saveUserToFile(user);
                 return true;
