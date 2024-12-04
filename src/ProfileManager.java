@@ -20,7 +20,7 @@ public class ProfileManager {
         contentCreation=new MainContentCreation();
     }
 
-    /*public List<User> loadProfiles() {
+    public List<User> loadProfiles() {
         JSONParser parser = new JSONParser();
         try (FileReader reader = new FileReader(database)) {
             JSONArray profilesArray = (JSONArray) parser.parse(reader);
@@ -46,7 +46,7 @@ public class ProfileManager {
         return profiles;
     }
 
-    public void saveProfiles(List<User> profiles) {
+    /*public void saveProfiles(List<User> profiles) {
         JSONArray profilesArray = new JSONArray();
         for (User user : profiles) {
             JSONObject saveProfile = new JSONObject();
@@ -63,7 +63,7 @@ public class ProfileManager {
             e.printStackTrace();
         }
     }
-    public void updateProfile(String userId, String profilePhoto, String coverPhoto, String bio, String password) {
+   /* public void updateProfile(String userId, String profilePhoto, String coverPhoto, String bio, String password) {
         List<User> profiles = loadProfiles();
         for (User user : profiles) {
             if (user.getUserId().equals(userId)) {
@@ -75,12 +75,12 @@ public class ProfileManager {
             }
         }
         saveProfiles(profiles);
-    }
+    }*/
 
     public User getProfile(String userId) {
         List<User> profiles = loadProfiles();
         return profiles.stream().filter(p -> p.getUserId().equals(userId)).findFirst().orElse(null);
-    }*/
+    }
 
 
 

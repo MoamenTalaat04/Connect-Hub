@@ -29,8 +29,11 @@ private ProfileManager profileManager;
     private JButton newsFeedButton;
 
     public myProfile(String Id) {
-    List<User> profiles = profileManager.();//nadiiiim
-    user=profileManager.getProfile(userID); //user ID hwa el GUI Entered by user;
+ User user = profileManager.getProfile(Id);
+  profile=new JLabel(user.getProfilePhotoPath());
+ Cover= new JLabel(user.getCoverPhotoPath());
+ Bio= new JLabel(user.getBio());
+    List <User> profiles = profileManager.load();  //nadiiiim
     if(user==null) {
         JOptionPane.showMessageDialog(null, "No profile found");
         return;
@@ -99,13 +102,13 @@ private ProfileManager profileManager;
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Gui nadiiim
-                lll
+            errormm
             }
         });
         myFriendsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                friend
+                friend// hnshof wl hn3mlha gui wla
             }
         });
         newsFeedButton.addActionListener(new ActionListener() {
