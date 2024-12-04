@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 public class MainContentCreation {
     private final String postsFilePath = "posts.json";
@@ -45,7 +44,10 @@ public class MainContentCreation {
 
     private <T> List<T> readContentFromFile(String filePath, Class<T[]> type) throws IOException {
         File file = new File(filePath);
-        if (!file.exists()) return new ArrayList<>();
+        if (!file.exists() || file.length() == 0) {
+            mapper.writeValue(file, new ArrayList<>());
+            return new ArrayList<>();
+        }
         T[] contentArray = mapper.readValue(file, type);
         return new ArrayList<>(Arrays.asList(contentArray));
     }
