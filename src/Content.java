@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Content {
     private String contentId;
     private String authorId;

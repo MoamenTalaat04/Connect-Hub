@@ -23,6 +23,18 @@ public class FriendManagement {
         return true;
     }
 
+    public ArrayList<User> SentRequests() {
+        ArrayList<User> sentRequests = new ArrayList<>();
+        for(User user : allUsers)
+        {
+            if(user.getPendingRequests().contains(currentUser))
+            {
+                sentRequests.add(user);
+            }
+        }
+        return sentRequests;
+    }
+
     // Accept Friend Request
     public boolean acceptFriendRequest(User sender) {
         // Check if there is a pending request
@@ -60,6 +72,13 @@ public class FriendManagement {
         // Remove from friends if present
         removeFriend(blocked);
         return true;
+    }
+
+    public boolean unblockUser(User unblocked) {
+        return currentUser.getBlocked().remove(unblocked);
+    }
+    public boolean cancelFriendRequest(User receiver) {
+        return receiver.getPendingRequests().remove(currentUser);
     }
 
     // Suggest Friends

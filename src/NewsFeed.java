@@ -94,4 +94,7 @@ public class NewsFeed {
     public User getCurrentUser() {
         return currentUser;
     }
+    public FriendManagement getFriendManagement() {
+        return friendManagement;
+    }
 }
