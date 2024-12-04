@@ -25,6 +25,9 @@ public class UserDatabase {
         users.add(user);
         mapper.writeValue(new File(userDatabaseFile), users);
     }
+    public void save(ArrayList<User> users) throws IOException {
+        mapper.writeValue(new File(userDatabaseFile), users);
+    }
 
     public ArrayList<User> readUsersFromFile() throws IOException {
         File file = new File(userDatabaseFile);
