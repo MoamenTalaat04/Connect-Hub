@@ -76,6 +76,7 @@ public class NewsFeedWindow extends JFrame {
             // Add a new post
             newsFeed.addPost(PostContantField.getText(), PostPhotoPathLable.getText());
             PostPhotoPathLable.setText("");
+            PostContantField.setText("");
         });
 
         storyButton.addActionListener(e -> {
@@ -87,6 +88,7 @@ public class NewsFeedWindow extends JFrame {
             }
             newsFeed.addStory(StoryContantField.getText(), StoryPhotoPathLable.getText());
             StoryPhotoPathLable.setText("");
+            StoryContantField.setText("");
         });
 
         PostPhotoButton.addActionListener(e -> {
@@ -129,6 +131,7 @@ public class NewsFeedWindow extends JFrame {
                 StoryContantField.setText("");
             }
         });
+
     }
 
 
@@ -142,7 +145,7 @@ public class NewsFeedWindow extends JFrame {
         ArrayList<String> friends = newsFeed.fetchFriendStatus();
         for (String friend : friends) {
             JLabel friendLabel = new JLabel(friend);
-            friendLabel.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for better readability
+            friendLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font for better readability
             friendLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align text
             FriendStatusPanel.add(friendLabel);
             FriendStatusPanel.add(Box.createVerticalStrut(10)); // Add space between friends
@@ -162,18 +165,23 @@ public class NewsFeedWindow extends JFrame {
         ArrayList<Stories> stories = newsFeed.fetchStoriesFromFriends();
         for (Stories story : stories) {
             JPanel storyPanel = new JPanel();
-            storyPanel.setPreferredSize(new Dimension(120, 120)); // Set story size
+            storyPanel.setPreferredSize(new Dimension(120, 280)); // Set story size
             storyPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2)); // Add border to story
 
-            JLabel storyLabel = new JLabel("<html><center>" + story.getContent() + "</center></html>");
+            JLabel UsernameAndTimeLable = new JLabel(newsFeed.getUsernameByID(story.getAuthorId()));
+            UsernameAndTimeLable.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font for username and time
+            UsernameAndTimeLable.setAlignmentX(Component.LEFT_ALIGNMENT); // Center align text
+            UsernameAndTimeLable.setVerticalAlignment(SwingConstants.TOP); // Align to the top
+            JLabel storyLabel = new JLabel( story.getContent());
             storyLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center align text
-
+            storyLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font for story content
+            storyLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align text
             // If the story has an image, add it
             if (story.getImagePath() != null && !story.getImagePath().isEmpty()) {
                 ImageIcon storyImage = new ImageIcon(story.getImagePath());
                 storyLabel.setIcon(storyImage); // Set image as icon
             }
-
+            storyPanel.add(UsernameAndTimeLable); // Add username and time label
             storyPanel.add(storyLabel); // Add story content to the story panel
             StoriesPanel.add(storyPanel); // Add story panel to the StoriesPanel
         }
@@ -193,20 +201,20 @@ public class NewsFeedWindow extends JFrame {
         for (Posts post : posts) {
             JPanel postPanel = new JPanel(new BorderLayout());
             postPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); // Add border to post panel
-            postPanel.setPreferredSize(new Dimension(100, 100)); // Set story size
-            JLabel UsernameAndTimeLable = new JLabel(newsFeed.getUsernameByID(post.getAuthorId()) + " - " + LocalDateTime.now().toString());
+            postPanel.setPreferredSize(new Dimension(80, 80)); // Set story size
+            JLabel UsernameAndTimeLable = new JLabel(newsFeed.getUsernameByID(post.getAuthorId()) + " - " + post.getTimestamp().toString());
             UsernameAndTimeLable.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font for username and time
             UsernameAndTimeLable.setAlignmentX(Component.LEFT_ALIGNMENT); // Center align text
             UsernameAndTimeLable.setVerticalAlignment(SwingConstants.TOP); // Align to the top
             JLabel postLabel = new JLabel( post.getContent());
-            postLabel.setFont(new Font("Arial", Font.PLAIN, 26)); // Set font for post content
+            postLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font for post content
             postLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Left align text
 
             // If the post has an image, add it
             if (post.getImagePath() != null && !post.getImagePath().isEmpty()) {
                 ImageIcon postImage = new ImageIcon(post.getImagePath());
                 JLabel imageLabel = new JLabel(postImage);
-                postPanel.add(imageLabel, BorderLayout.NORTH); // Add image at the top
+                postPanel.add(imageLabel, BorderLayout.SOUTH); // Add image at the bottom
             }
 
             postPanel.add(postLabel, BorderLayout.CENTER); // Add content to the center

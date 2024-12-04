@@ -133,8 +133,8 @@
               <component id="3a4be" class="javax.swing.JTextField" binding="PostContantField">
                 <constraints/>
                 <properties>
-                  <font name="Microsoft Yi Baiti"/>
-                  <text value="New Post......."/>
+                  <font name="Century Schoolbook" size="12"/>
+                  <text value="Write a post..."/>
                 </properties>
               </component>
             </children>
@@ -161,8 +161,8 @@
               <component id="97be8" class="javax.swing.JTextField" binding="StoryContantField">
                 <constraints/>
                 <properties>
-                  <font name="Microsoft Yi Baiti"/>
-                  <text value="New Story......."/>
+                  <font name="Century Schoolbook" size="12"/>
+                  <text value="Write a Story......."/>
                 </properties>
               </component>
             </children>

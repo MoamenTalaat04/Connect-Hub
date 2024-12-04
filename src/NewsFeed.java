@@ -52,7 +52,7 @@ public class NewsFeed {
         return friendPosts;
     }
 
-    // Fetch stories from friends (using FriendManagement for friend handling)
+    // Fetch stories from friends
     public ArrayList<Stories> fetchStoriesFromFriends() {
         ArrayList<Stories> friendStories = new ArrayList<>();
         ArrayList<Stories> allStories = null;
