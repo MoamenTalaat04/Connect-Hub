@@ -39,12 +39,13 @@ public class LoginWindow extends JFrame {
                 else if (password.isEmpty() || password.equals("")) JOptionPane.showMessageDialog(null, "Please enter password", "Invalid Password", JOptionPane.INFORMATION_MESSAGE);
                 else {
                     try {
-                        if (HashPassword.hashPassword(emailPasswordMap.get(email)).equals(password)) {
+                        if (HashPassword.hashPassword(emailPasswordMap.get(email)).equals(HashPassword.hashPassword(password))) {
                             accountManagement.login(email,password);
                             //window to appear after login
+                            System.out.println("login success");
                             dispose();
                         }
-                        else JOptionPane.showMessageDialog(null, "please enter valid password", "Invalid Password", JOptionPane.INFORMATION_MESSAGE);
+                        else JOptionPane.showMessageDialog(null, "please enter correct password", "Invalid Password", JOptionPane.INFORMATION_MESSAGE);
                     } catch (NoSuchAlgorithmException ex) {
                         throw new RuntimeException(ex);
                     } catch (IOException ex) {
