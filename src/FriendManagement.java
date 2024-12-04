@@ -73,6 +73,14 @@ public class FriendManagement {
         return suggestedFriends;
     }
 
+    public ArrayList<String> FriendStatus() {
+        ArrayList<String> friendStatus = new ArrayList<>();
+        for (User friend : currentUser.getFriends()) {
+            friendStatus.add(friend.getUsername() + " is " + friend.getStatus());
+        }
+        return friendStatus;
+    }
+
     public ArrayList<User> getAllUsers() {
         return allUsers;
     }

@@ -80,12 +80,9 @@ public class NewsFeed {
         return friendManagement.suggestFriends();  // Using FriendManagement to suggest friends
     }
     public ArrayList<String> fetchFriendStatus() {
-        ArrayList<String> friendStatus = new ArrayList<>();
-        for (User friend : currentUser.getFriends()) {
-            friendStatus.add(friend.getUsername() + " is " + friend.getStatus());
-        }
-        return friendStatus;
+        return friendManagement.FriendStatus();  // Using FriendManagement to fetch friend status
     }
+
     public String getUsernameByID(String UserID){
         for(User user :currentUser.getFriends()){
             if (user.getUserId().equals(UserID)){

@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class NewsFeedWindow extends JFrame {
@@ -35,6 +36,7 @@ public class NewsFeedWindow extends JFrame {
     private JLabel StoryPhotoPathLable;
 
     private NewsFeed newsFeed;
+    DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public NewsFeedWindow(NewsFeed newsFeed) {
         this.newsFeed = newsFeed;
@@ -168,10 +170,13 @@ public class NewsFeedWindow extends JFrame {
             storyPanel.setPreferredSize(new Dimension(120, 280)); // Set story size
             storyPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2)); // Add border to story
 
-            JLabel UsernameAndTimeLable = new JLabel(newsFeed.getUsernameByID(story.getAuthorId()));
-            UsernameAndTimeLable.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font for username and time
-            UsernameAndTimeLable.setAlignmentX(Component.LEFT_ALIGNMENT); // Center align text
-            UsernameAndTimeLable.setVerticalAlignment(SwingConstants.TOP); // Align to the top
+            JLabel Username = new JLabel(newsFeed.getUsernameByID(story.getAuthorId()));
+            JLabel Time = new JLabel(story.getTimestamp().format(dtf));
+            Time.setFont(new Font("Arial", Font.PLAIN, 12));
+            Time.setAlignmentX(Component.CENTER_ALIGNMENT);
+            Username.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font for username and time
+            Username.setAlignmentX(Component.LEFT_ALIGNMENT); // Center align text
+            Username.setVerticalAlignment(SwingConstants.TOP); // Align to the top
             JLabel storyLabel = new JLabel( story.getContent());
             storyLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center align text
             storyLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font for story content
@@ -181,7 +186,8 @@ public class NewsFeedWindow extends JFrame {
                 ImageIcon storyImage = new ImageIcon(story.getImagePath());
                 storyLabel.setIcon(storyImage); // Set image as icon
             }
-            storyPanel.add(UsernameAndTimeLable); // Add username and time label
+            storyPanel.add(Username); // Add username and time label
+            storyPanel.add(Time);
             storyPanel.add(storyLabel); // Add story content to the story panel
             StoriesPanel.add(storyPanel); // Add story panel to the StoriesPanel
         }
@@ -201,8 +207,7 @@ public class NewsFeedWindow extends JFrame {
         for (Posts post : posts) {
             JPanel postPanel = new JPanel(new BorderLayout());
             postPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); // Add border to post panel
-            postPanel.setPreferredSize(new Dimension(80, 80)); // Set story size
-            JLabel UsernameAndTimeLable = new JLabel(newsFeed.getUsernameByID(post.getAuthorId()) + " - " + post.getTimestamp().toString());
+            JLabel UsernameAndTimeLable = new JLabel(newsFeed.getUsernameByID(post.getAuthorId()) + " - " + post.getTimestamp().format(dtf));
             UsernameAndTimeLable.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font for username and time
             UsernameAndTimeLable.setAlignmentX(Component.LEFT_ALIGNMENT); // Center align text
             UsernameAndTimeLable.setVerticalAlignment(SwingConstants.TOP); // Align to the top
