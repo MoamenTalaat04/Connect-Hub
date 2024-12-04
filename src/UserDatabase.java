@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class UserDatabase {
     private final String userDatabaseFile = "users.json";
-    private final ObjectMapper mapper;
+    private final ObjectMapper mapper ;
 
     public UserDatabase() {
         mapper = new ObjectMapper();
@@ -20,12 +20,14 @@ public class UserDatabase {
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
+    // save array list
     public void saveUserToFile(User user) throws IOException {
         ArrayList<User> users = readUsersFromFile();
         users.add(user);
         mapper.writeValue(new File(userDatabaseFile), users);
     }
 
+    //load array list
     public ArrayList<User> readUsersFromFile() throws IOException {
         File file = new File(userDatabaseFile);
         if (!file.exists()) return new ArrayList<>();
