@@ -21,14 +21,14 @@ public class UserDatabase {
     }
 
     // save array list
-    private void saveUserToFile(User user, String filePath) throws IOException {
+    public void saveUserToFile(User user, String filePath) throws IOException {
         List<User> users = readUsersFromFile(filePath, User[].class);
         users.add(user);
         mapper.writeValue(new File(filePath), users);
     }
 
     //load array list
-    private <T> List<T> readUsersFromFile(String filePath, Class<T[]> type) throws IOException {
+    public  <T> List<T> readUsersFromFile(String filePath, Class<T[]> type) throws IOException {
         File file = new File(filePath);
         if (!file.exists()) return new ArrayList<>();
         T[] usersArray = mapper.readValue(file, type);
