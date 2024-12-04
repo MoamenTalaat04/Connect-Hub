@@ -12,7 +12,8 @@ public class User {
     private ArrayList<User> friends;
     private ArrayList<User> blocked;
     private ArrayList<User> pendingRequests;
-
+    public User() {
+    }
     public User(String userId, ArrayList<User> blocked, ArrayList<User> pendingRequests, ArrayList<User> friends, String status,String dob,String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath) {
 
         this.userId = userId;
