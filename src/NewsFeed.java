@@ -6,10 +6,11 @@ public class NewsFeed {
     private MainContentCreation contentCreation;
     private User currentUser;
 
-    public NewsFeed(FriendManagement friendManagement) {
-        this.friendManagement = friendManagement;
+
+    public NewsFeed(User currentUser) {
+        this.friendManagement =new FriendManagement(currentUser); ;
         this.contentCreation = new MainContentCreation();
-        this.currentUser = friendManagement.getCurrentUser();
+        this.currentUser = currentUser;
     }
 
     public void addPost(String content, String imagePath) {

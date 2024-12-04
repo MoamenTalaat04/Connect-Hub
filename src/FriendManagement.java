@@ -3,10 +3,12 @@ import java.util.*;
 public class FriendManagement {
     private ArrayList<User> allUsers;  // Store User objects, with userId as key
     private User currentUser;  // The current user
+    private UserDatabase userDatabase;
 
-    public FriendManagement(User currentUser, ArrayList<User> allUsers) {
+    public FriendManagement(User currentUser) {
         this.currentUser = currentUser;  // Initialize currentUser in the constructor
-        this.allUsers = new ArrayList<>(allUsers);
+        this.userDatabase = new UserDatabase();
+        this.allUsers = userDatabase.readUsersFromFile();
     }
 
     // Send Friend Request
@@ -103,4 +105,5 @@ public class FriendManagement {
     public ArrayList<User> getAllUsers() {
         return allUsers;
     }
+
 }
