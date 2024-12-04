@@ -22,6 +22,7 @@ public class FriendManagement {
         }
         // Add to pending requests
         receiver.getPendingRequests().add(currentUser);
+        userDatabase.saveUsersToFile(allUsers);
         return true;
     }
 
@@ -49,6 +50,7 @@ public class FriendManagement {
         sender.getFriends().add(currentUser);
         // Remove from pending requests
         currentUser.getPendingRequests().remove(sender);
+        userDatabase.saveUsersToFile(allUsers);
         return true;
     }
 
@@ -56,7 +58,7 @@ public class FriendManagement {
     public boolean removeFriend(User friend) {
         boolean removedFromCurrentUser = currentUser.getFriends().remove(friend);
         boolean removedFromFriend = friend.getFriends().remove(currentUser);
-
+        userDatabase.saveUsersToFile(allUsers);
         return removedFromCurrentUser && removedFromFriend;
     }
     public User getCurrentUser() {
@@ -73,14 +75,23 @@ public class FriendManagement {
         currentUser.getBlocked().add(blocked);
         // Remove from friends if present
         removeFriend(blocked);
+        userDatabase.saveUsersToFile(allUsers);
         return true;
     }
 
     public boolean unblockUser(User unblocked) {
-        return currentUser.getBlocked().remove(unblocked);
+        if (currentUser.getBlocked().remove(unblocked)) {
+            userDatabase.saveUsersToFile(allUsers);
+            return true;
+        }
+        return false;
     }
     public boolean cancelFriendRequest(User receiver) {
-        return receiver.getPendingRequests().remove(currentUser);
+        if (receiver.getPendingRequests().remove(currentUser)) {
+            userDatabase.saveUsersToFile(allUsers);
+            return true;
+        }
+        return false;
     }
 
     // Suggest Friends
