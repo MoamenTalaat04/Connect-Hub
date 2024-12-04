@@ -14,13 +14,14 @@ public class ProfileManager {
     private MainContentCreation contentCreation;
     private static final String database = "profiles.json";
     List<User> profiles = new ArrayList<>();
+    private UserDatabase userDatabase;
 
     public ProfileManager(User currentUser) {
         this.currentUser = currentUser;
         contentCreation=new MainContentCreation();
     }
 
-    public List<User> loadProfiles() {
+   /* public List<User> loadProfiles() {
         JSONParser parser = new JSONParser();
         try (FileReader reader = new FileReader(database)) {
             JSONArray profilesArray = (JSONArray) parser.parse(reader);
@@ -78,7 +79,7 @@ public class ProfileManager {
     }*/
 
     public User getProfile(String userId) {
-        List<User> profiles = loadProfiles();
+        List<User> profiles = userDatabase.readArrayListFromFile();
         return profiles.stream().filter(p -> p.getUserId().equals(userId)).findFirst().orElse(null);
     }
 

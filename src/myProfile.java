@@ -8,10 +8,11 @@ import java.util.List;
 
 public class myProfile extends JFrame {
 private User user ;
+
 private ProfileManager profileManager;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private FriendManagment friend;
-    private ContentCreation content;
+    private MainContentCreation content;
     private JPanel thePanel;
     private JButton uploadprofile;
     private JButton uploadcover;
@@ -27,22 +28,19 @@ private ProfileManager profileManager;
     private JButton logoutButton;
     private JButton myFriendsButton;
     private JButton newsFeedButton;
+    private JScrollPane FriendStatusScrollPane;
+    private JPanel FriendStatusPanel;
 
-    public myProfile(String Id) {
- User user = profileManager.getProfile(Id);
-  profile=new JLabel(user.getProfilePhotoPath());
- Cover= new JLabel(user.getCoverPhotoPath());
- Bio= new JLabel(user.getBio());
-    List <User> profiles = profileManager.load();  //nadiiiim
-    if(user==null) {
-        JOptionPane.showMessageDialog(null, "No profile found");
-        return;
-    }
-    setTitle("My Profile");
-    setContentPane(thePanel);//rakz
-    setSize(600,600);
-
-
+    public myProfile(User user) {
+        this.friend= new FriendManagment(user);
+        this.user=user;
+        loadnewdata();
+        List <User> profiles = profileManager.load();  //nadiiiim
+        setTitle("My Profile");
+        setContentPane(thePanel);//rakz
+        setSize(1300,1000);
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
         uploadprofile.addActionListener(new ActionListener() {
@@ -56,8 +54,8 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setProfilePhotoPath(path);
-                    profileManager.save;// hnnady method el save beta3et nadim
-
+                    profileManager.save;   // hnnady method el save beta3et nadim
+                    loadnewdata();
                 }
             }
         });
@@ -75,6 +73,7 @@ private ProfileManager profileManager;
         else{
             user.setCoverPhotoPath(path);
             profileManager.saveProfiles();// el save beta3et nadim
+        loadnewdata();
         }
             }
         });
@@ -88,33 +87,40 @@ private ProfileManager profileManager;
                 else{
                     user.setBio(newBio);
                     profileManager.saveProfiles();//beta3et nadiiim
-
+                loadnewdata();
                 }
             }
         });
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                loadnewdata();
             }
         });
+
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Gui nadiiim
-            errormm
+            dispose();
             }
         });
+
         myFriendsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                friend// hnshof wl hn3mlha gui wla
-            }
+
+                new FriendWindow(user);
+                dispose();
+
+           }
         });
+
         newsFeedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new NewsFeed(friend); // gui abodeif
+                new NewsFeedWindow(user);
+                dispose();
             }
         });
     }
@@ -161,5 +167,30 @@ private ProfileManager profileManager;
         postsContent.revalidate();
         postsContent.repaint();
     }
+    private void loadnewdata(){
+        ImageIcon profilePicture = new ImageIcon(user.getProfilePhotoPath());
+        Image scaledProfileImage = profilePicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Scale image
+        ImageIcon coverPicture = new ImageIcon(scaledProfileImage);
+        Image scaledcoverPicture= coverPicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        profile=new JLabel((new ImageIcon(scaledProfileImage))) ;
+        Cover= new JLabel(new ImageIcon(scaledcoverPicture));
+        Bio= new JLabel(user.getBio());
+    }
+    private void loadFriendStatus() {
+        // Clear the FriendStatusPanel
+        FriendStatusPanel.removeAll();
+        FriendStatusPanel.setLayout(new BoxLayout(FriendStatusPanel, BoxLayout.Y_AXIS)); // Use vertical layout
 
+        ArrayList<String> friends = friend.FriendStatus();
+        for (String friend : friends) {
+            JLabel friendLabel = new JLabel(friend);
+            friendLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font for better readability
+            friendLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align text
+            FriendStatusPanel.add(friendLabel);
+            FriendStatusPanel.add(Box.createVerticalStrut(10)); // Add space between friends
+        }
+
+        FriendStatusScrollPane.setViewportView(FriendStatusPanel); // Attach the panel to the scroll pane
+
+}
 }
