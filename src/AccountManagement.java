@@ -77,7 +77,7 @@ public class AccountManagement {
             try{
                 String hashedPassword = hashPassword(password);
                 String id =UUID.randomUUID().toString()+users.size(); //generates unique id for each user
-                User user =new User(id,null,null,null,"Online",userName,email,hashedPassword,coverPhotoPath,bio,profilePhotoPath);
+                User user =new User(id,null,null,null,"Online",dateOfBirth,userName,email,hashedPassword,coverPhotoPath,bio,profilePhotoPath);
                 userDatabase.saveUserToFile(user,userDatabase.userDatabaseFile);
                 return true;
             }
