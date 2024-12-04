@@ -8,11 +8,12 @@ public class User {
     private String email;
     private String username;
     private String status;
+    private String dob;
     private ArrayList<User> friends;
     private ArrayList<User> blocked;
     private ArrayList<User> pendingRequests;
 
-    public User(String userId, ArrayList<User> blocked, ArrayList<User> pendingRequests, ArrayList<User> friends, String status, String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath) {
+    public User(String userId, ArrayList<User> blocked, ArrayList<User> pendingRequests, ArrayList<User> friends, String status,String dob,String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath) {
 
         this.userId = userId;
         this.blocked = blocked != null ? blocked : new ArrayList<>();
@@ -25,6 +26,7 @@ public class User {
         this.hashedPassword = hashedPassword;
         this.coverPhotoPath = coverPhotoPath;
         this.bio = bio;
+        this.dob=dob;
         this.profilePhotoPath = profilePhotoPath;
     }
 
@@ -114,6 +116,14 @@ public class User {
 
     public void setPendingRequests(ArrayList<User> pendingRequests) {
         this.pendingRequests = pendingRequests;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 }
 
