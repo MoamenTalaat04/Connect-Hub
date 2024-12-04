@@ -46,8 +46,8 @@ public class SignUpWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String email=emailField.getText();
                 String username=usernameField.getText();
-                String password= Arrays.toString(passwordField.getPassword());
-                String confirmPassword = Arrays.toString(confirmPasswordField.getPassword());
+                String password= new String(passwordField.getPassword());
+                String confirmPassword = new String(confirmPasswordField.getPassword());
                 String day=dd.getText();
                 String month=mm.getText();
                 String year=yyyy.getText();
