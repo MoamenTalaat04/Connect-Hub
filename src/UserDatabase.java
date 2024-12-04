@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class UserDatabase {
     private final String userDatabaseFile = "users.json";
-    private final ObjectMapper mapper ;
+    private final ObjectMapper mapper;
 
     public UserDatabase() {
         mapper = new ObjectMapper();
@@ -20,22 +20,21 @@ public class UserDatabase {
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-    // save array list
-    private void saveUserToFile(User user, String filePath) throws IOException {
-        List<User> users = readUsersFromFile(filePath, User[].class);
+    public void saveUserToFile(User user) throws IOException {
+        ArrayList<User> users = readUsersFromFile();
         users.add(user);
-        mapper.writeValue(new File(filePath), users);
+        mapper.writeValue(new File(userDatabaseFile), users);
     }
 
-    //load array list
-    private <T> List<T> readUsersFromFile(String filePath, Class<T[]> type) throws IOException {
-        File file = new File(filePath);
+    public ArrayList<User> readUsersFromFile() throws IOException {
+        File file = new File(userDatabaseFile);
         if (!file.exists()) return new ArrayList<>();
-        T[] usersArray = mapper.readValue(file, type);
+        User[] usersArray = mapper.readValue(file, User[].class);
         return new ArrayList<>(Arrays.asList(usersArray));
     }
-    public Map<String, String> readMapFromUsers(String filePath) throws IOException {
-        List<User> usersList = readUsersFromFile(filePath, User[].class);
+
+    public Map<String, String> readMapFromUsers() throws IOException {
+        ArrayList<User> usersList = readUsersFromFile();
 
         return usersList.stream()
                 .collect(Collectors.toMap(User::getEmail, User::getHashedPassword));
