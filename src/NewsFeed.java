@@ -79,4 +79,22 @@ public class NewsFeed {
     public ArrayList<User> suggestFriends() {
         return friendManagement.suggestFriends();  // Using FriendManagement to suggest friends
     }
+    public ArrayList<String> fetchFriendStatus() {
+        ArrayList<String> friendStatus = new ArrayList<>();
+        for (User friend : currentUser.getFriends()) {
+            friendStatus.add(friend.getUsername() + " is " + friend.getStatus());
+        }
+        return friendStatus;
+    }
+    public String getUsernameByID(String UserID){
+        for(User user :currentUser.getFriends()){
+            if (user.getUserId().equals(UserID)){
+                return user.getUsername();
+            }
+        }
+        return null;
+    }
+    public User getCurrentUser() {
+        return currentUser;
+    }
 }

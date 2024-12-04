@@ -4,9 +4,9 @@ public class FriendManagement {
     private ArrayList<User> allUsers;  // Store User objects, with userId as key
     private User currentUser;  // The current user
 
-    public FriendManagement(User currentUser) {
+    public FriendManagement(User currentUser, ArrayList<User> allUsers) {
         this.currentUser = currentUser;  // Initialize currentUser in the constructor
-        allUsers = new ArrayList<>();
+        this.allUsers = new ArrayList<>(allUsers);
     }
 
     // Send Friend Request
