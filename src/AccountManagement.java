@@ -1,6 +1,7 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -75,25 +76,28 @@ public class AccountManagement {
 
     public boolean signUp(String email,String userName,String password,String dateOfBirth,String bio,String coverPhotoPath,String profilePhotoPath){
             try{
+                ArrayList<User> users=userDatabase.readUsersFromFile();
                 String hashedPassword = hashPassword(password);
                 String id =UUID.randomUUID().toString()+users.size(); //generates unique id for each user
                 User user =new User(id,null,null,null,"Online",dateOfBirth,userName,email,hashedPassword,coverPhotoPath,bio,profilePhotoPath);
-                userDatabase.saveUserToFile(user,userDatabase.userDatabaseFile);
+                userDatabase.saveUserToFile(user);
                 return true;
             }
              catch (NoSuchAlgorithmException e) {
                 System.out.println("No Such Algorithm Exception !!");
                  return false;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
     }
-    public boolean login(String email,String password){
+    public boolean login(String email,String password) throws IOException {
         String inputPassword = null;
         try {
             inputPassword = hashPassword(password);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-        Map<String,String> loginMap=userDatabase.readMapFromFile();
+        Map<String,String> loginMap=userDatabase.readMapFromUsers();
         String storedPassword= loginMap.get(email);
         if (inputPassword.equals(storedPassword)) return true;
         else return false;
@@ -103,7 +107,7 @@ public boolean logout(User user){
        //sets user status to offline
        user.setStatus("Offline");
        //saves any changes happen
-       userDatabase.saveUserToFile(user,userDatabase.userDatabaseFile);
+       userDatabase.saveUserToFile(user);
        return true;
    }
    catch (Exception e){
