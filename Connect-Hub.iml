@@ -11,5 +11,7 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="libs" level="project" />
     <orderEntry type="library" name="googlecode.json.simple" level="project" />
+    <orderEntry type="library" name="libs (2)" level="project" />
+    <orderEntry type="library" name="fasterxml.jackson.datatype.jsr311" level="project" />
   </component>
 </module>

@@ -1,9 +1,0 @@
-[
-    {
-        "content": "Hello World",
-        "authorId": "user123",
-        "contentId": "uuid-1234",
-        "imagePath": "path/to/image.jpg",
-        "timestamp": "2024-01-01T10:15:30"
-    }
-]
