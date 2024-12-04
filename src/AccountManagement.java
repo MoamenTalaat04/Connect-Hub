@@ -9,13 +9,12 @@ import java.io.File;
 import java.io.IOException;
 
 public class AccountManagement {
-    private String dataBaseFile;
-    private ArrayList<User> users;
+    private  UserDatabase userDatabase;
 
 
 
-    public AccountManagement(String dataBaseFile) {
-        this.dataBaseFile = dataBaseFile;
+    public AccountManagement( UserDatabase userDatabase) {
+        this.userDatabase = userDatabase;
     }
 
     private String hashPassword(String password)
@@ -28,6 +27,7 @@ public class AccountManagement {
         }
         return stringBuilder.toString(); // returns the string that holds the encrypted password
     }
+    /*
     public void updateProfile(String userId, String profilePhoto, String coverPhoto, String bio, String password) {
         List<User> profiles = loadProfiles();
         for (User user : profiles) {
@@ -47,37 +47,38 @@ public class AccountManagement {
         return profiles.stream().filter(p -> p.getUserId().equals(userId)).findFirst().orElse(null);
     }
 
+     */
+    /*
     private void loadUsers(){
         //when called ----> load users from database ---transform--> User obj ----store---> arrayList of User
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            ArrayList<User> usersList = objectMapper.readValue(new File(/*Json file path*/""), new TypeReference<ArrayList<User>>(){});
+            ArrayList<User> usersList = objectMapper.readValue(new File(""), new TypeReference<ArrayList<User>>(){});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
+    */
+/*
     private void saveUsers(){
         //when called ----> transforms evey obj in User ArrayList to line string -----> and saves each line string in the database
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.writeValue(new File(/*Json file path*/" "),users);
+            objectMapper.writeValue(new File(" "),users);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
+
+ */
 
     public boolean signUp(String email,String userName,String password,String dateOfBirth,String bio,String coverPhotoPath,String profilePhotoPath){
             try{
                 String hashedPassword = hashPassword(password);
                 String id =UUID.randomUUID().toString()+users.size(); //generates unique id for each user
                 User user =new User(id,null,null,null,"Online",userName,email,hashedPassword,coverPhotoPath,bio,profilePhotoPath);
-                if(!users.isEmpty()){
-                    loadUsers();
-                }
-                users.add(user);
-                saveUsers();
+                userDatabase.saveUserToFile(user,userDatabase.userDatabaseFile);
                 return true;
             }
              catch (NoSuchAlgorithmException e) {
@@ -86,29 +87,23 @@ public class AccountManagement {
             }
     }
     public boolean login(String email,String password){
-        if(!users.isEmpty()){
-            loadUsers();
+        String inputPassword = null;
+        try {
+            inputPassword = hashPassword(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
-        for (int i=0;i<users.size();i++){
-
-            try {
-                if(users.get(i).getEmail().equals(email)&&users.get(i).getHashedPassword().equals(hashPassword(password))){
-                    users.get(i).setStatus("Online");
-                    saveUsers();
-                    return true;
-                }
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return false;
+        Map<String,String> loginMap=userDatabase.readMapFromFile();
+        String storedPassword= loginMap.get(email);
+        if (inputPassword.equals(storedPassword)) return true;
+        else return false;
     }
 public boolean logout(User user){
    try{
        //sets user status to offline
        user.setStatus("Offline");
        //saves any changes happen
-       saveUsers();
+       userDatabase.saveUserToFile(user,userDatabase.userDatabaseFile);
        return true;
    }
    catch (Exception e){
