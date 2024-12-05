@@ -20,7 +20,7 @@ public class SignUpWindow extends JFrame {
     private JTextField dd;
     private JTextField mm;
     private JTextArea bioField;
-    private String emailFormat="^[\\w.-]+@[a-zA-Z\\d.-]+\\.[a-zA-Z]{2,6}$";
+    private String emailFormat="^[a-zA-Z][\\w.-]*@[a-zA-Z\\d.-]+\\.[a-zA-Z]{2,6}$";
     private String usernameFormat ="^[a-zA-Z][a-zA-Z0-9._]{2,14}$";
     private String profilePicPath=null;
     private String profileCoverPath=null;

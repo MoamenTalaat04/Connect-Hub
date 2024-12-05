@@ -79,7 +79,7 @@ public class AccountManagement {
                 ArrayList<User> users=userDatabase.readUsersFromFile();
                 String hashedPassword = hashPassword(password);
                 String id =""+(users.size()+1); //generates unique id for each user
-                User user =new User(id,null,null,null,"Online",dateOfBirth,userName,email,hashedPassword,coverPhotoPath,bio,profilePhotoPath);
+                User user =new User(id,null,null,null,"Offline",dateOfBirth,userName,email,hashedPassword,coverPhotoPath,bio,profilePhotoPath);
                 userDatabase.saveUserToFile(user);
                 return true;
             }
@@ -102,7 +102,7 @@ public class AccountManagement {
         if (inputPassword.equals(storedPassword)) return true;
         else return false;
     }
-public boolean logout(User user){
+/*public boolean logout(User user){
    try{
        //sets user status to offline
        user.setStatus("Offline");
@@ -113,6 +113,6 @@ public boolean logout(User user){
    catch (Exception e){
        return false;
    }
-}
+}*/
 
 }
