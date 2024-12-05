@@ -49,10 +49,16 @@ public class FriendManagementWindow extends JFrame {
         logOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentUser.setStatus("Offline");
-                friendManagement.getUserDatabase().saveUsersToFile(friendManagement.getAllUsers());
-                new LoginWindow;
-                dispose();
+                try {
+
+
+                    currentUser.setStatus("Offline");
+                    friendManagement.getUserDatabase().saveUsersToFile(friendManagement.getAllUsers());
+                    new LoginWindow();
+                    dispose();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 

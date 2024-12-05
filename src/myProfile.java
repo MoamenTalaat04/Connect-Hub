@@ -10,9 +10,8 @@ public class myProfile extends JFrame {
 private User user ;
 private ProfileManager profileManager;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private FriendManagment friend;
-    private AccountManagment accountManagment;
-    UserDatabase userDatabase;
+    private FriendManagement friend;
+    private UserDatabase userDatabase;
     private MainContentCreation content;
     private JPanel thePanel;
     private JButton uploadprofile;
@@ -33,12 +32,12 @@ private ProfileManager profileManager;
     private JPanel FriendStatusPanel;
 
     public myProfile(User user) {
-        this.friend= new FriendManagment(user);
-        this.accountManagment=new AccountManagment;
-        this.profileManager=new ProfileManager();
+        this.friend= new FriendManagement(user);
+        this.userDatabase=new UserDatabase();
+        this.profileManager=new ProfileManager(user);
         this.user=user;
         loadnewdata();
-        List <User> profiles = accountManagment.readUsersFromFile();  //nadiiiim
+        List <User> profiles = userDatabase.readUsersFromFile();  //nadiiiim
         setTitle("My Profile");
         setContentPane(thePanel);
         setSize(1300,1000);
@@ -57,7 +56,7 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setProfilePhotoPath(path);
-                    AccountManagment.saveUserToFile;   // hnnady method el save beta3et nadim
+                    userDatabase.saveUserToFile(user);
                     loadnewdata();
                 }
             }
@@ -75,8 +74,8 @@ private ProfileManager profileManager;
         }
         else{
             user.setCoverPhotoPath(path);
-            AccountManagment.saveUserToFile();// el save beta3et nadim
-        loadnewdata();
+            userDatabase.saveUserToFile(user);
+            loadnewdata();
         }
             }
         });
@@ -89,8 +88,8 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setBio(newBio);
-                    AccountManagment.saveUserToFile();//beta3et nadiiim
-                loadnewdata();
+                    userDatabase.saveUserToFile(user);
+                    loadnewdata();
                 }
             }
         });
@@ -105,7 +104,7 @@ private ProfileManager profileManager;
             @Override
             public void actionPerformed(ActionEvent e) {
             user.setStatus("Offline");
-            AccountManagment.saveUserToFile();//beta3et nadiiim
+                userDatabase.saveUserToFile(user);
 
                 dispose();
             }
@@ -115,7 +114,7 @@ private ProfileManager profileManager;
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                new FriendWindow(user);
+                new FriendManagementWindow(user);
                 dispose();
 
            }

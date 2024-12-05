@@ -21,24 +21,39 @@ public class UserDatabase {
     }
 
     // save array list
-    public void saveUserToFile(User user) throws IOException {
-        ArrayList<User> users = readUsersFromFile();
-        users.add(user);
-        mapper.writeValue(new File(userDatabaseFile), users);
+    public void saveUserToFile(User user)
+    {
+        try {
+            ArrayList<User> users = readUsersFromFile();
+            users.add(user);
+            mapper.writeValue(new File(userDatabaseFile), users);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void saveUsersToFile(ArrayList<User> users) throws IOException {
-        mapper.writeValue(new File(userDatabaseFile), users);
+    public void saveUsersToFile(ArrayList<User> users)  {
+        try {
+
+
+            mapper.writeValue(new File(userDatabaseFile), users);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //load array list
-    public ArrayList<User> readUsersFromFile() throws IOException {
-        File file = new File(userDatabaseFile);
-        if (!file.exists()) return new ArrayList<>();
-        User[] usersArray = mapper.readValue(file, User[].class);
-        return new ArrayList<>(Arrays.asList(usersArray));
+    public ArrayList<User> readUsersFromFile()  {
+        try {
+            File file = new File(userDatabaseFile);
+            if (!file.exists()) return new ArrayList<>();
+            User[] usersArray = mapper.readValue(file, User[].class);
+            return new ArrayList<>(Arrays.asList(usersArray));
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public Map<String, String> readMapFromUsers() throws IOException {
+    public Map<String, String> readMapFromUsers()  {
         ArrayList<User> usersList = readUsersFromFile();
 
         return usersList.stream()
