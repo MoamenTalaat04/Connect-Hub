@@ -17,8 +17,6 @@ private ProfileManager profileManager;
     private JButton uploadprofile;
     private JButton uploadcover;
     private JButton uploadbio;
-    private JLabel profile;
-    private JLabel Cover;
     private JLabel Bio;
     private JPanel postsPanel;
     private JScrollPane scrollpane;
@@ -30,6 +28,8 @@ private ProfileManager profileManager;
     private JButton newsFeedButton;
     private JScrollPane FriendStatusScrollPane;
     private JPanel FriendStatusPanel;
+    private JPanel CoverPanel;
+    private JPanel ProfilePanel;
 
     public myProfile(User user) {
         this.friend= new FriendManagement(user);
@@ -37,10 +37,11 @@ private ProfileManager profileManager;
         this.profileManager=new ProfileManager(user);
         this.user=user;
         loadnewdata();
-        List <User> profiles = userDatabase.readUsersFromFile();  //nadiiiim
+        loadPosts();
+        ArrayList <User> profiles = userDatabase.readUsersFromFile();
         setTitle("My Profile");
         setContentPane(thePanel);
-        setSize(1300,1000);
+        setSize(900,600);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -97,6 +98,7 @@ private ProfileManager profileManager;
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadnewdata();
+                loadPosts();
             }
         });
 
@@ -172,31 +174,39 @@ private ProfileManager profileManager;
         postsContent.repaint();
     }
     private void loadnewdata(){
+        ProfilePanel.removeAll();
+        CoverPanel.removeAll();
+        Bio.setText("");
+        ProfilePanel.setLayout(new BorderLayout());
+        CoverPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        ProfilePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        CoverPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
        if (user.getProfilePhotoPath()==null){
-           profile=new JLabel("No Image");// put the default image if the user didnt upload a photo
-           profile.setHorizontalAlignment(SwingConstants.CENTER);
+          JLabel profile=new JLabel("No Image");// put the default image if the user didnt upload a photo
+           profile.setHorizontalAlignment(SwingConstants.LEFT);
            profile.setPreferredSize(new Dimension(100,100));
            profile.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+           ProfilePanel.add(profile,BorderLayout.CENTER);
        }else{
            ImageIcon profilePicture = new ImageIcon(user.getProfilePhotoPath());
-           Image scaledProfileImage = profilePicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Scale image
-           profile=new JLabel((new ImageIcon(scaledProfileImage))) ;
-
-
+           Image scaledProfileImage = profilePicture.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH); // Scale image
+          JLabel profile =new JLabel((new ImageIcon(scaledProfileImage))) ;
+           ProfilePanel.add(profile,BorderLayout.CENTER);
        }
-        if (user.getCoverPhotoPath()==null) {
-        Cover=new JLabel("No Image");// put the default image if the user didnt upload a photo
-            Cover.setHorizontalAlignment(SwingConstants.CENTER);
-            Cover.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
+       if (user.getCoverPhotoPath()==null) {
+           JLabel Cover=new JLabel("No Image");// put the default image if the user didnt upload a photo
+            Cover.setHorizontalAlignment(SwingConstants.LEFT);
+            Cover.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+           CoverPanel.add(Cover,BorderLayout.CENTER);
         }
        else{
            ImageIcon coverPicture = new ImageIcon(user.getCoverPhotoPath());
-            Image scaledcoverPicture= coverPicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-            Cover= new JLabel(new ImageIcon(scaledcoverPicture));
+            Image scaledcoverPicture= coverPicture.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            JLabel Cover= new JLabel(new ImageIcon(scaledcoverPicture));
+            CoverPanel.add(Cover,BorderLayout.CENTER);
         }
-
-        Bio= new JLabel(user.getBio());
+        Bio.setText(user.getBio());
     }
 
 
@@ -217,5 +227,6 @@ private ProfileManager profileManager;
 
         FriendStatusScrollPane.setViewportView(FriendStatusPanel); // Attach the panel to the scroll pane
 
-}
+   }
+
 }

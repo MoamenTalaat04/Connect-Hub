@@ -26,6 +26,7 @@ public class FriendManagementWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(Container);
         setLocationRelativeTo(null);
+        setVisible(true);
 
         loadFriendsList();
         friendsButton1.addActionListener(new ActionListener() {
