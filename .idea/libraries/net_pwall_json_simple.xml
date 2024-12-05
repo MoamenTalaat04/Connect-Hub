@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="net.pwall.json.simple" type="repository">
+    <properties maven-id="net.pwall.json:json-simple:1.9" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/json-simple-1.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/json-functions-1.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/int-output-2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/textmatcher-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/immutables-2.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
