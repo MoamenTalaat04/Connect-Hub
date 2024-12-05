@@ -86,8 +86,6 @@ public class AccountManagement {
              catch (NoSuchAlgorithmException e) {
                 System.out.println("No Such Algorithm Exception !!");
                  return false;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
     }
     public boolean login(String email,String password) throws IOException {
