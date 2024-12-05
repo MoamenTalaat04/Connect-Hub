@@ -26,7 +26,7 @@ public class FriendManagement {
         return true;
     }
 
-    public ArrayList<User> SentRequests() {
+    public ArrayList<User> SentRequestsFromUser() {
         ArrayList<User> sentRequests = new ArrayList<>();
         for(User user : allUsers)
         {
@@ -36,6 +36,9 @@ public class FriendManagement {
             }
         }
         return sentRequests;
+    }
+    public ArrayList<User> ReceivedRequestsForUser() {
+        return currentUser.getPendingRequests();
     }
 
     // Accept Friend Request
@@ -52,6 +55,14 @@ public class FriendManagement {
         currentUser.getPendingRequests().remove(sender);
         userDatabase.saveUsersToFile(allUsers);
         return true;
+    }
+
+    public boolean rejectFriendRequest(User sender) {
+        if (currentUser.getPendingRequests().remove(sender)) {
+            userDatabase.saveUsersToFile(allUsers);
+            return true;
+        }
+        return false;
     }
 
     // Remove Friend

@@ -1,5 +1,3 @@
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -227,7 +225,7 @@ public class NewsFeedWindow extends JFrame {
 
             JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 
-            if (newsFeed.getFriendManagement().SentRequests().contains(friend)) {
+            if (newsFeed.getFriendManagement().SentRequestsFromUser().contains(friend)) {
                 JButton cancelRequestButton = new JButton("Cancel Request");
                 cancelRequestButton.setFont(new Font("Arial", Font.PLAIN, 12));
                 cancelRequestButton.addActionListener(e -> {

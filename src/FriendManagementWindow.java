@@ -16,6 +16,7 @@ public class FriendManagementWindow extends JFrame {
     private JScrollPane FriendsManagmentScrollPane;
     private JPanel FriendsManagmentPanal;
     private JButton refreshButton;
+    private JButton receivedRequestsButton;
     private FriendManagement friendManagement;
 
     public FriendManagementWindow(User currentUser) {
@@ -67,6 +68,13 @@ public class FriendManagementWindow extends JFrame {
                 dispose();
             }
         });
+
+        receivedRequestsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadReceivedRequestsList();
+            }
+        });
     }
 
     private void loadFriendsList() {
@@ -85,6 +93,25 @@ public class FriendManagementWindow extends JFrame {
         FriendsManagmentPanal.revalidate();
         FriendsManagmentPanal.repaint();
     }
+
+    private void loadReceivedRequestsList() {
+        FriendsManagmentPanal.removeAll();
+
+        ArrayList<User> sentRequests = friendManagement.ReceivedRequestsForUser();
+        FriendsManagmentPanal.setLayout(new BoxLayout(FriendsManagmentPanal, BoxLayout.Y_AXIS));
+
+        for (User friend : sentRequests) {
+            JPanel friendPanel = CreateReceivedRequestsPanel(friend);
+            FriendsManagmentPanal.add(friendPanel);
+            FriendsManagmentPanal.add(Box.createVerticalStrut(10));
+        }
+
+        FriendsManagmentScrollPane.setViewportView(FriendsManagmentPanal);
+        FriendsManagmentPanal.revalidate();
+        FriendsManagmentPanal.repaint();
+    }
+
+
 
     private void blockedFriendsList() {
         FriendsManagmentPanal.removeAll();
@@ -120,7 +147,7 @@ public class FriendManagementWindow extends JFrame {
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 
-        if (friendManagement.SentRequests().contains(friend)) {
+        if (friendManagement.SentRequestsFromUser().contains(friend)) {
             JButton cancelRequestButton = new JButton("Cancel Request");
             cancelRequestButton.addActionListener(e -> {
                 if (friendManagement.cancelFriendRequest(friend)) {
@@ -129,11 +156,11 @@ public class FriendManagementWindow extends JFrame {
                 }
             });
             buttonsPanel.add(cancelRequestButton);
-        } else {
-            JButton sendRequestButton = new JButton("Send Request");
+        } else  {
+            JButton sendRequestButton = new JButton("Remove Friend");
             sendRequestButton.addActionListener(e -> {
-                if (friendManagement.sendFriendRequest(friend)) {
-                    JOptionPane.showMessageDialog(this, "Friend Request Sent.");
+                if (friendManagement.removeFriend(friend)) {
+                    JOptionPane.showMessageDialog(this, "Friend Removed.");
                     loadFriendsList();
                 }
             });
@@ -188,6 +215,47 @@ public class FriendManagementWindow extends JFrame {
 
         return blockedPanel;
     }
+    private JPanel CreateReceivedRequestsPanel(User friend) {
+        JPanel friendPanel = new JPanel();
+        friendPanel.setLayout(new BorderLayout(10, 10));
+        friendPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY, 1),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+        friendPanel.setPreferredSize(new Dimension(900, 100));
+
+        JLabel profilePictureLabel = createProfilePictureLabel(friend.getProfilePhotoPath());
+        friendPanel.add(profilePictureLabel, BorderLayout.WEST);
+
+        JLabel friendLabel = new JLabel(friend.getUsername());
+        friendLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        friendPanel.add(friendLabel, BorderLayout.CENTER);
+
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+
+        JButton acceptRequestButton = new JButton("Accept Request");
+        acceptRequestButton.addActionListener(e -> {
+            if (friendManagement.acceptFriendRequest(friend)) {
+                JOptionPane.showMessageDialog(this, "Friend Request Accepted.");
+                loadReceivedRequestsList();
+            }
+        });
+        buttonsPanel.add(acceptRequestButton);
+
+        JButton rejectRequestButton = new JButton("Reject Request");
+        rejectRequestButton.addActionListener(e -> {
+            if (friendManagement.rejectFriendRequest(friend)) {
+                JOptionPane.showMessageDialog(this, "Friend Request Rejected.");
+                loadReceivedRequestsList();
+            }
+        });
+        buttonsPanel.add(rejectRequestButton);
+
+        friendPanel.add(buttonsPanel, BorderLayout.EAST);
+
+        return friendPanel;
+    }
+
 
     private JLabel createProfilePictureLabel(String profilePhotoPath) {
         JLabel profilePictureLabel;
