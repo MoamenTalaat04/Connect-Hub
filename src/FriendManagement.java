@@ -128,4 +128,7 @@ public class FriendManagement {
         return allUsers;
     }
 
+    public UserDatabase getUserDatabase() {
+        return userDatabase;
+    }
 }

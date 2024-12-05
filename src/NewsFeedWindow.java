@@ -70,7 +70,9 @@ public class NewsFeedWindow extends JFrame {
         });
 
         logOutButton.addActionListener(e -> {
-            new LoginUI();
+            currentUser.setStatus("Offline");
+            newsFeed.getFriendManagement().getUserDatabase().saveUsersToFile(newsFeed.getFriendManagement().getAllUsers());
+            new LoginWindow;
             dispose();
         });
 
