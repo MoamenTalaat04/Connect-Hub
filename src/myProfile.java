@@ -8,7 +8,6 @@ import java.util.List;
 
 public class myProfile extends JFrame {
 private User user ;
-
 private ProfileManager profileManager;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private FriendManagment friend;
