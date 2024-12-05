@@ -12,6 +12,7 @@ private User user ;
 private ProfileManager profileManager;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private FriendManagment friend;
+    UserDatabase userDatabase;
     private MainContentCreation content;
     private JPanel thePanel;
     private JButton uploadprofile;
@@ -35,9 +36,9 @@ private ProfileManager profileManager;
         this.friend= new FriendManagment(user);
         this.user=user;
         loadnewdata();
-        List <User> profiles = profileManager.load();  //nadiiiim
+        List <User> profiles = profileManager.readUsersFromFile();  //nadiiiim
         setTitle("My Profile");
-        setContentPane(thePanel);//rakz
+        setContentPane(thePanel);
         setSize(1300,1000);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -54,7 +55,7 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setProfilePhotoPath(path);
-                    profileManager.save;   // hnnady method el save beta3et nadim
+                    profileManager.saveUserToFile;   // hnnady method el save beta3et nadim
                     loadnewdata();
                 }
             }
@@ -72,7 +73,7 @@ private ProfileManager profileManager;
         }
         else{
             user.setCoverPhotoPath(path);
-            profileManager.saveProfiles();// el save beta3et nadim
+            profileManager.saveUserToFile();// el save beta3et nadim
         loadnewdata();
         }
             }
@@ -86,7 +87,7 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setBio(newBio);
-                    profileManager.saveProfiles();//beta3et nadiiim
+                    profileManager.saveUserToFile();//beta3et nadiiim
                 loadnewdata();
                 }
             }
@@ -101,7 +102,8 @@ private ProfileManager profileManager;
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Gui nadiiim
+            user.setStatus("Offline");
+
             dispose();
             }
         });
@@ -168,12 +170,24 @@ private ProfileManager profileManager;
         postsContent.repaint();
     }
     private void loadnewdata(){
-        ImageIcon profilePicture = new ImageIcon(user.getProfilePhotoPath());
-        Image scaledProfileImage = profilePicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Scale image
-        ImageIcon coverPicture = new ImageIcon(scaledProfileImage);
-        Image scaledcoverPicture= coverPicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        profile=new JLabel((new ImageIcon(scaledProfileImage))) ;
-        Cover= new JLabel(new ImageIcon(scaledcoverPicture));
+       if (user.getProfilePhotoPath()==null){
+           profile=new JLabel();// put the default image if the user didnt upload a photo
+       }else{
+           ImageIcon profilePicture = new ImageIcon(user.getProfilePhotoPath());
+           Image scaledProfileImage = profilePicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Scale image
+           profile=new JLabel((new ImageIcon(scaledProfileImage))) ;
+
+
+       }
+        if (user.getCoverPhotoPath()==null) {
+        Cover=new JLabel();// put the default image if the user didnt upload a photo
+        }
+       else{
+           ImageIcon coverPicture = new ImageIcon(user.getCoverPhotoPath());
+            Image scaledcoverPicture= coverPicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            Cover= new JLabel(new ImageIcon(scaledcoverPicture));
+        }
+
         Bio= new JLabel(user.getBio());
     }
     private void loadFriendStatus() {
