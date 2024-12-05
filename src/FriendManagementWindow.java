@@ -101,8 +101,8 @@ public class FriendManagementWindow extends JFrame {
         FriendsManagmentPanal.setLayout(new BoxLayout(FriendsManagmentPanal, BoxLayout.Y_AXIS));
 
         for (User friend : sentRequests) {
-            JPanel friendPanel = CreateReceivedRequestsPanel(friend);
-            FriendsManagmentPanal.add(friendPanel);
+            JPanel RequestsPanel = CreateReceivedRequestsPanel(friend);
+            FriendsManagmentPanal.add(RequestsPanel);
             FriendsManagmentPanal.add(Box.createVerticalStrut(10));
         }
 
@@ -147,27 +147,16 @@ public class FriendManagementWindow extends JFrame {
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 
-        if (friendManagement.SentRequestsFromUser().contains(friend)) {
-            JButton cancelRequestButton = new JButton("Cancel Request");
-            cancelRequestButton.addActionListener(e -> {
-                if (friendManagement.cancelFriendRequest(friend)) {
-                    JOptionPane.showMessageDialog(this, "Friend Request Cancelled.");
-                    loadFriendsList();
-                }
-            });
-            buttonsPanel.add(cancelRequestButton);
-        } else  {
-            JButton sendRequestButton = new JButton("Remove Friend");
-            sendRequestButton.addActionListener(e -> {
-                if (friendManagement.removeFriend(friend)) {
+        JButton sendRequestButton = new JButton("Remove Friend");
+        sendRequestButton.addActionListener(e -> {
+            if (friendManagement.removeFriend(friend)) {
                     JOptionPane.showMessageDialog(this, "Friend Removed.");
                     loadFriendsList();
                 }
             });
-            sendRequestButton.setAlignmentY(CENTER_ALIGNMENT);
-            sendRequestButton.setVerticalAlignment(SwingConstants.CENTER);
-            buttonsPanel.add(sendRequestButton);
-        }
+        sendRequestButton.setAlignmentY(CENTER_ALIGNMENT);
+        sendRequestButton.setVerticalAlignment(SwingConstants.CENTER);
+        buttonsPanel.add(sendRequestButton);
 
         JButton blockButton = new JButton("Block");
         blockButton.addActionListener(e -> {
@@ -216,20 +205,20 @@ public class FriendManagementWindow extends JFrame {
         return blockedPanel;
     }
     private JPanel CreateReceivedRequestsPanel(User friend) {
-        JPanel friendPanel = new JPanel();
-        friendPanel.setLayout(new BorderLayout(10, 10));
-        friendPanel.setBorder(BorderFactory.createCompoundBorder(
+        JPanel RequestsPanel = new JPanel();
+        RequestsPanel.setLayout(new BorderLayout(10, 10));
+        RequestsPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        friendPanel.setPreferredSize(new Dimension(900, 100));
+        RequestsPanel.setPreferredSize(new Dimension(900, 100));
 
         JLabel profilePictureLabel = createProfilePictureLabel(friend.getProfilePhotoPath());
-        friendPanel.add(profilePictureLabel, BorderLayout.WEST);
+        RequestsPanel.add(profilePictureLabel, BorderLayout.WEST);
 
         JLabel friendLabel = new JLabel(friend.getUsername());
         friendLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        friendPanel.add(friendLabel, BorderLayout.CENTER);
+        RequestsPanel.add(friendLabel, BorderLayout.CENTER);
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 
@@ -251,11 +240,10 @@ public class FriendManagementWindow extends JFrame {
         });
         buttonsPanel.add(rejectRequestButton);
 
-        friendPanel.add(buttonsPanel, BorderLayout.EAST);
+        RequestsPanel.add(buttonsPanel, BorderLayout.EAST);
 
-        return friendPanel;
+        return RequestsPanel;
     }
-
 
     private JLabel createProfilePictureLabel(String profilePhotoPath) {
         JLabel profilePictureLabel;
