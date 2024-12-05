@@ -175,7 +175,10 @@ private ProfileManager profileManager;
     }
     private void loadnewdata(){
        if (user.getProfilePhotoPath()==null){
-           profile=new JLabel(,,,,,);// put the default image if the user didnt upload a photo
+           profile=new JLabel("No Image");// put the default image if the user didnt upload a photo
+           profile.setHorizontalAlignment(SwingConstants.CENTER);
+           profile.setPreferredSize(new Dimension(100,100));
+           profile.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
        }else{
            ImageIcon profilePicture = new ImageIcon(user.getProfilePhotoPath());
            Image scaledProfileImage = profilePicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Scale image
@@ -184,7 +187,10 @@ private ProfileManager profileManager;
 
        }
         if (user.getCoverPhotoPath()==null) {
-        Cover=new JLabel(.......);// put the default image if the user didnt upload a photo
+        Cover=new JLabel("No Image");// put the default image if the user didnt upload a photo
+            Cover.setHorizontalAlignment(SwingConstants.CENTER);
+            Cover.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
         }
        else{
            ImageIcon coverPicture = new ImageIcon(user.getCoverPhotoPath());
