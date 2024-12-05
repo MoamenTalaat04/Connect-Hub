@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="fasterxml.jackson.datatype.jsr310" type="repository">
+  <library name="fasterxml.jackson.datatype.jsr311" type="repository">
     <properties maven-id="com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.16.1/jackson-datatype-jsr310-2.16.1.jar!/" />
