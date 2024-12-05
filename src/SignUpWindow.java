@@ -12,8 +12,6 @@ public class SignUpWindow extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JFormattedTextField yyyy;
-    private JButton addProfilePictureButton;
-    private JButton profileCoverButton;
     private JPasswordField confirmPasswordField;
     private JButton signupButton;
     private JButton loginButton;
