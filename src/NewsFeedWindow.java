@@ -307,10 +307,12 @@ public class NewsFeedWindow extends JFrame {
             ArrayList<Posts> posts = newsFeed.fetchPostsFromFriends();
             for (Posts post : posts) {
                 JPanel postPanel = new JPanel(new BorderLayout());
+                postPanel.setPreferredSize(new Dimension(1200, 150));
                 postPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
                 JLabel UsernameAndTimeLable = new JLabel(newsFeed.getUsernameByID(post.getAuthorId()) + " - " + post.getTimestamp().format(dtf));
                 UsernameAndTimeLable.setFont(new Font("Arial", Font.PLAIN, 12));
                 UsernameAndTimeLable.setAlignmentX(Component.LEFT_ALIGNMENT);
+                UsernameAndTimeLable.setHorizontalTextPosition(SwingConstants.LEFT);
                 UsernameAndTimeLable.setVerticalAlignment(SwingConstants.TOP);
                 JLabel postLabel = new JLabel(post.getContent());
                 postLabel.setFont(new Font("Arial", Font.PLAIN, 16));
