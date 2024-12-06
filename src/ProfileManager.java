@@ -6,9 +6,6 @@ import java.util.List;
 public class ProfileManager {
     private User currentUser ;
     private MainContentCreation contentCreation;
-    private static final String database = "profiles.json";
-    List<User> profiles = new ArrayList<>();
-    private UserDatabase userDatabase;
 
     public ProfileManager(User currentUser) {
         this.currentUser = currentUser;

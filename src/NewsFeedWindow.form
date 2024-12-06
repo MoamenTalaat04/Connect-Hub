@@ -222,7 +222,9 @@
           </component>
           <scrollpane id="84be0" binding="FriendSuggestionsScrollPane">
             <constraints>
-              <grid row="3" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <maximum-size width="-1" height="210"/>
+              </grid>
             </constraints>
             <properties>
               <verticalScrollBarPolicy value="21"/>

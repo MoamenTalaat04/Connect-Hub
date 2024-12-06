@@ -31,14 +31,14 @@ private ProfileManager profileManager;
     private JPanel CoverPanel;
     private JPanel ProfilePanel;
 
-    public myProfile(User user) {
-        this.friend= new FriendManagement(user);
+    public myProfile(User user,ArrayList<User>allUsers) {
         this.userDatabase=new UserDatabase();
         this.profileManager=new ProfileManager(user);
         this.user=user;
         loadnewdata();
         loadPosts();
-        ArrayList <User> profiles = userDatabase.readUsersFromFile();
+        ArrayList <User> profiles = allUsers;
+        this.friend= new FriendManagement(user,profiles);
         setTitle("My Profile");
         setContentPane(thePanel);
         setSize(900,600);
@@ -57,7 +57,7 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setProfilePhotoPath(path);
-                    userDatabase.saveUserToFile(user);
+                    userDatabase.saveUsersToFile(allUsers);
                     loadnewdata();
                 }
             }
@@ -75,7 +75,7 @@ private ProfileManager profileManager;
         }
         else{
             user.setCoverPhotoPath(path);
-            userDatabase.saveUserToFile(user);
+            userDatabase.saveUsersToFile(allUsers);
             loadnewdata();
         }
             }
@@ -89,7 +89,7 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setBio(newBio);
-                    userDatabase.saveUserToFile(user);
+                    userDatabase.saveUsersToFile(allUsers);
                     loadnewdata();
                 }
             }
@@ -106,7 +106,7 @@ private ProfileManager profileManager;
             @Override
             public void actionPerformed(ActionEvent e) {
             user.setStatus("Offline");
-                userDatabase.saveUserToFile(user);
+                userDatabase.saveUsersToFile(allUsers);
 
                 dispose();
             }
@@ -116,7 +116,7 @@ private ProfileManager profileManager;
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                new FriendManagementWindow(user);
+                new FriendManagementWindow(user,profiles);
                 dispose();
 
            }
@@ -125,7 +125,7 @@ private ProfileManager profileManager;
         newsFeedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new NewsFeedWindow(user);
+                new NewsFeedWindow(user,profiles);
                 dispose();
             }
         });

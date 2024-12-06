@@ -7,8 +7,8 @@ public class NewsFeed {
     private User currentUser;
 
 
-    public NewsFeed(User currentUser) {
-        this.friendManagement =new FriendManagement(currentUser); ;
+    public NewsFeed(User currentUser,ArrayList<User>allUsers) {
+        this.friendManagement =new FriendManagement(currentUser,allUsers); ;
         this.contentCreation = new MainContentCreation();
         this.currentUser = currentUser;
     }

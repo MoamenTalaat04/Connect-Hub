@@ -19,8 +19,8 @@ public class FriendManagementWindow extends JFrame {
     private JButton receivedRequestsButton;
     private FriendManagement friendManagement;
 
-    public FriendManagementWindow(User currentUser) {
-        this.friendManagement = new FriendManagement(currentUser);
+    public FriendManagementWindow(User currentUser,ArrayList<User>allUsers) {
+        this.friendManagement = new FriendManagement(currentUser,allUsers);
         setTitle("Friend Management");
         setSize(1300, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,7 +66,7 @@ public class FriendManagementWindow extends JFrame {
         newsFeedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               new NewsFeedWindow(friendManagement.getCurrentUser());
+               new NewsFeedWindow(friendManagement.getCurrentUser(),allUsers);
                 dispose();
             }
         });
@@ -74,7 +74,7 @@ public class FriendManagementWindow extends JFrame {
         profileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              //  new ProfileUI(friendManagement.getCurrentUser());
+                new myProfile(friendManagement.getCurrentUser(),allUsers);
                 dispose();
             }
         });
@@ -107,10 +107,10 @@ public class FriendManagementWindow extends JFrame {
     private void loadReceivedRequestsList() {
         FriendsManagmentPanal.removeAll();
 
-        ArrayList<User> sentRequests = friendManagement.ReceivedRequestsForUser();
+        ArrayList<User> ReceivedRequests = friendManagement.ReceivedRequestsForUser();
         FriendsManagmentPanal.setLayout(new BoxLayout(FriendsManagmentPanal, BoxLayout.Y_AXIS));
 
-        for (User friend : sentRequests) {
+        for (User friend : ReceivedRequests) {
             JPanel RequestsPanel = CreateReceivedRequestsPanel(friend);
             FriendsManagmentPanal.add(RequestsPanel);
             FriendsManagmentPanal.add(Box.createVerticalStrut(10));
@@ -146,7 +146,7 @@ public class FriendManagementWindow extends JFrame {
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        friendPanel.setPreferredSize(new Dimension(900, 100));
+        friendPanel.setMaximumSize(new Dimension(900, 100));
 
         JLabel profilePictureLabel = createProfilePictureLabel(friend.getProfilePhotoPath());
         friendPanel.add(profilePictureLabel, BorderLayout.WEST);
@@ -191,7 +191,7 @@ public class FriendManagementWindow extends JFrame {
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        blockedPanel.setPreferredSize(new Dimension(900, 100));
+        blockedPanel.setMaximumSize(new Dimension(900, 100));
 
         JLabel profilePictureLabel = createProfilePictureLabel(blocked.getProfilePhotoPath());
         blockedPanel.add(profilePictureLabel, BorderLayout.WEST);
@@ -221,7 +221,7 @@ public class FriendManagementWindow extends JFrame {
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        RequestsPanel.setPreferredSize(new Dimension(900, 100));
+        RequestsPanel.setMaximumSize(new Dimension(900, 100));
 
         JLabel profilePictureLabel = createProfilePictureLabel(friend.getProfilePhotoPath());
         RequestsPanel.add(profilePictureLabel, BorderLayout.WEST);

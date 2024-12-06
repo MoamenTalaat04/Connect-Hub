@@ -37,8 +37,8 @@ public class NewsFeedWindow extends JFrame {
     private NewsFeed newsFeed;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public NewsFeedWindow(User currentUser) {
-        this.newsFeed = new NewsFeed(currentUser);
+    public NewsFeedWindow(User currentUser,ArrayList<User>allUsers) {
+        this.newsFeed = new NewsFeed(currentUser,allUsers);
         setContentPane(panel1);
         setTitle("News Feed");
         setSize(1300, 1000);
@@ -60,12 +60,12 @@ public class NewsFeedWindow extends JFrame {
         });
 
         profileButton.addActionListener(e -> {
-            new myProfile(newsFeed.getCurrentUser());
+            new myProfile(newsFeed.getCurrentUser(),allUsers);
             dispose();
         });
 
         friendsButton.addActionListener(e -> {
-            new FriendManagementWindow(newsFeed.getCurrentUser());
+            new FriendManagementWindow(newsFeed.getCurrentUser(),allUsers);
             dispose();
         });
 

@@ -5,10 +5,10 @@ public class FriendManagement {
     private User currentUser;  // The current user
     private UserDatabase userDatabase;
 
-    public FriendManagement(User currentUser) {
+    public FriendManagement(User currentUser,ArrayList<User> allUsers) {
         this.currentUser = currentUser;  // Initialize currentUser in the constructor
         this.userDatabase = new UserDatabase();
-        this.allUsers = userDatabase.readUsersFromFile();
+        this.allUsers =allUsers;
     }
 
     // Send Friend Request
