@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
 import java.util.ArrayList;
 
 public class FriendManagementWindow extends JFrame {
@@ -85,12 +86,14 @@ public class FriendManagementWindow extends JFrame {
                 loadReceivedRequestsList();
             }
         });
+        Container.addComponentListener(new ComponentAdapter() {
+        });
     }
 
     private void loadFriendsList() {
         FriendsManagmentPanal.removeAll();
 
-        ArrayList<User> friends = friendManagement.getCurrentUser().getFriends();
+        ArrayList<User> friends =friendManagement.getUsersById(friendManagement.getCurrentUser().getFriends());
         FriendsManagmentPanal.setLayout(new BoxLayout(FriendsManagmentPanal, BoxLayout.Y_AXIS));
 
         for (User friend : friends) {
@@ -126,7 +129,7 @@ public class FriendManagementWindow extends JFrame {
     private void blockedFriendsList() {
         FriendsManagmentPanal.removeAll();
         FriendsManagmentPanal.setLayout(new BoxLayout(FriendsManagmentPanal, BoxLayout.Y_AXIS));
-        ArrayList<User> blockedUsers = friendManagement.getCurrentUser().getBlocked();
+        ArrayList<User> blockedUsers = friendManagement.getUsersById(friendManagement.getCurrentUser().getBlocked());
 
         for (User blocked : blockedUsers) {
             JPanel blockedPanel = createBlockedPanel(blocked);
@@ -146,7 +149,7 @@ public class FriendManagementWindow extends JFrame {
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        friendPanel.setMaximumSize(new Dimension(900, 100));
+        friendPanel.setMaximumSize(new Dimension(1200, 190));
 
         JLabel profilePictureLabel = createProfilePictureLabel(friend.getProfilePhotoPath());
         friendPanel.add(profilePictureLabel, BorderLayout.WEST);
@@ -191,7 +194,7 @@ public class FriendManagementWindow extends JFrame {
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        blockedPanel.setMaximumSize(new Dimension(900, 100));
+        blockedPanel.setMaximumSize(new Dimension(1200, 190));
 
         JLabel profilePictureLabel = createProfilePictureLabel(blocked.getProfilePhotoPath());
         blockedPanel.add(profilePictureLabel, BorderLayout.WEST);
@@ -221,7 +224,7 @@ public class FriendManagementWindow extends JFrame {
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
-        RequestsPanel.setMaximumSize(new Dimension(900, 100));
+        RequestsPanel.setMaximumSize(new Dimension(1200, 190));
 
         JLabel profilePictureLabel = createProfilePictureLabel(friend.getProfilePhotoPath());
         RequestsPanel.add(profilePictureLabel, BorderLayout.WEST);

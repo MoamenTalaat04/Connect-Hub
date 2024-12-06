@@ -41,9 +41,9 @@ public class NewsFeed {
         }
 
         // Filter posts to include only those from friends
-        for (User friend : currentUser.getFriends()) {
+        for (String friend : currentUser.getFriends()) {
             for (Posts post : allPosts) {
-                if (post.getAuthorId().equals(friend.getUserId())) {
+                if (post.getAuthorId().equals(friend)) {
                     friendPosts.add(post);
                 }
             }
@@ -64,9 +64,9 @@ public class NewsFeed {
         }
 
         // Filter stories to include only those from friends
-        for (User friend : currentUser.getFriends()) {
+        for (String friend : currentUser.getFriends()) {
             for (Stories story : allStories) {
-                if (story.getAuthorId().equals(friend.getUserId())) {
+                if (story.getAuthorId().equals(friend)) {
                     friendStories.add(story);
                 }
             }
@@ -85,7 +85,7 @@ public class NewsFeed {
     }
 
     public String getUsernameByID(String UserID){
-        for(User user :currentUser.getFriends()){
+        for(User user :friendManagement.getUsersById( currentUser.getFriends())){
             if (user.getUserId().equals(UserID)){
                 return user.getUsername();
             }
