@@ -34,20 +34,19 @@ private ProfileManager profileManager;
     private JPanel ProfilePanel;
 
     public myProfile(User user,ArrayList<User>allUsers) {
-        this.userDatabase=new UserDatabase();
+        this.userDatabase = UserDatabase.getInstance();
         this.profileManager=new ProfileManager(user);
         this.user=user;
-        loadnewdata();
-        loadPosts();
-        loadFriendStatus();
-        ArrayList <User> profiles = allUsers;
-        this.friend= new FriendManagement(user,profiles);
+        this.friend= new FriendManagement(user,allUsers);
         setTitle("My Profile");
         setContentPane(thePanel);
         setSize(900,600);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        loadnewdata();
+        loadPosts();
+        loadFriendStatus();
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -127,7 +126,7 @@ private ProfileManager profileManager;
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                new FriendManagementWindow(user,profiles);
+                new FriendManagementWindow(user,allUsers);
                 dispose();
 
            }
@@ -136,7 +135,7 @@ private ProfileManager profileManager;
         newsFeedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new NewsFeedWindow(user,profiles);
+                new NewsFeedWindow(user,allUsers);
                 dispose();
             }
         });

@@ -31,7 +31,7 @@ public class SignUpWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        UserDatabase userDatabase = new UserDatabase();
+        UserDatabase userDatabase = UserDatabase.getInstance();
         ArrayList<User> users=userDatabase.readUsersFromFile();
         Map<String,String> emailPasswordMap=userDatabase.readMapFromUsers();
 

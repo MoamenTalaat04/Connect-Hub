@@ -5,12 +5,15 @@ public class NewsFeed {
     private FriendManagement friendManagement;
     private MainContentCreation contentCreation;
     private User currentUser;
+    private UserDatabase userDatabase;
+
 
 
     public NewsFeed(User currentUser,ArrayList<User>allUsers) {
         this.friendManagement =new FriendManagement(currentUser,allUsers); ;
         this.contentCreation = new MainContentCreation();
         this.currentUser = currentUser;
+        this.userDatabase = UserDatabase.getInstance();
     }
 
     public void addPost(String content, String imagePath) {
@@ -97,5 +100,8 @@ public class NewsFeed {
     }
     public FriendManagement getFriendManagement() {
         return friendManagement;
+    }
+    public UserDatabase getUserDatabase() {
+        return userDatabase;
     }
 }

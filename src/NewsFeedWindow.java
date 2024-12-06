@@ -59,7 +59,7 @@ public class NewsFeedWindow extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 currentUser.setStatus("Offline");
-                newsFeed.getFriendManagement().getUserDatabase().saveUsersToFile(newsFeed.getFriendManagement().getAllUsers());
+                newsFeed.getUserDatabase().saveUsersToFile(allUsers);
             }
         });
 
@@ -85,7 +85,7 @@ public class NewsFeedWindow extends JFrame {
 
 
                 currentUser.setStatus("Offline");
-                newsFeed.getFriendManagement().getUserDatabase().saveUsersToFile(newsFeed.getFriendManagement().getAllUsers());
+                newsFeed.getUserDatabase().saveUsersToFile(allUsers);
                 new LoginWindow();
                 dispose();
             } catch (Exception ex) {
@@ -119,7 +119,7 @@ public class NewsFeedWindow extends JFrame {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 // Get the selected file
                 String imagePath = fileChooser.getSelectedFile().getAbsolutePath();
-                // Set the image path in the PostContantField
+                // Set the image path in the PostContentField
                 PostPhotoPathLable.setText(imagePath);
             }
         });

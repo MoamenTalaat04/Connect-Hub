@@ -7,7 +7,7 @@ public class FriendManagement {
 
     public FriendManagement(User currentUser,ArrayList<User> allUsers) {
         this.currentUser = currentUser;  // Initialize currentUser in the constructor
-        this.userDatabase = new UserDatabase();
+        this.userDatabase =UserDatabase.getInstance();
         this.allUsers =allUsers;
     }
 
