@@ -9,11 +9,12 @@ public class User {
     private String username;
     private String status;
     private String dob;
-    private ArrayList<User> friends;
-    private ArrayList<User> blocked;
-    private ArrayList<User> pendingRequests;
-
-    public User(String userId, ArrayList<User> blocked, ArrayList<User> pendingRequests, ArrayList<User> friends, String status,String dob,String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath) {
+    private ArrayList<String> friends;
+    private ArrayList<String> blocked;
+    private ArrayList<String> pendingRequests;
+    public User() {
+    }
+    public User(String userId, ArrayList<String> blocked, ArrayList<String> pendingRequests, ArrayList<String> friends, String status,String dob,String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath) {
 
         this.userId = userId;
         this.blocked = blocked != null ? blocked : new ArrayList<>();
@@ -94,27 +95,27 @@ public class User {
         this.status = status;
     }
 
-    public ArrayList<User> getFriends() {
+    public ArrayList<String> getFriends() {
         return friends;
     }
 
-    public void setFriends(ArrayList<User> friends) {
+    public void setFriends(ArrayList<String> friends) {
         this.friends = friends;
     }
 
-    public ArrayList<User> getBlocked() {
+    public ArrayList<String> getBlocked() {
         return blocked;
     }
 
-    public void setBlocked(ArrayList<User> blocked) {
+    public void setBlocked(ArrayList<String> blocked) {
         this.blocked = blocked;
     }
 
-    public ArrayList<User> getPendingRequests() {
+    public ArrayList<String> getPendingRequests() {
         return pendingRequests;
     }
 
-    public void setPendingRequests(ArrayList<User> pendingRequests) {
+    public void setPendingRequests(ArrayList<String> pendingRequests) {
         this.pendingRequests = pendingRequests;
     }
 
