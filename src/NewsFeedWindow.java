@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -52,6 +54,15 @@ public class NewsFeedWindow extends JFrame {
         loadStories();
         loadPosts();
         loadFriendSuggestions();
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                currentUser.setStatus("Offline");
+                newsFeed.getFriendManagement().getUserDatabase().saveUsersToFile(newsFeed.getFriendManagement().getAllUsers());
+            }
+        });
+
         refreshButton.addActionListener(e -> {
             loadFriendStatus();
             loadStories();

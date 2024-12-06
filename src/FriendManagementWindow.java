@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class FriendManagementWindow extends JFrame {
@@ -28,6 +26,14 @@ public class FriendManagementWindow extends JFrame {
         setContentPane(Container);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                currentUser.setStatus("Offline");
+                friendManagement.getUserDatabase().saveUsersToFile(friendManagement.getAllUsers());
+            }
+        });
 
         loadFriendsList();
         friendsButton1.addActionListener(new ActionListener() {

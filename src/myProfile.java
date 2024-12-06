@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ private ProfileManager profileManager;
         this.user=user;
         loadnewdata();
         loadPosts();
+        loadFriendStatus();
         ArrayList <User> profiles = allUsers;
         this.friend= new FriendManagement(user,profiles);
         setTitle("My Profile");
@@ -44,7 +47,15 @@ private ProfileManager profileManager;
         setSize(900,600);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                user.setStatus("Offline");
+                userDatabase.saveUsersToFile(allUsers);
+            }
+        });
 
         uploadprofile.addActionListener(new ActionListener() {
             @Override
