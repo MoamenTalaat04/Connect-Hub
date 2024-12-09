@@ -50,7 +50,8 @@ public class LoginWindow extends JFrame {
                                 }
                             }
                             currentUser.setStatus("Online");
-                            new NewsFeedWindow(currentUser,users);
+                            userDatabase.saveUsersToFile(users);
+                            new NewsFeedWindow(currentUser);
                             dispose();
                         }
                         else {JOptionPane.showMessageDialog(null, "please enter correct password", "Invalid Password", JOptionPane.INFORMATION_MESSAGE);}

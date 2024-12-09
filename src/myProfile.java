@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +34,11 @@ private ProfileManager profileManager;
     private JPanel NavigationPanel;
 
 
-    public myProfile(User user,ArrayList<User>allUsers) {
+    public myProfile(User user) {
         this.userDatabase = UserDatabase.getInstance();
         this.profileManager=new ProfileManager(user);
         this.user=user;
-        this.friend= new FriendManagement(user,allUsers);
+        this.friend= new FriendManagement(user);
         setTitle("My Profile");
         setContentPane(thePanel);
         setSize(1300,1000);
@@ -51,8 +52,8 @@ private ProfileManager profileManager;
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                user.setStatus("Offline");
-                userDatabase.saveUsersToFile(allUsers);
+                profileManager.getCurrentUser().setStatus("Offline");
+                userDatabase.saveUsersToFile(profileManager.getAllUsers());
             }
         });
 
@@ -67,7 +68,7 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setProfilePhotoPath(path);
-                    userDatabase.saveUsersToFile(allUsers);
+                    userDatabase.saveUsersToFile(profileManager.getAllUsers());
                     loadnewdata();
                 }
             }
@@ -85,7 +86,7 @@ private ProfileManager profileManager;
         }
         else{
             user.setCoverPhotoPath(path);
-            userDatabase.saveUsersToFile(allUsers);
+            userDatabase.saveUsersToFile(profileManager.getAllUsers());
             loadnewdata();
         }
             }
@@ -99,7 +100,7 @@ private ProfileManager profileManager;
                 }
                 else{
                     user.setBio(newBio);
-                    userDatabase.saveUsersToFile(allUsers);
+                    userDatabase.saveUsersToFile(profileManager.getAllUsers());
                     loadnewdata();
                 }
             }
@@ -115,9 +116,13 @@ private ProfileManager profileManager;
         logOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            user.setStatus("Offline");
-                userDatabase.saveUsersToFile(allUsers);
-
+                profileManager.getCurrentUser().setStatus("Offline");
+                userDatabase.saveUsersToFile(profileManager.getAllUsers());
+                try {
+                    new LoginWindow();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 dispose();
             }
         });
@@ -126,7 +131,7 @@ private ProfileManager profileManager;
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                new FriendManagementWindow(user,allUsers);
+                new FriendManagementWindow(user);
                 dispose();
 
            }
@@ -135,7 +140,7 @@ private ProfileManager profileManager;
         newsFeedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new NewsFeedWindow(user,allUsers);
+                new NewsFeedWindow(user);
                 dispose();
             }
         });
@@ -187,9 +192,11 @@ private ProfileManager profileManager;
     private void loadnewdata(){
         ProfilePanel.removeAll();
         CoverPanel.removeAll();
+        profileManager.fetchAllUsers();
         Bio.setText("");
         ProfilePanel.setLayout(new BoxLayout(ProfilePanel, BoxLayout.Y_AXIS));
         CoverPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        user = profileManager.getProfile(user.getUserId());
 
         ProfilePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         CoverPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
@@ -234,7 +241,7 @@ private ProfileManager profileManager;
         // Clear the FriendStatusPanel
         FreindsStatusPanel.removeAll();
         FreindsStatusPanel.setLayout(new BoxLayout(FreindsStatusPanel, BoxLayout.Y_AXIS)); // Use vertical layout
-
+        profileManager.fetchAllUsers();
         ArrayList<String> friends = friend.FriendStatus();
         for (String friend : friends) {
             JLabel friendLabel = new JLabel(friend);

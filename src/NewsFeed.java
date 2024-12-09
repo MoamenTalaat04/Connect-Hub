@@ -6,19 +6,23 @@ public class NewsFeed {
     private MainContentCreation contentCreation;
     private User currentUser;
     private UserDatabase userDatabase;
+    private ArrayList<User> allUsers;
 
 
 
-    public NewsFeed(User currentUser,ArrayList<User>allUsers) {
-        this.friendManagement =new FriendManagement(currentUser,allUsers); ;
-        this.contentCreation = new MainContentCreation();
-        this.currentUser = currentUser;
-        this.userDatabase = UserDatabase.getInstance();
+    public NewsFeed(User currentUser) {
+        friendManagement =new FriendManagement(currentUser); ;
+        contentCreation = new MainContentCreation();
+        userDatabase = UserDatabase.getInstance();
+        allUsers = userDatabase.readUsersFromFile();
+        this.currentUser = friendManagement.getUserById(currentUser.getUserId());
+
+
     }
 
     public void addPost(String content, String imagePath) {
         try {
-            contentCreation.createPost(currentUser.getUserId(), content, imagePath);
+            contentCreation.createPost(getCurrentUser().getUserId(), content, imagePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -27,7 +31,7 @@ public class NewsFeed {
 
     public void addStory(String content, String imagePath) {
         try {
-            contentCreation.createStory(currentUser.getUserId(), content, imagePath);
+            contentCreation.createStory(getCurrentUser().getUserId(), content, imagePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -44,7 +48,7 @@ public class NewsFeed {
         }
 
         // Filter posts to include only those from friends
-        for (String friend : currentUser.getFriends()) {
+        for (String friend : getCurrentUser().getFriends()) {
             for (Posts post : allPosts) {
                 if (post.getAuthorId().equals(friend)) {
                     friendPosts.add(post);
@@ -67,7 +71,7 @@ public class NewsFeed {
         }
 
         // Filter stories to include only those from friends
-        for (String friend : currentUser.getFriends()) {
+        for (String friend : getCurrentUser().getFriends()) {
             for (Stories story : allStories) {
                 if (story.getAuthorId().equals(friend)) {
                     friendStories.add(story);
@@ -88,7 +92,7 @@ public class NewsFeed {
     }
 
     public String getUsernameByID(String UserID){
-        for(User user :friendManagement.getUsersById( currentUser.getFriends())){
+        for(User user :getUsersById( getCurrentUser().getFriends())){
             if (user.getUserId().equals(UserID)){
                 return user.getUsername();
             }
@@ -96,12 +100,47 @@ public class NewsFeed {
         return null;
     }
     public User getCurrentUser() {
-        return currentUser;
+        return getUserById(currentUser.getUserId());
     }
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void setAllUsers(ArrayList<User> allUsers) {
+        this.allUsers = allUsers;
+    }
+    public void fetchAllUsers(){
+        setAllUsers(userDatabase.readUsersFromFile());
+        setCurrentUser(getUserById(getCurrentUser().getUserId()));
+        friendManagement.fetchAllUsers();
+    }
+
+
+
     public FriendManagement getFriendManagement() {
         return friendManagement;
     }
     public UserDatabase getUserDatabase() {
         return userDatabase;
     }
+    public ArrayList<User> getAllUsers() {
+        return allUsers;
+    }
+    public User getUserById(String UserId){
+        for(User user: allUsers ){
+            if (user.getUserId().equals(UserId))return user;
+        }
+        return null;
+
+    }
+    public ArrayList<User> getUsersById(ArrayList<String> UsersId){
+        ArrayList<User> Users =new ArrayList<>();
+        for(String userId: UsersId ){
+            Users.add(getUserById(userId));
+        }
+        return Users;
+
+    }
+
+
 }

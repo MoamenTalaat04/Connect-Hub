@@ -18,8 +18,8 @@ public class FriendManagementWindow extends JFrame {
     private JButton receivedRequestsButton;
     private FriendManagement friendManagement;
 
-    public FriendManagementWindow(User currentUser,ArrayList<User>allUsers) {
-        this.friendManagement = new FriendManagement(currentUser,allUsers);
+    public FriendManagementWindow(User currentUser) {
+        this.friendManagement = new FriendManagement(currentUser);
         setTitle("Friend Management");
         setSize(1300, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,6 +52,7 @@ public class FriendManagementWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadFriendsList();
+
             }
         });
         logOutButton.addActionListener(new ActionListener() {
@@ -73,7 +74,7 @@ public class FriendManagementWindow extends JFrame {
         newsFeedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               new NewsFeedWindow(friendManagement.getCurrentUser(),allUsers);
+               new NewsFeedWindow(friendManagement.getCurrentUser());
                 dispose();
             }
         });
@@ -81,7 +82,7 @@ public class FriendManagementWindow extends JFrame {
         profileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new myProfile(friendManagement.getCurrentUser(),allUsers);
+                new myProfile(friendManagement.getCurrentUser());
                 dispose();
             }
         });
@@ -98,7 +99,7 @@ public class FriendManagementWindow extends JFrame {
 
     private void loadFriendsList() {
         FriendsManagmentPanal.removeAll();
-
+        friendManagement.fetchAllUsers();
         ArrayList<User> friends =friendManagement.getUsersById(friendManagement.getCurrentUser().getFriends());
         FriendsManagmentPanal.setLayout(new BoxLayout(FriendsManagmentPanal, BoxLayout.Y_AXIS));
 
@@ -115,7 +116,7 @@ public class FriendManagementWindow extends JFrame {
 
     private void loadReceivedRequestsList() {
         FriendsManagmentPanal.removeAll();
-
+        friendManagement.fetchAllUsers();
         ArrayList<User> ReceivedRequests = friendManagement.ReceivedRequestsForUser();
         FriendsManagmentPanal.setLayout(new BoxLayout(FriendsManagmentPanal, BoxLayout.Y_AXIS));
 
@@ -135,6 +136,7 @@ public class FriendManagementWindow extends JFrame {
     private void blockedFriendsList() {
         FriendsManagmentPanal.removeAll();
         FriendsManagmentPanal.setLayout(new BoxLayout(FriendsManagmentPanal, BoxLayout.Y_AXIS));
+        friendManagement.fetchAllUsers();
         ArrayList<User> blockedUsers = friendManagement.getUsersById(friendManagement.getCurrentUser().getBlocked());
 
         for (User blocked : blockedUsers) {
