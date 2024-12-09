@@ -39,8 +39,8 @@ public class NewsFeedWindow extends JFrame {
     private NewsFeed newsFeed;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public NewsFeedWindow(User currentUser,ArrayList<User>allUsers) {
-        this.newsFeed = new NewsFeed(currentUser,allUsers);
+    public NewsFeedWindow(User currentUser) {
+        this.newsFeed = new NewsFeed(currentUser);
         setContentPane(panel1);
         setTitle("News Feed");
         setSize(1300, 1000);
@@ -58,8 +58,9 @@ public class NewsFeedWindow extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                currentUser.setStatus("Offline");
-                newsFeed.getUserDatabase().saveUsersToFile(allUsers);
+                newsFeed.fetchAllUsers();
+                newsFeed.getCurrentUser().setStatus("Offline");
+                newsFeed.getUserDatabase().saveUsersToFile(newsFeed.getAllUsers());
             }
         });
 
@@ -71,21 +72,21 @@ public class NewsFeedWindow extends JFrame {
         });
 
         profileButton.addActionListener(e -> {
-            new myProfile(newsFeed.getCurrentUser(),allUsers);
+            new myProfile(newsFeed.getCurrentUser());
             dispose();
         });
 
         friendsButton.addActionListener(e -> {
-            new FriendManagementWindow(newsFeed.getCurrentUser(),allUsers);
+            new FriendManagementWindow(newsFeed.getCurrentUser());
             dispose();
         });
 
         logOutButton.addActionListener(e -> {
             try {
 
-
-                currentUser.setStatus("Offline");
-                newsFeed.getUserDatabase().saveUsersToFile(allUsers);
+                newsFeed.fetchAllUsers();
+                newsFeed.getCurrentUser().setStatus("Offline");
+                newsFeed.getUserDatabase().saveUsersToFile(newsFeed.getAllUsers());
                 new LoginWindow();
                 dispose();
             } catch (Exception ex) {
@@ -154,7 +155,7 @@ public class NewsFeedWindow extends JFrame {
     private void loadFriendStatus() {
         FriendStatusPanel.removeAll();
         FriendStatusPanel.setLayout(new BoxLayout(FriendStatusPanel, BoxLayout.Y_AXIS)); // Use vertical layout
-
+        newsFeed.fetchAllUsers();
         ArrayList<String> friends = newsFeed.fetchFriendStatus();
         for (String friend : friends) {
             JLabel friendLabel = new JLabel(friend);
@@ -209,6 +210,7 @@ public class NewsFeedWindow extends JFrame {
 
     }
     private void loadFriendSuggestions() {
+        newsFeed.fetchAllUsers();
         FriendSuggestionsPanel.removeAll();
         FriendSuggestionsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5)); // Align buttons to the right with spacing); // Use vertical layout
         ArrayList<User> friendSuggestions = newsFeed.suggestFriends();
@@ -244,11 +246,11 @@ public class NewsFeedWindow extends JFrame {
 
             JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 
-            if (newsFeed.getFriendManagement().SentRequestsFromUser().contains(friend)) {
+            if (newsFeed.getFriendManagement().SentRequestsFromUser().contains(newsFeed.getFriendManagement().getUserById(friend.getUserId()))) {
                 JButton cancelRequestButton = new JButton("Cancel Request");
                 cancelRequestButton.setFont(new Font("Arial", Font.PLAIN, 12));
                 cancelRequestButton.addActionListener(e -> {
-                    boolean success = newsFeed.getFriendManagement().cancelFriendRequest(friend);
+                    boolean success = newsFeed.getFriendManagement().cancelFriendRequest(newsFeed.getFriendManagement().getUserById(friend.getUserId()));
                     if (success) {
                         JOptionPane.showMessageDialog(this, "Friend Request Cancelled to " + friend.getUsername());
                         loadFriendSuggestions(); // Refresh suggestions after cancelling
@@ -261,12 +263,12 @@ public class NewsFeedWindow extends JFrame {
                 JButton sendRequestButton = new JButton("Send Request");
                 sendRequestButton.setFont(new Font("Arial", Font.PLAIN, 12));
                 sendRequestButton.addActionListener(e -> {
-                    boolean success = newsFeed.getFriendManagement().sendFriendRequest(friend);
+                    boolean success = newsFeed.getFriendManagement().sendFriendRequest(newsFeed.getFriendManagement().getUserById(friend.getUserId()));
                     if (success) {
-                        JOptionPane.showMessageDialog(this, "Friend Request Sent to " + friend.getUsername());
+                        JOptionPane.showMessageDialog(this, "Friend Request Sent to " + newsFeed.getFriendManagement().getUserById(friend.getUserId()).getUsername());
                         loadFriendSuggestions(); // Refresh suggestions after sending
                     } else {
-                        JOptionPane.showMessageDialog(this, "Unable to Send Friend Request to " + friend.getUsername());
+                        JOptionPane.showMessageDialog(this, "Unable to Send Friend Request to " + newsFeed.getFriendManagement().getUserById(friend.getUserId()).getUsername());
                     }
                 });
                 buttonsPanel.add(sendRequestButton);
@@ -275,12 +277,12 @@ public class NewsFeedWindow extends JFrame {
             JButton blockButton = new JButton("Block");
             blockButton.setFont(new Font("Arial", Font.PLAIN, 12));
             blockButton.addActionListener(e -> {
-                boolean success = newsFeed.getFriendManagement().blockUser(friend);
+                boolean success = newsFeed.getFriendManagement().blockUser(newsFeed.getFriendManagement().getUserById(friend.getUserId()));
                 if (success) {
-                    JOptionPane.showMessageDialog(this, friend.getUsername() + " has been blocked.");
+                    JOptionPane.showMessageDialog(this, newsFeed.getFriendManagement().getUserById(friend.getUserId()).getUsername() + " has been blocked.");
                     loadFriendSuggestions(); // Refresh suggestions after blocking
                 } else {
-                    JOptionPane.showMessageDialog(this, "Unable to Block " + friend.getUsername());
+                    JOptionPane.showMessageDialog(this, "Unable to Block " + newsFeed.getFriendManagement().getUserById(friend.getUserId()).getUsername());
                 }
             });
             buttonsPanel.add(blockButton);

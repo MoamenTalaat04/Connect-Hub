@@ -5,32 +5,35 @@ public class FriendManagement {
     private User currentUser;  // The current user
     private UserDatabase userDatabase;
 
-    public FriendManagement(User currentUser,ArrayList<User> allUsers) {
-        this.currentUser = currentUser;  // Initialize currentUser in the constructor
+    public FriendManagement(User currentUser) {
         this.userDatabase =UserDatabase.getInstance();
-        this.allUsers =allUsers;
+        this.allUsers = userDatabase.readUsersFromFile();
+        this.currentUser = getUserById(currentUser.getUserId());
     }
 
     // Send Friend Request
     public boolean sendFriendRequest(User receiver) {
+        fetchAllUsers();
+        receiver = getUserById(receiver.getUserId());
         // Check if already friends or blocked
-        if (currentUser.getFriends().contains(receiver.getUserId())) {
+        if (getCurrentUser().getFriends().contains(receiver.getUserId())) {
             return false;
         }
-        if (receiver.getBlocked().contains(currentUser.getUserId())) {
+        if (receiver.getBlocked().contains(getCurrentUser().getUserId())) {
             return false;
         }
         // Add to pending requests
-        receiver.getPendingRequests().add(currentUser.getUserId());
+        getUserById(receiver.getUserId()).getPendingRequests().add(getCurrentUser().getUserId());
         userDatabase.saveUsersToFile(allUsers);
         return true;
     }
 
     public ArrayList<User> SentRequestsFromUser() {
+        fetchAllUsers();
         ArrayList<User> sentRequests = new ArrayList<>();
         for(User user : allUsers)
         {
-            if(user.getPendingRequests().contains(currentUser.getUserId()))
+            if(user.getPendingRequests().contains(getCurrentUser().getUserId()))
             {
                 sentRequests.add(user);
             }
@@ -38,27 +41,31 @@ public class FriendManagement {
         return sentRequests;
     }
     public ArrayList<User> ReceivedRequestsForUser() {
-        return getUsersById(currentUser.getPendingRequests());
+        return getUsersById(getCurrentUser().getPendingRequests());
     }
 
     // Accept Friend Request
     public boolean acceptFriendRequest(User sender) {
+        fetchAllUsers();
+        sender = getUserById(sender.getUserId());
         // Check if there is a pending request
-        if (!currentUser.getPendingRequests().contains(sender.getUserId())) {
+        if (!getCurrentUser().getPendingRequests().contains(sender.getUserId())) {
             System.out.println("No pending friend request from " + sender.getUserId());
             return false;
         }
         // Add to friends list
-        currentUser.getFriends().add(sender.getUserId());
-        sender.getFriends().add(currentUser.getUserId());
+        getCurrentUser().getFriends().add(sender.getUserId());
+        sender.getFriends().add(getCurrentUser().getUserId());
         // Remove from pending requests
-        currentUser.getPendingRequests().remove(sender.getUserId());
+        getCurrentUser().getPendingRequests().remove(sender.getUserId());
         userDatabase.saveUsersToFile(allUsers);
         return true;
     }
 
     public boolean rejectFriendRequest(User sender) {
-        if (currentUser.getPendingRequests().remove(sender.getUserId())) {
+        fetchAllUsers();
+        sender = getUserById(sender.getUserId());
+        if (getCurrentUser().getPendingRequests().remove(sender.getUserId())) {
             userDatabase.saveUsersToFile(allUsers);
             return true;
         }
@@ -67,23 +74,23 @@ public class FriendManagement {
 
     // Remove Friend
     public boolean removeFriend(User friend) {
-        boolean removedFromCurrentUser = currentUser.getFriends().remove(friend.getUserId());
-        boolean removedFromFriend = friend.getFriends().remove(currentUser.getUserId());
+        fetchAllUsers();
+        friend = getUserById(friend.getUserId());
+        boolean removedFromCurrentUser = getCurrentUser().getFriends().remove(friend.getUserId());
+        boolean removedFromFriend = friend.getFriends().remove(getCurrentUser().getUserId());
         userDatabase.saveUsersToFile(allUsers);
         return removedFromCurrentUser && removedFromFriend;
     }
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
     // Block User
     public boolean blockUser(User blocked) {
-        if (currentUser.getBlocked().contains(blocked.getUserId())) {
-            System.out.println(blocked.getUserId() + " is already blocked by " + currentUser.getUserId());
+        fetchAllUsers();
+        blocked = getUserById(blocked.getUserId());
+        if (getCurrentUser().getBlocked().contains(blocked.getUserId())) {
+            System.out.println(blocked.getUserId() + " is already blocked by " + getCurrentUser().getUserId());
             return false;
         }
         // Add to blocked list
-        currentUser.getBlocked().add(blocked.getUserId());
+        getCurrentUser().getBlocked().add(blocked.getUserId());
         // Remove from friends if present
         removeFriend(blocked);
         userDatabase.saveUsersToFile(allUsers);
@@ -91,14 +98,18 @@ public class FriendManagement {
     }
 
     public boolean unblockUser(User unblocked) {
-        if (currentUser.getBlocked().remove(unblocked.getUserId())) {
+        fetchAllUsers();
+        unblocked = getUserById(unblocked.getUserId());
+        if (getCurrentUser().getBlocked().remove(unblocked.getUserId())) {
             userDatabase.saveUsersToFile(allUsers);
             return true;
         }
         return false;
     }
     public boolean cancelFriendRequest(User receiver) {
-        if (receiver.getPendingRequests().remove(currentUser.getUserId())) {
+        fetchAllUsers();
+        receiver = getUserById(receiver.getUserId());
+        if (receiver.getPendingRequests().remove(getCurrentUser().getUserId())) {
             userDatabase.saveUsersToFile(allUsers);
             return true;
         }
@@ -107,18 +118,20 @@ public class FriendManagement {
 
     // Suggest Friends
     public ArrayList<User> suggestFriends() {
+        fetchAllUsers();
         ArrayList<User> suggestedFriends = new ArrayList<>(allUsers);
         // Remove current user, his friends, and blocked users
-        suggestedFriends.remove(currentUser); // Remove the current user himself
-        suggestedFriends.removeAll(getUsersById(currentUser.getFriends())); // Remove friends
-        suggestedFriends.removeAll(getUsersById(currentUser.getBlocked())); // Remove blocked users
+        suggestedFriends.remove(getCurrentUser()); // Remove the current user himself
+        suggestedFriends.removeAll(getUsersById(getCurrentUser().getFriends())); // Remove friends
+        suggestedFriends.removeAll(getUsersById(getCurrentUser().getBlocked())); // Remove blocked users
 
         return suggestedFriends;
     }
 
     public ArrayList<String> FriendStatus() {
+        fetchAllUsers();
         ArrayList<String> friendStatus = new ArrayList<>();
-        for (User friend : getUsersById(currentUser.getFriends())) {
+        for (User friend : getUsersById(getCurrentUser().getFriends())) {
             friendStatus.add(friend.getUsername() + " is " + friend.getStatus());
         }
         return friendStatus;
@@ -147,5 +160,25 @@ public class FriendManagement {
         return Users;
 
     }
+    public ArrayList<User> getFriendsById(ArrayList<String> UsersId){
+        ArrayList<User> Users =new ArrayList<>();
+        for(String userId: UsersId ){
+            Users.add(getUserById(userId));
+        }
+        return Users;
 
+    }
+    public void setAllUsers(ArrayList<User> allUsers) {
+        this.allUsers = allUsers;
+    }
+   public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+    public void fetchAllUsers(){
+        setAllUsers(userDatabase.readUsersFromFile());
+        setCurrentUser(getUserById(currentUser.getUserId()));
+    }
+    public User getCurrentUser() {
+        return getUserById(currentUser.getUserId());
+    }
 }
