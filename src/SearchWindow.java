@@ -193,13 +193,13 @@ public class SearchWindow extends JFrame {
         if (allResults.isEmpty()) {
             ResultsPanel.add(new JLabel("No results found."));
         } else {
-            if (isFuzzySearch && !Suggestions.isEmpty()) {
-                ResultsPanel.add(new JLabel("No results found. Did you mean:"));
+            if (!Suggestions.isEmpty()) {
+                ResultsPanel.add(new JLabel("Did you mean:"));
                 for (Object suggestion : Suggestions) {
                     if (suggestion instanceof User) {
                         if(suggestion.equals(newsFeed.getCurrentUser()))
                         {
-                            continue;
+                             continue;
                         }
                         else if (newsFeed.getCurrentUser().getFriends().contains(suggestion)) {
                             createFriendPanel((User) suggestion);
@@ -207,19 +207,23 @@ public class SearchWindow extends JFrame {
                             createUserPanel((User) suggestion);
                         }
                     } else if (suggestion instanceof Group) {
-                        ResultsPanel.add(new JLabel("Group: " + ((Group) suggestion).getGroupName()));
+                         createGroupPanel((Group)suggestion);
                     }
                 }
             }
-            for (Object result : allResults) {
-                if (result instanceof User) {
-                    if(result.equals(searchContext.getCurrentUser()))
+            for (Object results : allResults) {
+                if (results instanceof User) {
+                    if(results.equals(newsFeed.getCurrentUser()))
                     {
                         continue;
                     }
-                    ResultsPanel.add(new JLabel("User: " + ((User) result).getUsername()));
-                } else if (result instanceof Group) {
-                    ResultsPanel.add(new JLabel("Group: " + ((Group) result).getGroupName()));
+                    else if (newsFeed.getCurrentUser().getFriends().contains(results)) {
+                        createFriendPanel((User) results);
+                    }else {
+                        createUserPanel((User) results);
+                    }
+                } else if (results instanceof Group) {
+                    createGroupPanel((Group)results);
                 }
             }
         }
