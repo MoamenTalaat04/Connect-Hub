@@ -52,7 +52,7 @@
           </hspacer>
         </children>
       </grid>
-      <grid id="46e84" binding="NewsFeedPanel" layout-manager="GridLayoutManager" row-count="12" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="46e84" binding="NewsFeedPanel" layout-manager="GridLayoutManager" row-count="13" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints border-constraint="Center"/>
         <properties/>
@@ -60,14 +60,14 @@
         <children>
           <hspacer id="9ff52">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="1" use-parent-layout="false">
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="1" use-parent-layout="false">
                 <maximum-size width="10" height="10"/>
               </grid>
             </constraints>
           </hspacer>
           <component id="9ef18" class="javax.swing.JSeparator" binding="NewsFeedNavigationSeparator">
             <constraints>
-              <grid row="0" column="1" row-span="11" col-span="1" vsize-policy="6" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="1" row-span="11" col-span="1" vsize-policy="6" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <orientation value="1"/>
@@ -75,7 +75,7 @@
           </component>
           <component id="2230" class="javax.swing.JSeparator" binding="NewsFeedFriendStatusSeparator">
             <constraints>
-              <grid row="0" column="4" row-span="2" col-span="1" vsize-policy="6" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="4" row-span="2" col-span="1" vsize-policy="6" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <orientation value="1"/>
@@ -83,7 +83,7 @@
           </component>
           <scrollpane id="9db69" binding="StoriesScrollPane">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <horizontalScrollBarPolicy value="30"/>
@@ -102,7 +102,7 @@
           </scrollpane>
           <scrollpane id="e7cca" binding="PostsScrollPane">
             <constraints>
-              <grid row="1" column="2" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="2" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <horizontalScrollBarPolicy value="31"/>
@@ -121,7 +121,7 @@
           </scrollpane>
           <scrollpane id="bb2d2" binding="PostContantScrollPane">
             <constraints>
-              <grid row="5" column="2" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+              <grid row="6" column="2" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <maximum-size width="600" height="50"/>
               </grid>
             </constraints>
@@ -141,7 +141,7 @@
           </scrollpane>
           <component id="d769e" class="javax.swing.JButton" binding="postButton" default-binding="true">
             <constraints>
-              <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Post"/>
@@ -149,7 +149,7 @@
           </component>
           <scrollpane id="22939" binding="StoryContantScrollPane">
             <constraints>
-              <grid row="9" column="2" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+              <grid row="10" column="2" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <maximum-size width="600" height="50"/>
               </grid>
             </constraints>
@@ -169,7 +169,7 @@
           </scrollpane>
           <component id="86267" class="javax.swing.JButton" binding="storyButton">
             <constraints>
-              <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="10" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Story"/>
@@ -177,7 +177,7 @@
           </component>
           <component id="a7428" class="javax.swing.JButton" binding="StoryPhotoButton">
             <constraints>
-              <grid row="10" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="11" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <icon value="photo.png"/>
@@ -186,7 +186,7 @@
           </component>
           <component id="66685" class="javax.swing.JSeparator">
             <constraints>
-              <grid row="8" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+              <grid row="9" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="-1" height="10"/>
                 <maximum-size width="-1" height="10"/>
               </grid>
@@ -195,7 +195,7 @@
           </component>
           <component id="ac8a1" class="javax.swing.JButton" binding="PostPhotoButton">
             <constraints>
-              <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+              <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
                 <maximum-size width="230" height="30"/>
               </grid>
             </constraints>
@@ -206,7 +206,7 @@
           </component>
           <component id="8fbc3" class="javax.swing.JLabel" binding="PostPhotoPathLable">
             <constraints>
-              <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="8" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value=""/>
@@ -214,7 +214,7 @@
           </component>
           <component id="2b453" class="javax.swing.JLabel" binding="StoryPhotoPathLable">
             <constraints>
-              <grid row="11" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="12" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value=""/>
@@ -222,7 +222,7 @@
           </component>
           <scrollpane id="84be0" binding="FriendSuggestionsScrollPane">
             <constraints>
-              <grid row="3" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+              <grid row="4" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <maximum-size width="-1" height="210"/>
               </grid>
             </constraints>
@@ -240,6 +240,24 @@
               </grid>
             </children>
           </scrollpane>
+          <component id="815d9" class="javax.swing.JTextField" binding="SearchField">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="c3f14" class="javax.swing.JButton" binding="searchButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Search"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <scrollpane id="4c765" binding="FriendStatusScrollPane">
