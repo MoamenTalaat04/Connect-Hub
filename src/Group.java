@@ -4,49 +4,52 @@ public class Group {
     private String groupId;
     private String groupName;
     private String groupBio;
-    private ArrayList<User> groupMembers;
-    private ArrayList<User> groupAdmins;
-    private User groupOwner;
+    private ArrayList<String> groupMembersIds;
+    private ArrayList<String> groupAdminsIds;
+    private String groupOwnerId;
     private String groupIconPath;
     private String groupCoverPath;
+    private ArrayList<Posts> posts;
 
     //Constructor that creates group
 
-    public Group(String groupId, String groupName, String groupBio, ArrayList<User> groupMembers, ArrayList<User> groupAdmins, User groupOwner, String groupIconPath, String groupCoverPath) {
-        this.groupId = groupId;
+    public Group(String groupName, String groupId, ArrayList<String> groupMembersIds, String groupBio, ArrayList<String> groupAdminsIds, String groupOwnerId, String groupIconPath, ArrayList<Posts> posts, String groupCoverPath) {
         this.groupName = groupName;
+        this.groupId = groupId;
+        this.groupMembersIds = groupMembersIds;
         this.groupBio = groupBio;
-        this.groupMembers = groupMembers;
-        this.groupAdmins = groupAdmins;
-        this.groupOwner = groupOwner;
+        this.groupAdminsIds = groupAdminsIds;
+        this.groupOwnerId = groupOwnerId;
         this.groupIconPath = groupIconPath;
+        this.posts = posts;
         this.groupCoverPath = groupCoverPath;
     }
 
-    //Getters
 
-    public String getGroupId() {
-        return groupId;
-    }
+    //Getters
 
     public String getGroupName() {
         return groupName;
+    }
+
+    public String getGroupId() {
+        return groupId;
     }
 
     public String getGroupBio() {
         return groupBio;
     }
 
-    public ArrayList<User> getGroupMembers() {
-        return groupMembers;
+    public ArrayList<String> getGroupMembersIds() {
+        return groupMembersIds;
     }
 
-    public ArrayList<User> getGroupAdmins() {
-        return groupAdmins;
+    public ArrayList<String> getGroupAdminsIds() {
+        return groupAdminsIds;
     }
 
-    public User getGroupOwner() {
-        return groupOwner;
+    public String getGroupOwnerId() {
+        return groupOwnerId;
     }
 
     public String getGroupIconPath() {
@@ -56,6 +59,11 @@ public class Group {
     public String getGroupCoverPath() {
         return groupCoverPath;
     }
+
+    public ArrayList<Posts> getPosts() {
+        return posts;
+    }
+
 
     //Setters
 
@@ -71,16 +79,16 @@ public class Group {
         this.groupBio = groupBio;
     }
 
-    public void setGroupMembers(ArrayList<User> groupMembers) {
-        this.groupMembers = groupMembers;
+    public void setGroupMembersIds(ArrayList<String> groupMembersIds) {
+        this.groupMembersIds = groupMembersIds;
     }
 
-    public void setGroupAdmins(ArrayList<User> groupAdmins) {
-        this.groupAdmins = groupAdmins;
+    public void setGroupAdminsIds(ArrayList<String> groupAdminsIds) {
+        this.groupAdminsIds = groupAdminsIds;
     }
 
-    public void setGroupOwner(User groupOwner) {
-        this.groupOwner = groupOwner;
+    public void setGroupOwnerId(String groupOwnerId) {
+        this.groupOwnerId = groupOwnerId;
     }
 
     public void setGroupIconPath(String groupIconPath) {
@@ -89,5 +97,9 @@ public class Group {
 
     public void setGroupCoverPath(String groupCoverPath) {
         this.groupCoverPath = groupCoverPath;
+    }
+
+    public void setPosts(ArrayList<Posts> posts) {
+        this.posts = posts;
     }
 }
