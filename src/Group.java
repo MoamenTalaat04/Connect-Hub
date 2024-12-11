@@ -9,29 +9,31 @@ public class Group {
     private String groupOwnerId;
     private String groupIconPath;
     private String groupCoverPath;
+    private ArrayList<Posts> posts;
 
     //Constructor that creates group
 
-    public Group(String groupId, String groupName, String groupBio, ArrayList<String> groupMembersIds, ArrayList<String> groupAdminsIds, String groupOwnerId, String groupIconPath, String groupCoverPath) {
-        this.groupId = groupId;
+    public Group(String groupName, String groupId, ArrayList<String> groupMembersIds, String groupBio, ArrayList<String> groupAdminsIds, String groupOwnerId, String groupIconPath, ArrayList<Posts> posts, String groupCoverPath) {
         this.groupName = groupName;
-        this.groupBio = groupBio;
+        this.groupId = groupId;
         this.groupMembersIds = groupMembersIds;
+        this.groupBio = groupBio;
         this.groupAdminsIds = groupAdminsIds;
         this.groupOwnerId = groupOwnerId;
         this.groupIconPath = groupIconPath;
+        this.posts = posts;
         this.groupCoverPath = groupCoverPath;
     }
 
 
     //Getters
 
-    public String getGroupId() {
-        return groupId;
-    }
-
     public String getGroupName() {
         return groupName;
+    }
+
+    public String getGroupId() {
+        return groupId;
     }
 
     public String getGroupBio() {
@@ -56,6 +58,10 @@ public class Group {
 
     public String getGroupCoverPath() {
         return groupCoverPath;
+    }
+
+    public ArrayList<Posts> getPosts() {
+        return posts;
     }
 
 
@@ -91,5 +97,9 @@ public class Group {
 
     public void setGroupCoverPath(String groupCoverPath) {
         this.groupCoverPath = groupCoverPath;
+    }
+
+    public void setPosts(ArrayList<Posts> posts) {
+        this.posts = posts;
     }
 }
