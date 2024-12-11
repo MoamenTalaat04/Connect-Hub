@@ -10,7 +10,35 @@ public class GroupManagement {
     public GroupManagement(GroupDatabase groupDatabase) {
         this.groupDatabase = groupDatabase;
     }
-    public void createGroup(String id,String name,String bio,String iconPath,String coverPath){
-        Group group = new Group(id,name,bio,null,iconPath,coverPath);
+    private String getGroupId(){
+        return String.valueOf(groupDatabase.readGroupsFromFile().size()+1);
     }
+    public void createGroup(String name,String bio,ArrayList<User> members,User owner,ArrayList<User> admins,String iconPath,String coverPath){
+        Group group = new Group(getGroupId(),name,bio,members,admins,owner,iconPath,coverPath);
+    }
+    public void addUserToGroup(Group group,User user){
+        group.getGroupMembers().add(user);
+    }
+    public void removeUserFromGroup(Group group,User user){
+        group.getGroupMembers().
+    }
+    public void addAdmin(){
+
+    }
+    public void removeAdmin(){
+
+    }
+    public void deleteGroup(){
+
+    }
+    public void updateGroupInfo(){
+
+    }
+    public void addPostToGroup(){
+
+    }
+    public void removePostFromGroup(){
+
+    }
+
 }
