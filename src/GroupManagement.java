@@ -10,32 +10,55 @@ public class GroupManagement {
     public GroupManagement(GroupDatabase groupDatabase) {
         this.groupDatabase = groupDatabase;
     }
+
+    //generates an id for the group
     private String getGroupId(){
         return String.valueOf(groupDatabase.readGroupsFromFile().size()+1);
     }
-    public void createGroup(String name,String bio,ArrayList<User> members,User owner,ArrayList<User> admins,String iconPath,String coverPath){
-        Group group = new Group(getGroupId(),name,bio,members,admins,owner,iconPath,coverPath);
+
+    //creates a new group with the given data
+    public void createGroup(String name,String bio,ArrayList<String> membersIds,ArrayList<String> adminsIds,String ownerId,String iconPath,String coverPath){
+        Group group = new Group(getGroupId(),name,bio,membersIds,adminsIds,ownerId,iconPath,coverPath);
     }
-    public void addUserToGroup(Group group,User user){
-        group.getGroupMembers().add(user);
+
+    //adds a user to a given group
+    public void addMemberToGroup(Group group,String userId){
+        group.getGroupMembersIds().add(userId);
     }
+    //removes user from
     public void removeUserFromGroup(Group group,User user){
-        group.getGroupMembers().
     }
-    public void addAdmin(){
 
+
+    //promotes member --to--> admin
+    public void promoteMemberToAdmin(Group group,String userId){
+        group.getGroupMembersIds().remove(userId);
+        group.getGroupAdminsIds().add(userId);
     }
-    public void removeAdmin(){
-
+    //demotes admin --to--> member
+    private void demoteAdminToMember(Group group,String userId){
+        group.getGroupAdminsIds().remove(userId);
+        group.getGroupMembersIds().add(userId);
     }
-    public void deleteGroup(){
 
+    private void removeMemberFromGroup(Group group,String userId){
+        group.getGroupMembersIds().remove(userId);
     }
-    public void updateGroupInfo(){
-
+    private void removeAdminFromGroup(Group group,String userId){
+        group.getGroupAdminsIds().remove(userId);
     }
-    public void addPostToGroup(){
-
+    private void removeOwner(Group group){
+        if (!group.getGroupAdminsIds().isEmpty())group.setGroupOwnerId(group.getGroupAdminsIds().get(0));
+        else if(!group.getGroupMembersIds().isEmpty())group.setGroupOwnerId(group.getGroupMembersIds().get(0));
+        else deleteGroup(group);
+    }
+    public void deleteGroup(Group group){
+        ArrayList<Group> groups = groupDatabase.readGroupsFromFile();
+        groups.remove(group);
+        groupDatabase.saveGroupsToFile(groups);
+    }
+    public void addPostToGroup(Posts post){
+        
     }
     public void removePostFromGroup(){
 
