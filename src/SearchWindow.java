@@ -1,11 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SearchWindow extends JFrame {
     private JPanel panel1;
@@ -36,6 +35,8 @@ public class SearchWindow extends JFrame {
     private JScrollPane ResultsScrollPane;
     private JPanel ResultsPanel;
     private NewsFeed newsFeed ;
+    private Timer timer;
+
 
     public SearchWindow(NewsFeed newsFeed) {
         this.newsFeed=newsFeed;
@@ -151,6 +152,20 @@ public class SearchWindow extends JFrame {
             }
         });
 
+
+        SearchField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                handleDebouncedSearch();
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    performSearch();
+                }
+            }
+        });
     }
     private void performSearch() {
         String query = SearchField.getText().trim();
@@ -231,6 +246,22 @@ public class SearchWindow extends JFrame {
         ResultsPanel.revalidate();
         ResultsPanel.repaint();
     }
+
+    private void handleDebouncedSearch() {
+        if (timer != null) {
+            timer.cancel(); // Cancel existing timer
+        }
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                performSearch();
+            }
+        }, 500); // Delay of 500ms
+    }
+
+
     private void loadFriendStatus() {
         FriendStatusPanel.removeAll();
         FriendStatusPanel.setLayout(new BoxLayout(FriendStatusPanel, BoxLayout.Y_AXIS)); // Use vertical layout
