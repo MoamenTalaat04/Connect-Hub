@@ -406,7 +406,7 @@ public class SearchWindow extends JFrame {
       if(group.getGroupMembers().contains(newsFeed.getCurrentUser())) {
           JButton joinButton = new JButton("Join");
           joinButton.addActionListener(e -> {
-              if (newsFeed.getGroupManagement().joinGroup(group)) {
+              if (newsFeed.getGroupManagement().addUserToGroup(group)) {
                   JOptionPane.showMessageDialog(this, "Joined " + group.getGroupName());
                   performSearch();
               }
@@ -415,7 +415,7 @@ public class SearchWindow extends JFrame {
       }else {
         JButton leaveButton = new JButton("Leave");
         leaveButton.addActionListener(e -> {
-            if (newsFeed.getGroupManagement().leaveGroup(group)) {
+            if (newsFeed.getGroupManagement().removeUserFromGroup(group)) {
                 JOptionPane.showMessageDialog(this, "Left " + group.getGroupName());
                 performSearch();
             }
