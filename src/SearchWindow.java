@@ -403,10 +403,10 @@ public class SearchWindow extends JFrame {
         groupPanel.add(groupLabel, BorderLayout.CENTER);
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
-      if(!group.getGroupMembersIds().contains(newsFeed.getCurrentUser().getUserId())&& !group.getGroupAdminsIds().contains(newsFeed.getCurrentUser().getUserId())&&!group.getGroupOwnerId(newsFeed.getCurrentUser().getUserId())) {
+      if(!group.getGroupMembersIds().contains(newsFeed.getCurrentUser().getUserId())&& !group.getGroupAdminsIds().contains(newsFeed.getCurrentUser().getUserId())&&!group.getGroupOwnerId().equals((newsFeed.getCurrentUser().getUserId()))) {
           JButton joinButton = new JButton("Join");
           joinButton.addActionListener(e -> {
-              if (newsFeed.getGroupManagement().addUserToGroup(group,newsFeed.getCurrentUser().getUserId())) {
+              if (newsFeed.getGroupManagement().addMemberToGroup(group,newsFeed.getCurrentUser().getUserId())) {
                   JOptionPane.showMessageDialog(this, "Joined " + group.getGroupName());
                   performSearch();
               }
