@@ -5,19 +5,26 @@ public class Group {
     private String groupName;
     private String groupBio;
     private ArrayList<User> groupMembers;
+    private ArrayList<User> groupAdmins;
+    private User groupOwner;
     private String groupIconPath;
     private String groupCoverPath;
 
     //Constructor that creates group
-    public Group(String groupId, String groupName, String groupBio, ArrayList<User> groupMembers, String groupIconPath, String groupCoverPath) {
+
+    public Group(String groupId, String groupName, String groupBio, ArrayList<User> groupMembers, ArrayList<User> groupAdmins, User groupOwner, String groupIconPath, String groupCoverPath) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.groupBio = groupBio;
         this.groupMembers = groupMembers;
+        this.groupAdmins = groupAdmins;
+        this.groupOwner = groupOwner;
         this.groupIconPath = groupIconPath;
         this.groupCoverPath = groupCoverPath;
     }
+
     //Getters
+
     public String getGroupId() {
         return groupId;
     }
@@ -34,6 +41,14 @@ public class Group {
         return groupMembers;
     }
 
+    public ArrayList<User> getGroupAdmins() {
+        return groupAdmins;
+    }
+
+    public User getGroupOwner() {
+        return groupOwner;
+    }
+
     public String getGroupIconPath() {
         return groupIconPath;
     }
@@ -41,7 +56,12 @@ public class Group {
     public String getGroupCoverPath() {
         return groupCoverPath;
     }
+
     //Setters
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
@@ -53,6 +73,14 @@ public class Group {
 
     public void setGroupMembers(ArrayList<User> groupMembers) {
         this.groupMembers = groupMembers;
+    }
+
+    public void setGroupAdmins(ArrayList<User> groupAdmins) {
+        this.groupAdmins = groupAdmins;
+    }
+
+    public void setGroupOwner(User groupOwner) {
+        this.groupOwner = groupOwner;
     }
 
     public void setGroupIconPath(String groupIconPath) {
