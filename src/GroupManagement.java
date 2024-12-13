@@ -8,6 +8,7 @@ public class GroupManagement {
     private  String currentUserId;
     private MainContentCreation contentCreation;
     private ArrayList<Group> allGroups;
+    private NotificationManager notificationManager ;
     //constructor method
     //takes a GroupDatabase as an argument and creates and object of GroupManagement that holds that object
     //GroupManagement object will contain the groups inside itself
@@ -16,6 +17,7 @@ public class GroupManagement {
         this.groupDatabase = GroupDatabase.getInstance();
         this.currentUserId=currentUser.getUserId();
         this.contentCreation  = new MainContentCreation();
+        this.notificationManager = new NotificationManager();
     }
 
     //generates an id for the group
@@ -56,7 +58,7 @@ public class GroupManagement {
         if(!g.getGroupAdminsIds().contains(userId)){
             g.getGroupMembersIds().remove(userId);
             g.getGroupAdminsIds().add(userId);
-           // promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),true);
+            notificationManager.promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),true);
             groupDatabase.saveGroupsToFile(allGroups);
         }
 
@@ -68,7 +70,7 @@ public class GroupManagement {
         g.getGroupAdminsIds().remove(userId);
         g.getGroupMembersIds().add(userId);
         groupDatabase.saveGroupsToFile(allGroups);
-      //  promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),false);
+        notificationManager.promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),false);
     }
     //these methods (the next three) are private methods used to delete different type of user
     //removes normal member

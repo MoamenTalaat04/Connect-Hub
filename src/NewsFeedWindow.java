@@ -50,7 +50,7 @@ public class NewsFeedWindow extends JFrame {
         this.newsFeed = new NewsFeed(currentUser);
         setContentPane(panel1);
         setTitle("News Feed");
-        setSize(1400, 1000);
+        setSize(1500, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -61,6 +61,7 @@ public class NewsFeedWindow extends JFrame {
         loadFriendSuggestions();
         loadMyGroups();
         loadGroupSuggestions();
+
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -174,7 +175,7 @@ public class NewsFeedWindow extends JFrame {
         });
 
         NotifcationButton.addActionListener(e -> {
-           // new NotificationUI(newsFeed.getCurrentUser());
+           new NotificationUI(newsFeed);
         });
 
         createNewGroupButton.addActionListener(e -> {

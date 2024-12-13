@@ -1,12 +1,11 @@
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class notificationData {
-    private String photopath;
-    private String from;
-    private String description;
-    private String date;
+    protected String photopath;
+    protected String from;
+    protected String description;
+    protected String date;
 
 
     public notificationData(){}

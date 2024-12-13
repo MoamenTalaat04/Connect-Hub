@@ -20,6 +20,7 @@ public class NewsFeed {
         allUsers = userDatabase.readUsersFromFile();
         this.currentUser = friendManagement.getUserById(currentUser.getUserId());
         groupManagement = new GroupManagement(currentUser);
+
     }
 
     public void addPost(String content, String imagePath) {

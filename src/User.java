@@ -30,7 +30,7 @@ public class User {
         this.bio = bio;
         this.dob=dob;
         this.profilePhotoPath = profilePhotoPath;
-        this.notification=notifications!= null ? notifications : new ArrayList<>();
+        this.notification=notifications!= null ? notifications : new ArrayList<notificationData>();
 
     }
 
@@ -135,6 +135,12 @@ public class User {
 
     public void setNotification(ArrayList<notificationData> notifications){
         this.notification=notifications;
+    }
+    public void addNotification(notificationData notification){
+        if (this.notification==null){
+            this.notification=new ArrayList<>();
+        }
+        this.notification.add(notification);
     }
 }
 
