@@ -11,7 +11,7 @@ public class GroupSearchStrategy implements SearchStrategy {
     @Override
     public ArrayList<Group> search(String query) {
         return allGroups.stream()
-                .filter(group -> group.getName().toLowerCase().contains(query.toLowerCase()))
+                .filter(group -> group.getGroupName().toLowerCase().contains(query.toLowerCase()))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 }

@@ -69,7 +69,7 @@ public class GroupManagement {
     }
     //demotes admin --to--> member
 
-    private void demoteAdminToMember(Group group,String userId){
+    public void demoteAdminToMember(Group group,String userId){
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         g.getGroupAdminsIds().remove(userId);
@@ -80,21 +80,21 @@ public class GroupManagement {
     }
     //these methods (the next three) are private methods used to delete different type of user
     //removes normal member
-    private void removeMemberFromGroup(Group group,String userId){
+    public void removeMemberFromGroup(Group group,String userId){
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         g.getGroupMembersIds().remove(userId);
         groupDatabase.saveGroupsToFile(allGroups);
     }
     //removes admin
-    private void removeAdminFromGroup(Group group,String userId){
+    public void removeAdminFromGroup(Group group,String userId){
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         g.getGroupAdminsIds().remove(userId);
         groupDatabase.saveGroupsToFile(allGroups);
     }
     //removes Owner
-    private void removeOwner(Group group){
+    public void removeOwner(Group group){
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         if (!g.getGroupAdminsIds().isEmpty())g.setGroupOwnerId(g.getGroupAdminsIds().get(0));
@@ -134,10 +134,9 @@ public class GroupManagement {
         try {
             ArrayList<Posts> posts = contentCreation.readPosts();
             for(Posts p : posts){
-
              if(p.getContentId().equals(post.getContentId())){
                  posts.remove(p);
-                 contentCreation.saveContentToFile(posts);
+                    contentCreation.saveContentToFile(posts);
                  break;
              }
             }
@@ -147,15 +146,7 @@ public class GroupManagement {
         }
     }
 
-    private void fetchAllGroups(){
-        try {
-            allGroups = groupDatabase.readGroupsFromFile();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Group getMyGroupVersion(Group group){
+    public Group getMyGroupVersion(Group group){
         for (Group g : allGroups){
             if(g.getGroupId().equals(group.getGroupId()))return g;
         }
@@ -166,11 +157,13 @@ public class GroupManagement {
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         return g.getPosts();
+    }
+
     public ArrayList<Group> getMyGroups(){
         fetchAllGroups();
         ArrayList<Group> myGroups = new ArrayList<>();
         for (Group g : allGroups){
-            if(g.getGroupMembersIds().contains(currentUserId) || g.getGroupAdminsIds().contains(currentUserId) || g.getGroupOwnerId().equals(currentUserId))myGroups.add(g);
+            if(g.getGroupMembersIds().contains(currentUserId) || g.getGroupAdminsIds().contains(currentUserId) || g.getGroupOwnerId().equals(currentUserId)) {myGroups.add(g);}
         }
         return myGroups;
 
@@ -184,10 +177,7 @@ public class GroupManagement {
         }
         return suggestions;
     }
-    public ArrayList<Group> getAllGroups(){
-        fetchAllGroups();
-        return allGroups;
-    }
+
     public boolean isAdmin(Group group,User user){
         if (group.getGroupAdminsIds().contains(user.getUserId())) return true;
         return false;
@@ -198,7 +188,7 @@ public class GroupManagement {
     }
 
 
-   private void fetchAllGroups(){
+    public void fetchAllGroups(){
         try {
             allGroups = groupDatabase.readGroupsFromFile();
         } catch (Exception e) {
@@ -206,18 +196,6 @@ public class GroupManagement {
         }
     }
 
-   private Group getMyGroupVersion(Group group){
-        for (Group g : allGroups){
-            if(g.getGroupId().equals(group.getGroupId()))return g;
-        }
-        return null;
-   }
-
-   public ArrayList<Posts> getGroupPosts(Group group){
-        fetchAllGroups();
-        Group g = getMyGroupVersion(group);
-        return g.getPosts();
-   }
    public ArrayList<Group> getAllGroups(){
         fetchAllGroups();
         return allGroups;

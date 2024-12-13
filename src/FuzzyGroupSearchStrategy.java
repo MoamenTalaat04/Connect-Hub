@@ -12,7 +12,7 @@ public class FuzzyGroupSearchStrategy implements SearchStrategy {
     public ArrayList<Group> search(String query) {
         LevenshteinDistance levenshtein = new LevenshteinDistance();
         return allGroups.stream()
-                .filter(group -> levenshtein.apply(group.getName().toLowerCase(), query.toLowerCase()) <= 3)
+                .filter(group -> levenshtein.apply(group.getGroupName().toLowerCase(), query.toLowerCase()) <= 3)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 }

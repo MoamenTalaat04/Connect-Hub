@@ -80,7 +80,5 @@ public class MainContentCreation {
             return new ArrayList<>();
         }
     }
-    public void saveContentToFile(ArrayList<Posts> posts) throws IOException {
-        mapper.writeValue(new File(postsFilePath),posts);
-    }
+
 }

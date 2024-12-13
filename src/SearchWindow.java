@@ -187,7 +187,7 @@ public class SearchWindow extends JFrame {
             allResults.addAll(userStrategy.search(query));
         }
         if (groupsCheckBox.isSelected()) {
-            SearchStrategy groupStrategy = new GroupSearchStrategy(newsFeed.getAllGroups());
+            SearchStrategy groupStrategy = new GroupSearchStrategy(newsFeed.getGroupManagement().getAllGroups());
             allResults.addAll(groupStrategy.search(query));
         }
 
@@ -199,7 +199,7 @@ public class SearchWindow extends JFrame {
                 Suggestions.addAll(fuzzyUserStrategy.search(query));
             }
             if (groupsCheckBox.isSelected()) {
-                SearchStrategy fuzzyGroupStrategy = new FuzzyGroupSearchStrategy(newsFeed.getAllGroups());
+                SearchStrategy fuzzyGroupStrategy = new FuzzyGroupSearchStrategy(newsFeed.getGroupManagement().getAllGroups());
                 Suggestions.addAll(fuzzyGroupStrategy.search(query));
             }
         }
@@ -395,7 +395,7 @@ public class SearchWindow extends JFrame {
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         groupPanel.setMaximumSize(new Dimension(1200, 190));
-         Label profilePictureLabel = createProfilePictureLabel(group.getGroupPhotoPath());
+         JLabel profilePictureLabel = createProfilePictureLabel(group.getGroupIconPath());
          groupPanel.add(profilePictureLabel, BorderLayout.WEST);
 
         JLabel groupLabel = new JLabel(group.getGroupName());
@@ -406,25 +406,25 @@ public class SearchWindow extends JFrame {
       if(!group.getGroupMembersIds().contains(newsFeed.getCurrentUser().getUserId())&& !group.getGroupAdminsIds().contains(newsFeed.getCurrentUser().getUserId())&&!group.getGroupOwnerId().equals((newsFeed.getCurrentUser().getUserId()))) {
           JButton joinButton = new JButton("Join");
           joinButton.addActionListener(e -> {
-              if (newsFeed.getGroupManagement().addMemberToGroup(group,newsFeed.getCurrentUser().getUserId())) {
-                  JOptionPane.showMessageDialog(this, "Joined " + group.getGroupName());
+              newsFeed.getGroupManagement().addMemberToGroup(group,newsFeed.getCurrentUser().getUserId());
+                      JOptionPane.showMessageDialog(this, "Joined " + group.getGroupName());
                   performSearch();
-              }
+
           });
           buttonsPanel.add(joinButton);
       }else {
         JButton leaveButton = new JButton("Leave");
         leaveButton.addActionListener(e -> {
-            if (newsFeed.getGroupManagement().removeUserFromGroup(group,newsFeed.getCurrentUser().getUserId())) {
+            newsFeed.getGroupManagement().removeUserFromGroup(group,newsFeed.getCurrentUser().getUserId());
                 JOptionPane.showMessageDialog(this, "Left " + group.getGroupName());
                 performSearch();
-            }
+
         });
         buttonsPanel.add(leaveButton);
         }
          JButton viewGroupButton = new JButton("View Group");
          viewGroupButton.addActionListener(e -> {
-             new GroupWindow(group);
+             new memberGroupUI(group,newsFeed.getCurrentUser(),newsFeed);
              dispose();
          });
 
