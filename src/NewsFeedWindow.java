@@ -41,6 +41,7 @@ public class NewsFeedWindow extends JFrame {
     private JButton NotifcationButton;
     private JScrollPane GroupsScrollPane;
     private JPanel GroupsPanel;
+    private JButton createNewGroupButton;
 
     private NewsFeed newsFeed;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -49,17 +50,17 @@ public class NewsFeedWindow extends JFrame {
         this.newsFeed = new NewsFeed(currentUser);
         setContentPane(panel1);
         setTitle("News Feed");
-        setSize(1300, 1000);
+        setSize(1400, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-
-
         // Load initial data
         loadFriendStatus();
         loadStories();
         loadPosts();
         loadFriendSuggestions();
+        loadMyGroups();
+        loadGroupSuggestions();
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -75,6 +76,8 @@ public class NewsFeedWindow extends JFrame {
             loadStories();
             loadPosts();
             loadFriendSuggestions();
+            loadMyGroups();
+            loadGroupSuggestions();
         });
 
         profileButton.addActionListener(e -> {
@@ -156,6 +159,28 @@ public class NewsFeedWindow extends JFrame {
             }
         });
 
+        SearchField.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+              //  new SearchWindow(newsFeed);
+                dispose();
+            }
+        });
+        searchButton.addActionListener(e -> {
+
+          // new SearchWindow(newsFeed);
+
+
+        });
+
+        NotifcationButton.addActionListener(e -> {
+           // new NotificationUI(newsFeed.getCurrentUser());
+        });
+
+        createNewGroupButton.addActionListener(e -> {
+            new GroupCreationWindow(newsFeed);
+        });
+
 
     }
 
@@ -190,7 +215,8 @@ public class NewsFeedWindow extends JFrame {
     private JPanel createGroupPanel(Group group) {
         JPanel groupPanel = new JPanel();
         groupPanel.setLayout(new BorderLayout(5, 5)); // Add spacing between components
-        groupPanel.setPreferredSize(new Dimension(250, 190)); // Adjust size of each suggestion panel
+        groupPanel.setPreferredSize(new Dimension(250, 120)); // Adjust size of each suggestion panel
+        groupPanel.setMaximumSize(new Dimension(250, 120));
         groupPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, 1), // Add border
                 BorderFactory.createEmptyBorder(10, 10, 10, 10) // Add padding
@@ -282,12 +308,12 @@ public class NewsFeedWindow extends JFrame {
                     JOptionPane.showMessageDialog(this, "Join Request has been Sent to " + newsFeed.getCurrentUser().getUsername());
             });
             buttonsPanel.add(SendRequestButton);
-
+            groupPanel.add(buttonsPanel, BorderLayout.SOUTH);
             GroupSuggestionsPanel.add(groupPanel);
             GroupSuggestionsPanel.add(Box.createHorizontalStrut(10));
         }
 
-        GroupSuggestionsScrollPane.setViewportView(FriendSuggestionsPanel);
+        GroupSuggestionsScrollPane.setViewportView(GroupSuggestionsPanel);
 
     }
 
@@ -431,7 +457,7 @@ public class NewsFeedWindow extends JFrame {
             ArrayList<Posts> posts = newsFeed.fetchPostsFromFriends();
             for (Posts post : posts) {
                 JPanel postPanel = new JPanel(new BorderLayout());
-                postPanel.setPreferredSize(new Dimension(1200, 150));
+                postPanel.setPreferredSize(new Dimension(800, 150));
                 postPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
                 JLabel UsernameAndTimeLable = new JLabel(newsFeed.getUsernameByID(post.getAuthorId()) + " - " + post.getTimestamp().format(dtf));
                 UsernameAndTimeLable.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -446,7 +472,7 @@ public class NewsFeedWindow extends JFrame {
                 if (post.getImagePath() != null && !post.getImagePath().isEmpty()) {
 
                     ImageIcon postImage = new ImageIcon(post.getImagePath());
-                    Image scaledImage = postImage.getImage().getScaledInstance(600, 300, Image.SCALE_SMOOTH); // Scale image
+                    Image scaledImage = postImage.getImage().getScaledInstance(400, 200, Image.SCALE_SMOOTH); // Scale image
                     postPanel.add(new JLabel(new ImageIcon(scaledImage)), BorderLayout.SOUTH);
                 }
 

@@ -12,7 +12,7 @@ public class Group {
     private ArrayList<Posts> posts;
 
     //Constructor that creates group
-
+    public Group(){}
     public Group(String groupName, String groupId, ArrayList<String> groupMembersIds, String groupBio, ArrayList<String> groupAdminsIds, String groupOwnerId, String groupIconPath, ArrayList<Posts> posts, String groupCoverPath) {
         this.groupName = groupName;
         this.groupId = groupId;
