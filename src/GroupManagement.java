@@ -1,14 +1,17 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 //this class handles the operations related to the group class
 public class GroupManagement {
     private  GroupDatabase groupDatabase;
+    private  String currentUserId;
     //constructor method
     //takes a GroupDatabase as an argument and creates and object of GroupManagement that holds that object
     //GroupManagement object will contain the groups inside itself
     //we will construct an instance of GroupManagement when ever we want to make an operation related to groups
-    public GroupManagement(GroupDatabase groupDatabase) {
+    public GroupManagement(GroupDatabase groupDatabase,User currentUser) {
         this.groupDatabase = groupDatabase;
+        this.currentUserId=currentUserId;
     }
 
     //generates an id for the group
@@ -78,10 +81,16 @@ public class GroupManagement {
         }
     }
     //method used to add a post to the group
-    public void addPostToGroup(Group group,Posts post){
-        group.getPosts().add(post);
-        saveChanges();
+    public void addPost(String content, String imagePath) {
+        try {
+            MainContentCreation contentCreation = new MainContentCreation();
+            contentCreation.createPost(this.currentUserId, content, imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
+
     //method used to delete a post from the group
     public void removePostFromGroup(Group group,Posts post){
         group.getPosts().remove(post);
@@ -92,5 +101,4 @@ public class GroupManagement {
     private void saveChanges() {
         groupDatabase.saveGroupsToFile(groupDatabase.readGroupsFromFile());
     }
-
 }
