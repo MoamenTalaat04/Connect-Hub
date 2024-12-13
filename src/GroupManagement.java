@@ -135,6 +135,25 @@ public class GroupManagement {
         }
     }
 
+    public ArrayList<Group> getMyGroups(){
+        fetchAllGroups();
+        ArrayList<Group> myGroups = new ArrayList<>();
+        for (Group g : allGroups){
+            if(g.getGroupMembersIds().contains(currentUserId) || g.getGroupAdminsIds().contains(currentUserId) || g.getGroupOwnerId().equals(currentUserId))myGroups.add(g);
+        }
+        return myGroups;
+
+    }
+
+    public ArrayList<Group> Suggestions(){
+        fetchAllGroups();
+        ArrayList<Group> suggestions = new ArrayList<>();
+        for (Group g : allGroups){
+            if(!g.getGroupMembersIds().contains(currentUserId) && !g.getGroupAdminsIds().contains(currentUserId) && !g.getGroupOwnerId().equals(currentUserId))suggestions.add(g);
+        }
+        return suggestions;
+    }
+
    private void fetchAllGroups(){
         try {
             allGroups = groupDatabase.readGroupsFromFile();
@@ -148,6 +167,12 @@ public class GroupManagement {
             if(g.getGroupId().equals(group.getGroupId()))return g;
         }
         return null;
+   }
+
+   public ArrayList<Posts> getGroupPosts(Group group){
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        return g.getPosts();
    }
    public ArrayList<Group> getAllGroups(){
         fetchAllGroups();

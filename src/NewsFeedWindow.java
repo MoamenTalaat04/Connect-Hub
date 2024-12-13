@@ -17,7 +17,6 @@ public class NewsFeedWindow extends JFrame {
     private JButton logOutButton;
     private JButton refreshButton;
     private JSeparator NewsFeedNavigationSeparator;
-    private JSeparator NewsFeedFriendStatusSeparator;
     private JScrollPane PostsScrollPane;
     private JScrollPane StoriesScrollPane;
     private JScrollPane FriendStatusScrollPane;
@@ -35,6 +34,13 @@ public class NewsFeedWindow extends JFrame {
     private JLabel StoryPhotoPathLable;
     private JScrollPane FriendSuggestionsScrollPane;
     private JPanel FriendSuggestionsPanel;
+    private JScrollPane GroupSuggestionsScrollPane;
+    private JPanel GroupSuggestionsPanel;
+    private JTextField SearchField;
+    private JButton searchButton;
+    private JButton NotifcationButton;
+    private JScrollPane GroupsScrollPane;
+    private JPanel GroupsPanel;
 
     private NewsFeed newsFeed;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -150,6 +156,7 @@ public class NewsFeedWindow extends JFrame {
             }
         });
 
+
     }
 
     private void loadFriendStatus() {
@@ -166,6 +173,121 @@ public class NewsFeedWindow extends JFrame {
         }
 
         FriendStatusScrollPane.setViewportView(FriendStatusPanel);
+
+    }
+
+    private void loadMyGroups() {
+        GroupsPanel.removeAll();
+        GroupsPanel.setLayout(new BoxLayout(GroupsPanel, BoxLayout.Y_AXIS)); // Use vertical layout
+        ArrayList<Group> groups = newsFeed.GroupsOfUser();
+        for (Group group : groups) {
+           GroupsPanel.add(createGroupPanel(group));
+           GroupsPanel.add(Box.createVerticalStrut(10));
+        }
+        GroupsScrollPane.setViewportView(GroupsPanel);
+    }
+
+    private JPanel createGroupPanel(Group group) {
+        JPanel groupPanel = new JPanel();
+        groupPanel.setLayout(new BorderLayout(5, 5)); // Add spacing between components
+        groupPanel.setPreferredSize(new Dimension(250, 190)); // Adjust size of each suggestion panel
+        groupPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY, 1), // Add border
+                BorderFactory.createEmptyBorder(10, 10, 10, 10) // Add padding
+        ));
+
+        // Add group profile picture (if available)
+        JLabel profilePictureLabel;
+        if (group.getGroupIconPath() != null && !group.getGroupIconPath().isEmpty()) {
+            ImageIcon profilePicture = new ImageIcon(group.getGroupIconPath());
+            Image scaledImage = profilePicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Scale image
+            profilePictureLabel = new JLabel(new ImageIcon(scaledImage));
+        } else {
+            profilePictureLabel = new JLabel("No Image");
+            profilePictureLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            profilePictureLabel.setPreferredSize(new Dimension(100, 100));
+            profilePictureLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+        }
+        groupPanel.add(profilePictureLabel, BorderLayout.WEST);
+
+        // Add group name at the top
+        JLabel groupLabel = new JLabel(group.getGroupName());
+        groupLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        groupLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        groupPanel.add(groupLabel, BorderLayout.CENTER);
+
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+
+        JButton viewGroupButton = new JButton("View Group");
+        viewGroupButton.setFont(new Font("Arial", Font.PLAIN, 12));
+        viewGroupButton.addActionListener(e -> {
+          //  new GroupWindow(group, newsFeed.getCurrentUser());
+            dispose();
+        });
+        buttonsPanel.add(viewGroupButton);
+
+        JButton leaveGroupButton = new JButton("Leave Group");
+        leaveGroupButton.setFont(new Font("Arial", Font.PLAIN, 12));
+        leaveGroupButton.addActionListener(e -> {
+            newsFeed.getGroupManagement().removeUserFromGroup(group, newsFeed.getCurrentUser().getUserId());
+            JOptionPane.showMessageDialog(this, "You have left the group " + group.getGroupName());
+            loadMyGroups(); // Refresh groups after leaving
+        });
+        buttonsPanel.add(leaveGroupButton);
+
+        groupPanel.add(buttonsPanel, BorderLayout.SOUTH);
+        return groupPanel;
+    }
+
+    private void loadGroupSuggestions() {
+        GroupSuggestionsPanel.removeAll();
+        GroupSuggestionsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5)); // Align buttons to the right with spacing); // Use vertical layout
+        ArrayList<Group> groupSuggestions = newsFeed.GroupsSuggested();
+
+        for (Group group : groupSuggestions) {
+            JPanel groupPanel = new JPanel();
+            groupPanel.setLayout(new BorderLayout(5, 5)); // Add spacing between components
+            groupPanel.setPreferredSize(new Dimension(250, 190)); // Adjust size of each suggestion panel
+            groupPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.GRAY, 1), // Add border
+                    BorderFactory.createEmptyBorder(10, 10, 10, 10) // Add padding
+            ));
+
+            // Add group profile picture (if available)
+            JLabel profilePictureLabel;
+            if (group.getGroupIconPath() != null && !group.getGroupIconPath().isEmpty()) {
+                ImageIcon profilePicture = new ImageIcon(group.getGroupIconPath());
+                Image scaledImage = profilePicture.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Scale image
+                profilePictureLabel = new JLabel(new ImageIcon(scaledImage));
+            } else {
+                profilePictureLabel = new JLabel("No Image");
+                profilePictureLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                profilePictureLabel.setPreferredSize(new Dimension(100, 100));
+                profilePictureLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+            }
+            groupPanel.add(profilePictureLabel, BorderLayout.WEST);
+
+            // Add group name at the top
+            JLabel groupLabel = new JLabel(group.getGroupName());
+            groupLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            groupLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            groupPanel.add(groupLabel, BorderLayout.CENTER);
+
+            JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+
+            JButton SendRequestButton = new JButton("Join Group");
+            SendRequestButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            SendRequestButton.addActionListener(e -> {
+                newsFeed.getGroupManagement().addMemberToGroup(group, newsFeed.getCurrentUser().getUserId());
+                    JOptionPane.showMessageDialog(this, "Join Request has been Sent to " + newsFeed.getCurrentUser().getUsername());
+            });
+            buttonsPanel.add(SendRequestButton);
+
+            GroupSuggestionsPanel.add(groupPanel);
+            GroupSuggestionsPanel.add(Box.createHorizontalStrut(10));
+        }
+
+        GroupSuggestionsScrollPane.setViewportView(FriendSuggestionsPanel);
 
     }
 

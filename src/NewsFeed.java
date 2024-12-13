@@ -8,8 +8,7 @@ public class NewsFeed {
     private User currentUser;
     private UserDatabase userDatabase;
     private ArrayList<User> allUsers;
-    private GroupDatabase groupDatabase;
-    private ArrayList<Group> allGroups;
+
     private GroupManagement groupManagement;
 
 
@@ -20,8 +19,6 @@ public class NewsFeed {
         userDatabase = UserDatabase.getInstance();
         allUsers = userDatabase.readUsersFromFile();
         this.currentUser = friendManagement.getUserById(currentUser.getUserId());
-        groupDatabase = GroupDatabase.getInstance();
-        allGroups = groupDatabase.readGroupsFromFile();
         groupManagement = new GroupManagement(currentUser);
     }
 
@@ -144,20 +141,23 @@ public class NewsFeed {
 
     }
 
-    private ArrayList<Group> getAllGroups() {
-        return allGroups;
+    public void addGroup(String groupName, String groupBio, String groupIconPath, String groupCoverPath) {
+        groupManagement.createGroup(groupName, groupBio,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<Posts>(),currentUser.getUserId(), groupIconPath, groupCoverPath);
     }
+    public ArrayList<Group> GroupsOfUser(){
+        return groupManagement.getMyGroups();
+    }
+    public ArrayList<Group> GroupsSuggested(){
+        return groupManagement.Suggestions();
+    }
+
     public Group getGroupById(String GroupId){
-        for(Group group: allGroups ){
+        for(Group group: groupManagement.getAllGroups() ){
             if (group.getGroupId().equals(GroupId))return group;
         }
         return null;
 
     }
-    private GroupDatabase getGroupDatabase() {
-        return groupDatabase;
-    }
-
 
     public ArrayList<User> getUsersById(ArrayList<String> UsersId){
         ArrayList<User> Users =new ArrayList<>();
