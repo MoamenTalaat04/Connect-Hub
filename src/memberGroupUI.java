@@ -84,6 +84,24 @@ public class memberGroupUI extends JFrame {
                 dispose();
             }
         });
+        if (groupManagement.isOwner(group,this.user)){
+            JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+            JButton deleteGroupButton = new JButton("Delete Group");
+            deleteGroupButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            deleteGroupButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    groupManagement.deleteGroup(group);
+                    dispose();
+                }
+            });
+            buttonsPanel.add(deleteGroupButton);
+            properties.add(buttonsPanel, BorderLayout.SOUTH);
+
+
+        }
+
+
 
     }
     private void loadPosts() {
@@ -113,6 +131,19 @@ public class memberGroupUI extends JFrame {
             }
 
             postPanel.add(postLabel, BorderLayout.CENTER); // Add content to the center
+            if (groupManagement.isAdmin(group,this.user) || groupManagement.isOwner(group,this.user)){
+
+
+                JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+                JButton deletePostButton = new JButton("Delete Post");
+                deletePostButton.setFont(new Font("Arial", Font.PLAIN, 12));
+                deletePostButton.addActionListener(e -> {
+                    groupManagement.removePostFromGroup(group, post); // Delete the post
+                    loadPosts(); // Reload the posts to update the UI after deletion
+                });
+                buttonsPanel.add(deletePostButton);
+                postPanel.add(buttonsPanel, BorderLayout.EAST); // Add the button to the panel
+            }
             PostsPanel.add(UsernameAndTimeLable); // Add username and time label
             PostsPanel.add(postPanel); // Add post panel to the PostsPanel
         }
@@ -153,7 +184,46 @@ public class memberGroupUI extends JFrame {
         JLabel friendLabel = new JLabel(user.getUsername());
         friendLabel.setFont(new Font("Arial", Font.BOLD, 16));
         MemberPanel.add(friendLabel, BorderLayout.CENTER);
-        if (m)
+        if (groupManagement.isAdmin(group,this.user) && !groupManagement.isOwner(group,user)){
+            JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+            JButton deleteMemberButton = new JButton("Kick");
+            deleteMemberButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            deleteMemberButton.addActionListener(e -> {
+                groupManagement.removeUserFromGroup(group, user.getUserId());
+                loadMembers(); // Reload the members to update the UI after deletion
+            });
+            buttonsPanel.add(deleteMemberButton);
+            MemberPanel.add(buttonsPanel, BorderLayout.EAST); // Add the button to the panel
+        }
+        else if (groupManagement.isOwner(group,this.user)){
+            JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+            JButton deleteMemberButton = new JButton("Kick");
+            deleteMemberButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            deleteMemberButton.addActionListener(e -> {
+                groupManagement.removeUserFromGroup(group, user.getUserId());
+                loadMembers(); // Reload the members to update the UI after deletion
+            });
+            buttonsPanel.add(deleteMemberButton);
+
+            if (groupManagement.isAdmin(group,user)){
+            JButton demoteAdminButton = new JButton("Demote");
+            demoteAdminButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            demoteAdminButton.addActionListener(e -> {
+                groupManagement.demoteAdminToMember(group, user.getUserId());
+                loadMembers(); // Reload the members to update the UI after deletion
+            });
+                buttonsPanel.add(demoteAdminButton);}
+            else if (!groupManagement.isAdmin(group,user)){
+                JButton promoteMemberButton = new JButton("Promote");
+                promoteMemberButton.setFont(new Font("Arial", Font.PLAIN, 12));
+                promoteMemberButton.addActionListener(e -> {
+                    groupManagement.promoteMemberToAdmin(group, user.getUserId());
+                    loadMembers(); // Reload the members to update the UI after deletion
+                });
+                buttonsPanel.add(promoteMemberButton);
+            }
+            MemberPanel.add(buttonsPanel, BorderLayout.EAST); // Add the button to the panel
+        }
 
 
         //JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));    for nadim to add buttons
@@ -174,9 +244,6 @@ public class memberGroupUI extends JFrame {
             profilePictureLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         }
         return profilePictureLabel;
-    }
-    private boolean isAdmin(User user){
-        if (user.getUserId().equals(group.ge))
     }
 
 

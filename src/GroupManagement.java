@@ -60,7 +60,7 @@ public class GroupManagement {
         }
     }
     //demotes admin --to--> member
-    private void demoteAdminToMember(Group group,String userId){
+    public void demoteAdminToMember(Group group,String userId){
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         g.getGroupAdminsIds().remove(userId);
