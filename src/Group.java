@@ -25,7 +25,6 @@ public class Group {
         this.groupCoverPath = groupCoverPath;
     }
 
-
     //Getters
 
     public String getGroupName() {

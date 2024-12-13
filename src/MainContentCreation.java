@@ -26,9 +26,10 @@ public class MainContentCreation {
     public String getNewStoryId() throws IOException {
         return String.valueOf(readActiveStories().size()+1);
     }
-    public void createPost(String authorId, String content, String imagePath) throws IOException {
+    public Posts createPost(String authorId, String content, String imagePath) throws IOException {
         Posts post = new Posts(content, authorId, getNewPostId(), imagePath, LocalDateTime.now());
         saveContentToFile(post, postsFilePath);
+        return post;
     }
 
     public void createStory(String authorId, String content, String imagePath) throws IOException {
@@ -75,5 +76,8 @@ public class MainContentCreation {
             ex.printStackTrace();
             return new ArrayList<>();
         }
+    }
+    public void saveContentToFile(ArrayList<Posts> posts) throws IOException {
+        mapper.writeValue(new File(postsFilePath),posts);
     }
 }

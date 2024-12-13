@@ -1,14 +1,21 @@
+import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 //this class handles the operations related to the group class
 public class GroupManagement {
     private  GroupDatabase groupDatabase;
+    private  String currentUserId;
+    private MainContentCreation contentCreation;
+    private ArrayList<Group> allGroups;
     //constructor method
     //takes a GroupDatabase as an argument and creates and object of GroupManagement that holds that object
     //GroupManagement object will contain the groups inside itself
     //we will construct an instance of GroupManagement when ever we want to make an operation related to groups
-    public GroupManagement(GroupDatabase groupDatabase) {
-        this.groupDatabase = groupDatabase;
+    public GroupManagement(User currentUser) {
+        this.groupDatabase = GroupDatabase.getInstance();
+        this.currentUserId=currentUser.getUserId();
+        this.contentCreation  = new MainContentCreation();
     }
 
     //generates an id for the group
@@ -24,73 +31,133 @@ public class GroupManagement {
 
     //adds a user to a given group
     public void addMemberToGroup(Group group,String userId){
-        if (!group.getGroupMembersIds().contains(userId)) {
-        group.getGroupMembersIds().add(userId);
-        saveChanges();
-    }}
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        if (!g.getGroupMembersIds().contains(userId)) {
+            g.getGroupMembersIds().add(userId);
+            groupDatabase.saveGroupsToFile(allGroups);
+        }}
     //checks the user's type and calls the proper deletion method
     //incase that the user we want to remove is owner and there is no other user in the group this method will delete the group
     public void removeUserFromGroup(Group group,String userId){
-        if(group.getGroupOwnerId().equals(userId)) removeOwner(group);
-        else if(group.getGroupAdminsIds().contains(userId))removeAdminFromGroup(group,userId);
-        else if (group.getGroupMembersIds().contains(userId))removeMemberFromGroup(group,userId);
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        if(g.getGroupOwnerId().equals(userId)) removeOwner(group);
+        else if(g.getGroupAdminsIds().contains(userId))removeAdminFromGroup(g,userId);
+        else if (g.getGroupMembersIds().contains(userId))removeMemberFromGroup(g,userId);
+        groupDatabase.saveGroupsToFile(allGroups);
     }
 
 
     //promotes member --to--> admin
     public void promoteMemberToAdmin(Group group,String userId){
-        if(!group.getGroupAdminsIds().contains(userId)){
-            group.getGroupMembersIds().remove(userId);
-            group.getGroupAdminsIds().add(userId);
-            saveChanges();
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        if(!g.getGroupAdminsIds().contains(userId)){
+            g.getGroupMembersIds().remove(userId);
+            g.getGroupAdminsIds().add(userId);
+            groupDatabase.saveGroupsToFile(allGroups);
         }
     }
     //demotes admin --to--> member
     private void demoteAdminToMember(Group group,String userId){
-        group.getGroupAdminsIds().remove(userId);
-        group.getGroupMembersIds().add(userId);
-        saveChanges();
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        g.getGroupAdminsIds().remove(userId);
+        g.getGroupMembersIds().add(userId);
+        groupDatabase.saveGroupsToFile(allGroups);
     }
     //these methods (the next three) are private methods used to delete different type of user
     //removes normal member
     private void removeMemberFromGroup(Group group,String userId){
-        group.getGroupMembersIds().remove(userId);
-        saveChanges();
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        g.getGroupMembersIds().remove(userId);
+        groupDatabase.saveGroupsToFile(allGroups);
     }
     //removes admin
     private void removeAdminFromGroup(Group group,String userId){
-        group.getGroupAdminsIds().remove(userId);
-        saveChanges();
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        g.getGroupAdminsIds().remove(userId);
+        groupDatabase.saveGroupsToFile(allGroups);
     }
     //removes Owner
     private void removeOwner(Group group){
-        if (!group.getGroupAdminsIds().isEmpty())group.setGroupOwnerId(group.getGroupAdminsIds().get(0));
-        else if(!group.getGroupMembersIds().isEmpty())group.setGroupOwnerId(group.getGroupMembersIds().get(0));
-        else deleteGroup(group);
-        saveChanges();
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        if (!g.getGroupAdminsIds().isEmpty())g.setGroupOwnerId(g.getGroupAdminsIds().get(0));
+        else if(!g.getGroupMembersIds().isEmpty())g.setGroupOwnerId(g.getGroupMembersIds().get(0));
+        else deleteGroup(g);
+        groupDatabase.saveGroupsToFile(allGroups);
+
     }
     //method used to delete the Group
     public void deleteGroup(Group group){
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
         ArrayList<Group> groups = groupDatabase.readGroupsFromFile();
-        if(groups.contains(group)){
-            groups.remove(group);
-            groupDatabase.saveGroupsToFile(groups);
+        if(groups.contains(g)){
+            groups.remove(g);
+            groupDatabase.saveGroupsToFile(allGroups);
         }
     }
     //method used to add a post to the group
-    public void addPostToGroup(Group group,Posts post){
-        group.getPosts().add(post);
-        saveChanges();
+    public void addPost(String content, String imagePath,Group group) {
+        try {
+            fetchAllGroups();
+            Group g = getMyGroupVersion(group);
+            g.getPosts().add(contentCreation.createPost(this.currentUserId, content, imagePath));
+            groupDatabase.saveGroupsToFile(allGroups);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
+
     //method used to delete a post from the group
     public void removePostFromGroup(Group group,Posts post){
-        group.getPosts().remove(post);
-        saveChanges();
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        g.getPosts().remove(post);
+        try {
+            ArrayList<Posts> posts = contentCreation.readPosts();
+            for(Posts p : posts){
+                if(p.getContentId().equals(post.getContentId())){
+                    posts.remove(p);
+                    contentCreation.saveContentToFile(posts);
+                    break;
+                }
+            }
+            groupDatabase.saveGroupsToFile(allGroups);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    //method to save any changes made to the group instantly
-    //to make sure any changes made is visible to other user
-    private void saveChanges() {
-        groupDatabase.saveGroupsToFile(groupDatabase.readGroupsFromFile());
+
+    private void fetchAllGroups(){
+        try {
+            allGroups = groupDatabase.readGroupsFromFile();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Group getMyGroupVersion(Group group){
+        for (Group g : allGroups){
+            if(g.getGroupId().equals(group.getGroupId()))return g;
+        }
+        return null;
+    }
+
+    public ArrayList<Posts> getGroupPosts(Group group){
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        return g.getPosts();
+    }
+    public ArrayList<Group> getAllGroups(){
+        fetchAllGroups();
+        return allGroups;
     }
 
 }
