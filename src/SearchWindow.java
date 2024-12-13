@@ -170,6 +170,7 @@ public class SearchWindow extends JFrame {
     private void performSearch() {
         String query = SearchField.getText().trim();
         ResultsPanel.removeAll();
+        ResultsPanel.setLayout(new BoxLayout(ResultsPanel, BoxLayout.Y_AXIS));
 
         if (query.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter a search query.");
@@ -208,15 +209,16 @@ public class SearchWindow extends JFrame {
         if (allResults.isEmpty()) {
             ResultsPanel.add(new JLabel("No results found."));
         } else {
-            if (!Suggestions.isEmpty()) {
+            if (isFuzzySearch) {
                 ResultsPanel.add(new JLabel("Did you mean:"));
                 for (Object suggestion : Suggestions) {
                     if (suggestion instanceof User) {
+                        User user = (User) suggestion;
                         if(suggestion.equals(newsFeed.getCurrentUser()))
                         {
                              continue;
                         }
-                        else if (newsFeed.getCurrentUser().getFriends().contains(suggestion)) {
+                        else if (newsFeed.getCurrentUser().getFriends().contains((user.getUserId()))) {
                             createFriendPanel((User) suggestion);
                         }else {
                             createUserPanel((User) suggestion);
@@ -446,8 +448,5 @@ public class SearchWindow extends JFrame {
         }
         return profilePictureLabel;
     }
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-        groupsCheckBox.setSelected(!usersCheckBox.isSelected());
-    }
+
 }

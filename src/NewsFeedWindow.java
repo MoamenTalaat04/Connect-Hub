@@ -176,13 +176,14 @@ public class NewsFeedWindow extends JFrame {
         SearchField.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-              //  new SearchWindow(newsFeed);
+                new SearchWindow(newsFeed);
                 dispose();
             }
         });
         searchButton.addActionListener(e -> {
 
-          // new SearchWindow(newsFeed);
+                new SearchWindow(newsFeed);
+                dispose();
 
 
         });
