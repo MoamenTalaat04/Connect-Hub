@@ -8,6 +8,8 @@ public class GroupManagement {
     private  String currentUserId;
     private MainContentCreation contentCreation;
     private ArrayList<Group> allGroups;
+
+    private NotificationManager notificationManager ;
     //constructor method
     //takes a GroupDatabase as an argument and creates and object of GroupManagement that holds that object
     //GroupManagement object will contain the groups inside itself
@@ -16,6 +18,8 @@ public class GroupManagement {
         this.groupDatabase = GroupDatabase.getInstance();
         this.currentUserId=currentUser.getUserId();
         this.contentCreation  = new MainContentCreation();
+
+        this.notificationManager = new NotificationManager();
     }
 
     //generates an id for the group
@@ -36,7 +40,8 @@ public class GroupManagement {
         if (!g.getGroupMembersIds().contains(userId)) {
             g.getGroupMembersIds().add(userId);
             groupDatabase.saveGroupsToFile(allGroups);
-        }}
+
+    }}
     //checks the user's type and calls the proper deletion method
     //incase that the user we want to remove is owner and there is no other user in the group this method will delete the group
     public void removeUserFromGroup(Group group,String userId){
@@ -56,16 +61,22 @@ public class GroupManagement {
         if(!g.getGroupAdminsIds().contains(userId)){
             g.getGroupMembersIds().remove(userId);
             g.getGroupAdminsIds().add(userId);
+
+            notificationManager.promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),true);
             groupDatabase.saveGroupsToFile(allGroups);
         }
+
     }
     //demotes admin --to--> member
-    public void demoteAdminToMember(Group group,String userId){
+
+    private void demoteAdminToMember(Group group,String userId){
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         g.getGroupAdminsIds().remove(userId);
         g.getGroupMembersIds().add(userId);
         groupDatabase.saveGroupsToFile(allGroups);
+
+        notificationManager.promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),false);
     }
     //these methods (the next three) are private methods used to delete different type of user
     //removes normal member
@@ -123,11 +134,12 @@ public class GroupManagement {
         try {
             ArrayList<Posts> posts = contentCreation.readPosts();
             for(Posts p : posts){
-                if(p.getContentId().equals(post.getContentId())){
-                    posts.remove(p);
-                    contentCreation.saveContentToFile(posts);
-                    break;
-                }
+
+             if(p.getContentId().equals(post.getContentId())){
+                 posts.remove(p);
+                 contentCreation.saveContentToFile(posts);
+                 break;
+             }
             }
             groupDatabase.saveGroupsToFile(allGroups);
         } catch (IOException e) {
@@ -154,6 +166,23 @@ public class GroupManagement {
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         return g.getPosts();
+    public ArrayList<Group> getMyGroups(){
+        fetchAllGroups();
+        ArrayList<Group> myGroups = new ArrayList<>();
+        for (Group g : allGroups){
+            if(g.getGroupMembersIds().contains(currentUserId) || g.getGroupAdminsIds().contains(currentUserId) || g.getGroupOwnerId().equals(currentUserId))myGroups.add(g);
+        }
+        return myGroups;
+
+    }
+
+    public ArrayList<Group> Suggestions(){
+        fetchAllGroups();
+        ArrayList<Group> suggestions = new ArrayList<>();
+        for (Group g : allGroups){
+            if(!g.getGroupMembersIds().contains(currentUserId) && !g.getGroupAdminsIds().contains(currentUserId) && !g.getGroupOwnerId().equals(currentUserId))suggestions.add(g);
+        }
+        return suggestions;
     }
     public ArrayList<Group> getAllGroups(){
         fetchAllGroups();
@@ -168,5 +197,30 @@ public class GroupManagement {
         return false;
     }
 
+
+   private void fetchAllGroups(){
+        try {
+            allGroups = groupDatabase.readGroupsFromFile();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+   private Group getMyGroupVersion(Group group){
+        for (Group g : allGroups){
+            if(g.getGroupId().equals(group.getGroupId()))return g;
+        }
+        return null;
+   }
+
+   public ArrayList<Posts> getGroupPosts(Group group){
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        return g.getPosts();
+   }
+   public ArrayList<Group> getAllGroups(){
+        fetchAllGroups();
+        return allGroups;
+   }
 
 }

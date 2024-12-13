@@ -42,6 +42,9 @@ public class MainContentCreation {
         contents.add(content);
         mapper.writeValue(new File(filePath), contents);
     }
+    public void saveContentToFile(ArrayList<Posts> posts) throws IOException {
+        mapper.writeValue(new File(postsFilePath), posts);
+    }
 
     private <T> ArrayList<T> readContentFromFile(String filePath, Class<T[]> type) throws IOException {
         File file = new File(filePath);

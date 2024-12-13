@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -8,6 +9,8 @@ public class NewsFeed {
     private UserDatabase userDatabase;
     private ArrayList<User> allUsers;
 
+    private GroupManagement groupManagement;
+
 
 
     public NewsFeed(User currentUser) {
@@ -16,7 +19,7 @@ public class NewsFeed {
         userDatabase = UserDatabase.getInstance();
         allUsers = userDatabase.readUsersFromFile();
         this.currentUser = friendManagement.getUserById(currentUser.getUserId());
-
+        groupManagement = new GroupManagement(currentUser);
 
     }
 
@@ -114,8 +117,13 @@ public class NewsFeed {
         setCurrentUser(getUserById(getCurrentUser().getUserId()));
         friendManagement.fetchAllUsers();
     }
+    public ArrayList<Group> fetchAllGroups(){
+       return groupManagement.getAllGroups();
+    }
 
-
+    public GroupManagement getGroupManagement() {
+        return groupManagement;
+    }
 
     public FriendManagement getFriendManagement() {
         return friendManagement;
@@ -133,6 +141,25 @@ public class NewsFeed {
         return null;
 
     }
+
+    public void addGroup(String groupName, String groupBio, String groupIconPath, String groupCoverPath) {
+        groupManagement.createGroup(groupName, groupBio,new ArrayList<String>(),new ArrayList<String>(),new ArrayList<Posts>(),currentUser.getUserId(), groupIconPath, groupCoverPath);
+    }
+    public ArrayList<Group> GroupsOfUser(){
+        return groupManagement.getMyGroups();
+    }
+    public ArrayList<Group> GroupsSuggested(){
+        return groupManagement.Suggestions();
+    }
+
+    public Group getGroupById(String GroupId){
+        for(Group group: groupManagement.getAllGroups() ){
+            if (group.getGroupId().equals(GroupId))return group;
+        }
+        return null;
+
+    }
+
     public ArrayList<User> getUsersById(ArrayList<String> UsersId){
         ArrayList<User> Users =new ArrayList<>();
         for(String userId: UsersId ){
