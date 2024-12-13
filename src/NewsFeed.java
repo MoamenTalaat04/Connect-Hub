@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -7,6 +8,9 @@ public class NewsFeed {
     private User currentUser;
     private UserDatabase userDatabase;
     private ArrayList<User> allUsers;
+    private GroupDatabase groupDatabase;
+    private ArrayList<Group> allGroups;
+    private GroupManagement groupManagement;
 
 
 
@@ -16,8 +20,9 @@ public class NewsFeed {
         userDatabase = UserDatabase.getInstance();
         allUsers = userDatabase.readUsersFromFile();
         this.currentUser = friendManagement.getUserById(currentUser.getUserId());
-
-
+        groupDatabase = GroupDatabase.getInstance();
+        allGroups = groupDatabase.readGroupsFromFile();
+        groupManagement = new GroupManagement(currentUser);
     }
 
     public void addPost(String content, String imagePath) {
@@ -114,8 +119,13 @@ public class NewsFeed {
         setCurrentUser(getUserById(getCurrentUser().getUserId()));
         friendManagement.fetchAllUsers();
     }
+    public ArrayList<Group> fetchAllGroups(){
+       return groupManagement.getAllGroups();
+    }
 
-
+    public GroupManagement getGroupManagement() {
+        return groupManagement;
+    }
 
     public FriendManagement getFriendManagement() {
         return friendManagement;
@@ -133,6 +143,22 @@ public class NewsFeed {
         return null;
 
     }
+
+    private ArrayList<Group> getAllGroups() {
+        return allGroups;
+    }
+    public Group getGroupById(String GroupId){
+        for(Group group: allGroups ){
+            if (group.getGroupId().equals(GroupId))return group;
+        }
+        return null;
+
+    }
+    private GroupDatabase getGroupDatabase() {
+        return groupDatabase;
+    }
+
+
     public ArrayList<User> getUsersById(ArrayList<String> UsersId){
         ArrayList<User> Users =new ArrayList<>();
         for(String userId: UsersId ){
