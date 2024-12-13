@@ -152,21 +152,25 @@ public class SearchWindow extends JFrame {
             }
         });
 
-
         SearchField.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                handleDebouncedSearch();
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    performSearch();
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if (timer != null) {
+                    timer.cancel();
                 }
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        performSearch();
+                    }
+                }, 1000);
             }
         });
+
     }
+
     private void performSearch() {
         String query = SearchField.getText().trim();
         ResultsPanel.removeAll();
@@ -219,12 +223,12 @@ public class SearchWindow extends JFrame {
                              continue;
                         }
                         else if (newsFeed.getCurrentUser().getFriends().contains((user.getUserId()))) {
-                            createFriendPanel((User) suggestion);
+                            ResultsPanel.add(createFriendPanel((User) suggestion));
                         }else {
-                            createUserPanel((User) suggestion);
+                           ResultsPanel.add(createUserPanel((User) suggestion));
                         }
                     } else if (suggestion instanceof Group) {
-                         createGroupPanel((Group)suggestion);
+                         ResultsPanel.add( createGroupPanel((Group)suggestion));
                     }
                 }
             }
@@ -234,13 +238,13 @@ public class SearchWindow extends JFrame {
                     {
                         continue;
                     }
-                    else if (newsFeed.getCurrentUser().getFriends().contains(results)) {
-                        createFriendPanel((User) results);
+                    else if (newsFeed.getCurrentUser().getFriends().contains(((User) results).getUserId())) {
+                       ResultsPanel.add( createFriendPanel((User) results));
                     }else {
-                        createUserPanel((User) results);
+                        ResultsPanel.add( createUserPanel((User) results));
                     }
                 } else if (results instanceof Group) {
-                    createGroupPanel((Group)results);
+                    ResultsPanel.add(createGroupPanel((Group)results));
                 }
             }
         }
@@ -249,19 +253,7 @@ public class SearchWindow extends JFrame {
         ResultsPanel.repaint();
     }
 
-    private void handleDebouncedSearch() {
-        if (timer != null) {
-            timer.cancel(); // Cancel existing timer
-        }
 
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                performSearch();
-            }
-        }, 500); // Delay of 500ms
-    }
 
 
     private void loadFriendStatus() {

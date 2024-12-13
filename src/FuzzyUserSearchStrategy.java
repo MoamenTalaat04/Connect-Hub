@@ -12,8 +12,8 @@ public class FuzzyUserSearchStrategy implements SearchStrategy {
     @Override
     public ArrayList<User> search(String query) {
         LevenshteinDistance levenshtein = new LevenshteinDistance();
-        return allUsers.stream()
+        return new ArrayList<>( allUsers.stream()
                 .filter(user -> levenshtein.apply(user.getUsername().toLowerCase(), query.toLowerCase()) <= 3)
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.toList()));
     }
 }

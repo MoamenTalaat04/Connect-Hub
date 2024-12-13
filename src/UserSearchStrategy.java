@@ -10,8 +10,8 @@ public class UserSearchStrategy implements SearchStrategy {
 
     @Override
     public ArrayList<User> search(String query) {
-        return allUsers.stream()
-                .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()))
-                .collect(Collectors.toCollection(ArrayList::new));
+        return new ArrayList<>(allUsers.stream()
+                .filter(user -> user.getUsername() != null && user.getUsername().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList()));
     }
 }
