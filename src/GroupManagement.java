@@ -8,6 +8,7 @@ public class GroupManagement {
     private  String currentUserId;
     private MainContentCreation contentCreation;
     private ArrayList<Group> allGroups;
+
     private NotificationManager notificationManager ;
     //constructor method
     //takes a GroupDatabase as an argument and creates and object of GroupManagement that holds that object
@@ -17,6 +18,7 @@ public class GroupManagement {
         this.groupDatabase = GroupDatabase.getInstance();
         this.currentUserId=currentUser.getUserId();
         this.contentCreation  = new MainContentCreation();
+
         this.notificationManager = new NotificationManager();
     }
 
@@ -38,6 +40,7 @@ public class GroupManagement {
         if (!g.getGroupMembersIds().contains(userId)) {
             g.getGroupMembersIds().add(userId);
             groupDatabase.saveGroupsToFile(allGroups);
+
     }}
     //checks the user's type and calls the proper deletion method
     //incase that the user we want to remove is owner and there is no other user in the group this method will delete the group
@@ -58,18 +61,21 @@ public class GroupManagement {
         if(!g.getGroupAdminsIds().contains(userId)){
             g.getGroupMembersIds().remove(userId);
             g.getGroupAdminsIds().add(userId);
+
             notificationManager.promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),true);
             groupDatabase.saveGroupsToFile(allGroups);
         }
 
     }
     //demotes admin --to--> member
+
     private void demoteAdminToMember(Group group,String userId){
         fetchAllGroups();
         Group g = getMyGroupVersion(group);
         g.getGroupAdminsIds().remove(userId);
         g.getGroupMembersIds().add(userId);
         groupDatabase.saveGroupsToFile(allGroups);
+
         notificationManager.promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),false);
     }
     //these methods (the next three) are private methods used to delete different type of user
@@ -128,6 +134,7 @@ public class GroupManagement {
         try {
             ArrayList<Posts> posts = contentCreation.readPosts();
             for(Posts p : posts){
+
              if(p.getContentId().equals(post.getContentId())){
                  posts.remove(p);
                  contentCreation.saveContentToFile(posts);
@@ -140,6 +147,25 @@ public class GroupManagement {
         }
     }
 
+    private void fetchAllGroups(){
+        try {
+            allGroups = groupDatabase.readGroupsFromFile();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Group getMyGroupVersion(Group group){
+        for (Group g : allGroups){
+            if(g.getGroupId().equals(group.getGroupId()))return g;
+        }
+        return null;
+    }
+
+    public ArrayList<Posts> getGroupPosts(Group group){
+        fetchAllGroups();
+        Group g = getMyGroupVersion(group);
+        return g.getPosts();
     public ArrayList<Group> getMyGroups(){
         fetchAllGroups();
         ArrayList<Group> myGroups = new ArrayList<>();
@@ -158,6 +184,19 @@ public class GroupManagement {
         }
         return suggestions;
     }
+    public ArrayList<Group> getAllGroups(){
+        fetchAllGroups();
+        return allGroups;
+    }
+    public boolean isAdmin(Group group,User user){
+        if (group.getGroupAdminsIds().contains(user.getUserId())) return true;
+        return false;
+    }
+    public boolean isOwner(Group group,User user){
+        if (group.getGroupOwnerId().equals(user.getUserId())) return true;
+        return false;
+    }
+
 
    private void fetchAllGroups(){
         try {

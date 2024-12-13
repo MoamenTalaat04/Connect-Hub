@@ -25,7 +25,6 @@ public class Group {
         this.groupCoverPath = groupCoverPath;
     }
 
-
     //Getters
 
     public String getGroupName() {
@@ -43,6 +42,7 @@ public class Group {
     public ArrayList<String> getGroupMembersIds() {
         return groupMembersIds;
     }
+
 
     public ArrayList<String> getGroupAdminsIds() {
         return groupAdminsIds;

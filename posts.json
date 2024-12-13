@@ -1,33 +1,4 @@
-[
-  {
-    "contentId": "1",
-    "authorId": "2",
-    "content": "This is a post",
-    "imagePath": "C:\\Users\\mohammed adel\\Pictures\\Screenshots\\Screenshot 2023-07-30 140916.png",
-    "timestamp": "2024-12-03T00:35:42.8386909"
-  },
-  {
-    "contentId": "2",
-    "authorId": "3",
-    "content": "MEOOOOW",
-    "imagePath": "",
-    "timestamp": "2024-12-06T01:42:19.5148624"
-  },
-  {
-    "contentId": "3",
-    "authorId": "4",
-    "content": "HELOOOO PEOPLE",
-    "imagePath": "",
-    "timestamp": "2024-12-06T01:49:14.5278786"
-  },
-  {
-    "contentId": "4",
-    "authorId": "4",
-    "content": "HELLO",
-    "imagePath": "",
-    "timestamp": "2024-12-06T13:02:20.7038683"
-  },
-  {
+[{"contentId": "1", "authorId": "2", "content": "This is a post", "imagePath": "C:\\Users\\mohammed adel\\Pictures\\Screenshots\\Screenshot 2023-07-30 140916.png", "timestamp": "2024-12-03T00:35:42.8386909"}, {"contentId": "2", "authorId": "3", "content": "MEOOOOW", "imagePath": "", "timestamp": "2024-12-06T01:42:19.5148624"}, {"contentId": "3", "authorId": "4", "content": "HELOOOO PEOPLE", "imagePath": "", "timestamp": "2024-12-06T01:49:14.5278786"}, {"contentId": "4", "authorId": "4", "content": "HELLO", "imagePath": "", "timestamp": "2024-12-06T13:02:20.7038683"}, {
     "contentId": "5",
     "authorId": "4",
     "content": "HELLO",
