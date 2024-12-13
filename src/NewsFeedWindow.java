@@ -34,6 +34,7 @@ public class NewsFeedWindow extends JFrame {
     private JLabel StoryPhotoPathLable;
     private JScrollPane FriendSuggestionsScrollPane;
     private JPanel FriendSuggestionsPanel;
+
     private JScrollPane GroupSuggestionsScrollPane;
     private JPanel GroupSuggestionsPanel;
     private JTextField SearchField;
@@ -70,6 +71,18 @@ public class NewsFeedWindow extends JFrame {
                 newsFeed.getCurrentUser().setStatus("Offline");
                 newsFeed.getUserDatabase().saveUsersToFile(newsFeed.getAllUsers());
             }
+        });
+        SearchField.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                new SearchWindow(newsFeed);
+                dispose();
+            }
+        });
+        searchButton.addActionListener(e -> {
+          new SearchWindow(newsFeed);
+          JOptionPane.showMessageDialog(null, "EMPTY QUERY", "ERROR", JOptionPane.ERROR_MESSAGE);
+            dispose();
         });
 
         refreshButton.addActionListener(e -> {
