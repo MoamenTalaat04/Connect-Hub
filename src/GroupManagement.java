@@ -56,8 +56,10 @@ public class GroupManagement {
         if(!g.getGroupAdminsIds().contains(userId)){
             g.getGroupMembersIds().remove(userId);
             g.getGroupAdminsIds().add(userId);
+           // promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),true);
             groupDatabase.saveGroupsToFile(allGroups);
         }
+
     }
     //demotes admin --to--> member
     private void demoteAdminToMember(Group group,String userId){
@@ -66,6 +68,7 @@ public class GroupManagement {
         g.getGroupAdminsIds().remove(userId);
         g.getGroupMembersIds().add(userId);
         groupDatabase.saveGroupsToFile(allGroups);
+      //  promotedOrDemotedFromGroupNotification(userId,g.getGroupId(),g.getGroupIconPath(),false);
     }
     //these methods (the next three) are private methods used to delete different type of user
     //removes normal member
