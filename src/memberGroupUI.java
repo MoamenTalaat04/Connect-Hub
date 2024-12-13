@@ -42,8 +42,14 @@ public class memberGroupUI extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         bioText.setText(group.getGroupBio());
-        Cover.add(new JLabel(new ImageIcon(group.getGroupCoverPath())));
+        if (group.getGroupCoverPath() != null && !group.getGroupCoverPath().isEmpty()){
+            Cover.add(new JLabel(new ImageIcon(group.getGroupCoverPath())));
+        }
+        else {
+            Cover.add(new JLabel("No Image"));
+        }
         loadPosts();
+        loadMembers();
         PostContantField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -224,10 +230,6 @@ public class memberGroupUI extends JFrame {
             }
             MemberPanel.add(buttonsPanel, BorderLayout.EAST); // Add the button to the panel
         }
-
-
-        //JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));    for nadim to add buttons
-
         return MemberPanel;
     }
 

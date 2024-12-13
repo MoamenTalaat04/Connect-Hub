@@ -1,1 +1,26 @@
-[{"groupId":"1","groupName":"MY GROUP","groupBio":"HELLO","groupMembersIds":[],"groupAdminsIds":[],"groupOwnerId":"3","groupIconPath":"","groupCoverPath":"","posts":[]},{"groupId":"2","groupName":"SUII","groupBio":"","groupMembersIds":[],"groupAdminsIds":[],"groupOwnerId":"4","groupIconPath":"","groupCoverPath":"","posts":[]}]
+[
+  {
+    "groupId": "1",
+    "groupName": "MY GROUP",
+    "groupBio": "HELLO",
+    "groupMembersIds": [
+      "4"
+    ],
+    "groupAdminsIds": [],
+    "groupOwnerId": "3",
+    "groupIconPath": "",
+    "groupCoverPath": "",
+    "posts": []
+  },
+  {
+    "groupId": "2",
+    "groupName": "SUII",
+    "groupBio": "",
+    "groupMembersIds": [],
+    "groupAdminsIds": [],
+    "groupOwnerId": "4",
+    "groupIconPath": "",
+    "groupCoverPath": "",
+    "posts": []
+  }
+]

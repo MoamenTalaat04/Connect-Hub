@@ -253,7 +253,7 @@ public class NewsFeedWindow extends JFrame {
         JButton viewGroupButton = new JButton("View Group");
         viewGroupButton.setFont(new Font("Arial", Font.PLAIN, 12));
         viewGroupButton.addActionListener(e -> {
-          //  new GroupWindow(group, newsFeed.getCurrentUser());
+            new memberGroupUI(group, newsFeed.getCurrentUser(), newsFeed);
             dispose();
         });
         buttonsPanel.add(viewGroupButton);
@@ -312,6 +312,7 @@ public class NewsFeedWindow extends JFrame {
             SendRequestButton.addActionListener(e -> {
                 newsFeed.getGroupManagement().addMemberToGroup(group, newsFeed.getCurrentUser().getUserId());
                     JOptionPane.showMessageDialog(this, "Join Request has been Sent to " + newsFeed.getCurrentUser().getUsername());
+                    loadGroupSuggestions(); // Refresh suggestions after sending
             });
             buttonsPanel.add(SendRequestButton);
             groupPanel.add(buttonsPanel, BorderLayout.SOUTH);
