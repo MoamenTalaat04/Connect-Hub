@@ -22,6 +22,7 @@ public class memberGroupUI extends JFrame {
     private JPanel panel1;
     private JButton PostPhotoButton;
     private JLabel PostPhotoPathLable;
+    private JScrollPane MembersScrollPane;
     private JScrollPane PostsScrollPane;
     private Group group;
     private User user;
@@ -124,25 +125,54 @@ public class memberGroupUI extends JFrame {
     public void loadMembers()
     {
         members.removeAll();
+        newsFeed.fetchAllUsers();
         members.setLayout(new BoxLayout(members, BoxLayout.Y_AXIS));
         ArrayList<String> usersId = group.getGroupMembersIds();
-        for(String id: usersId)
-        {
+        ArrayList<User> users = newsFeed.getUsersById(usersId);
+        for (User user  : users) {
+            JPanel memberPanel = createMemberPanel(user);
+            members.add(memberPanel);
+            members.add(Box.createVerticalStrut(10));
+        }
+        MembersScrollPane.setViewportView(members);
 
-        }
-        for (String id : usersId) {
-            JPanel userPanel = new JPanel(new BorderLayout());
-            userPanel.setPreferredSize(new Dimension(1000, 150));
-            userPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-            JLabel UsernameLable = new JLabel(user.getFirstName() + " " + user.getLastName());
-            UsernameLable.setFont(new Font("Arial", Font.PLAIN, 16));
-            UsernameLable.setAlignmentX(Component.LEFT_ALIGNMENT);
-            UsernameLable.setVerticalAlignment(SwingConstants.TOP);
-            userPanel.add(UsernameLable, BorderLayout.CENTER);
-            members.add(userPanel);
-        }
     }
 
+    private JPanel createMemberPanel(User user){
+        JPanel MemberPanel = new JPanel();
+        MemberPanel.setLayout(new BorderLayout(10, 10));
+        MemberPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY, 1),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+        MemberPanel.setPreferredSize(new Dimension(250, 190));
+
+        JLabel profilePictureLabel = createProfilePictureLabel(user.getProfilePhotoPath());
+        MemberPanel.add(profilePictureLabel, BorderLayout.WEST);
+
+        JLabel friendLabel = new JLabel(user.getUsername());
+        friendLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        MemberPanel.add(friendLabel, BorderLayout.CENTER);
+
+        //JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));    for nadim to add buttons
+
+        return MemberPanel;
+    }
+
+    private JLabel createProfilePictureLabel(String profilePhotoPath) {
+        JLabel profilePictureLabel;
+        if (profilePhotoPath != null && !profilePhotoPath.isEmpty()) {
+            ImageIcon profilePicture = new ImageIcon(profilePhotoPath);
+            Image scaledImage = profilePicture.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+            profilePictureLabel = new JLabel(new ImageIcon(scaledImage));
+        } else {
+            profilePictureLabel = new JLabel("No Image");
+            profilePictureLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            profilePictureLabel.setPreferredSize(new Dimension(100, 100));
+            profilePictureLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+        }
+        return profilePictureLabel;
+    }
 
 
 }
