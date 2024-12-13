@@ -25,10 +25,12 @@ public class memberGroupUI extends JFrame {
     private JScrollPane PostsScrollPane;
     private Group group;
     private User user;
+    private NewsFeed newsFeed;
     private GroupManagement groupManagement;
     DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    public memberGroupUI(Group group, User user)
+    public memberGroupUI(Group group, User user , NewsFeed newsFeed)
     {
+        this.newsFeed = newsFeed;
         this.group = group;
         this.user = user;
         groupManagement = new GroupManagement(user);
@@ -118,5 +120,29 @@ public class memberGroupUI extends JFrame {
         PostsPanel.revalidate();
         PostsPanel.repaint();
     }
+
+    public void loadMembers()
+    {
+        members.removeAll();
+        members.setLayout(new BoxLayout(members, BoxLayout.Y_AXIS));
+        ArrayList<String> usersId = group.getGroupMembersIds();
+        for(String id: usersId)
+        {
+
+        }
+        for (String id : usersId) {
+            JPanel userPanel = new JPanel(new BorderLayout());
+            userPanel.setPreferredSize(new Dimension(1000, 150));
+            userPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+            JLabel UsernameLable = new JLabel(user.getFirstName() + " " + user.getLastName());
+            UsernameLable.setFont(new Font("Arial", Font.PLAIN, 16));
+            UsernameLable.setAlignmentX(Component.LEFT_ALIGNMENT);
+            UsernameLable.setVerticalAlignment(SwingConstants.TOP);
+            userPanel.add(UsernameLable, BorderLayout.CENTER);
+            members.add(userPanel);
+        }
+    }
+
+
 
 }
