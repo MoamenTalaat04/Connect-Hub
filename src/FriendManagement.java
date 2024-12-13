@@ -4,11 +4,13 @@ public class FriendManagement {
     private ArrayList<User> allUsers;  // Store User objects, with userId as key
     private User currentUser;  // The current user
     private UserDatabase userDatabase;
+    private NotificationManager notificationManager;
 
     public FriendManagement(User currentUser) {
         this.userDatabase =UserDatabase.getInstance();
         this.allUsers = userDatabase.readUsersFromFile();
         this.currentUser = getUserById(currentUser.getUserId());
+        this.notificationManager = new NotificationManager();
     }
 
     // Send Friend Request
@@ -25,6 +27,7 @@ public class FriendManagement {
         // Add to pending requests
         getUserById(receiver.getUserId()).getPendingRequests().add(getCurrentUser().getUserId());
         userDatabase.saveUsersToFile(allUsers);
+        notificationManager.addFriendRequestNotification(receiver.getUserId(), getCurrentUser().getUserId(), getCurrentUser().getProfilePhotoPath());
         return true;
     }
 
@@ -59,6 +62,7 @@ public class FriendManagement {
         // Remove from pending requests
         getCurrentUser().getPendingRequests().remove(sender.getUserId());
         userDatabase.saveUsersToFile(allUsers);
+        notificationManager.deleteNotification(notificationManager.getNotificationByDate(getCurrentUser().getUserId(),sender.getUserId(),"Sent you a friend request"),getCurrentUser().getUserId());
         return true;
     }
 
@@ -67,6 +71,7 @@ public class FriendManagement {
         sender = getUserById(sender.getUserId());
         if (getCurrentUser().getPendingRequests().remove(sender.getUserId())) {
             userDatabase.saveUsersToFile(allUsers);
+            notificationManager.deleteNotification(notificationManager.getNotificationByDate(getCurrentUser().getUserId(),sender.getUserId(),"Sent you a friend request"),getCurrentUser().getUserId());
             return true;
         }
         return false;
@@ -111,6 +116,7 @@ public class FriendManagement {
         receiver = getUserById(receiver.getUserId());
         if (receiver.getPendingRequests().remove(getCurrentUser().getUserId())) {
             userDatabase.saveUsersToFile(allUsers);
+            notificationManager.deleteNotification(notificationManager.getNotificationByDate(receiver.getUserId(), currentUser.getUserId(), "Sent you a friend request"),getCurrentUser().getUserId());
             return true;
         }
         return false;

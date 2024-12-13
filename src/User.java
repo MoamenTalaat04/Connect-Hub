@@ -12,9 +12,10 @@ public class User {
     private ArrayList<String> friends;
     private ArrayList<String> blocked;
     private ArrayList<String> pendingRequests;
+    private ArrayList<notificationData>notification;
     public User() {
     }
-    public User(String userId, ArrayList<String> blocked, ArrayList<String> pendingRequests, ArrayList<String> friends, String status,String dob,String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath) {
+    public User(String userId, ArrayList<String> blocked, ArrayList<String> pendingRequests, ArrayList<String> friends, String status,String dob,String username, String email, String hashedPassword, String coverPhotoPath, String bio, String profilePhotoPath,ArrayList<notificationData>notifications) {
 
         this.userId = userId;
         this.blocked = blocked != null ? blocked : new ArrayList<>();
@@ -29,6 +30,8 @@ public class User {
         this.bio = bio;
         this.dob=dob;
         this.profilePhotoPath = profilePhotoPath;
+        this.notification=notifications!= null ? notifications : new ArrayList<notificationData>();
+
     }
 
     public String getUserId() {
@@ -125,6 +128,19 @@ public class User {
 
     public void setDob(String dob) {
         this.dob = dob;
+    }
+    public ArrayList<notificationData> getNotification() {
+        return notification;
+    }
+
+    public void setNotification(ArrayList<notificationData> notifications){
+        this.notification=notifications;
+    }
+    public void addNotification(notificationData notification){
+        if (this.notification==null){
+            this.notification=new ArrayList<>();
+        }
+        this.notification.add(notification);
     }
 }
 
