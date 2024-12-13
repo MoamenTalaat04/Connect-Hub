@@ -81,10 +81,10 @@ public class GroupManagement {
         }
     }
     //method used to add a post to the group
-    public void addPost(String content, String imagePath) {
+    public void addPost(String content, String imagePath,Group group) {
         try {
             MainContentCreation contentCreation = new MainContentCreation();
-            contentCreation.createPost(this.currentUserId, content, imagePath);
+            group.getPosts().add(contentCreation.createPost(this.currentUserId, content, imagePath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
