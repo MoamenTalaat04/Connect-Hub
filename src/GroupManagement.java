@@ -159,6 +159,14 @@ public class GroupManagement {
         fetchAllGroups();
         return allGroups;
     }
+    public boolean isAdmin(Group group,User user){
+        if (group.getGroupAdminsIds().contains(user.getUserId())) return true;
+        return false;
+    }
+    public boolean isOwner(Group group,User user){
+        if (group.getGroupOwnerId().equals(user.getUserId())) return true;
+        return false;
+    }
 
 
 }

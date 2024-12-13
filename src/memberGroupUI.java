@@ -153,6 +153,8 @@ public class memberGroupUI extends JFrame {
         JLabel friendLabel = new JLabel(user.getUsername());
         friendLabel.setFont(new Font("Arial", Font.BOLD, 16));
         MemberPanel.add(friendLabel, BorderLayout.CENTER);
+        if (m)
+
 
         //JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));    for nadim to add buttons
 
@@ -172,6 +174,9 @@ public class memberGroupUI extends JFrame {
             profilePictureLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         }
         return profilePictureLabel;
+    }
+    private boolean isAdmin(User user){
+        if (user.getUserId().equals(group.ge))
     }
 
 
