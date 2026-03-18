@@ -27,6 +27,10 @@ public class FriendManagementWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
+        loadFriendsList();
+        wireNavigationActions();
+        wireListActions();
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -34,66 +38,37 @@ public class FriendManagementWindow extends JFrame {
                 friendManagement.getUserDatabase().saveUsersToFile(friendManagement.getAllUsers());
             }
         });
-
-        loadFriendsList();
-        friendsButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadFriendsList();
-            }
-        });
-        blockedButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                blockedFriendsList();
-            }
-        });
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadFriendsList();
-
-            }
-        });
-        logOutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-
-
-                    currentUser.setStatus("Offline");
-                    friendManagement.getUserDatabase().saveUsersToFile(friendManagement.getAllUsers());
-                    new LoginWindow();
-                    dispose();
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-
-        newsFeedButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               new NewsFeedWindow(friendManagement.getCurrentUser());
-                dispose();
-            }
-        });
-
-        profileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new myProfile(friendManagement.getCurrentUser());
-                dispose();
-            }
-        });
-
-        receivedRequestsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadReceivedRequestsList();
-            }
-        });
         Container.addComponentListener(new ComponentAdapter() {
+        });
+    }
+
+    private void wireListActions() {
+        friendsButton1.addActionListener(e -> loadFriendsList());
+        blockedButton.addActionListener(e -> blockedFriendsList());
+        refreshButton.addActionListener(e -> loadFriendsList());
+        receivedRequestsButton.addActionListener(e -> loadReceivedRequestsList());
+    }
+
+    private void wireNavigationActions() {
+        logOutButton.addActionListener(e -> {
+            try {
+                friendManagement.getCurrentUser().setStatus("Offline");
+                friendManagement.getUserDatabase().saveUsersToFile(friendManagement.getAllUsers());
+                new LoginWindow();
+                dispose();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        newsFeedButton.addActionListener(e -> {
+            new NewsFeedWindow(friendManagement.getCurrentUser());
+            dispose();
+        });
+
+        profileButton.addActionListener(e -> {
+            new myProfile(friendManagement.getCurrentUser());
+            dispose();
         });
     }
 

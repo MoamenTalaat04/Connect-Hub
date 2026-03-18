@@ -48,28 +48,21 @@ public class NewsFeedWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-
-        // Load initial data
-        loadFriendStatus();
-        loadStories();
-        loadPosts();
-        loadFriendSuggestions();
+        refreshAllSections();
+        wireNavigationActions();
+        wireContentActions();
+        wireInputActions();
 
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                newsFeed.fetchAllUsers();
-                newsFeed.getCurrentUser().setStatus("Offline");
-                newsFeed.getUserDatabase().saveUsersToFile(newsFeed.getAllUsers());
+                markCurrentUserOffline();
             }
         });
+    }
 
-        refreshButton.addActionListener(e -> {
-            loadFriendStatus();
-            loadStories();
-            loadPosts();
-            loadFriendSuggestions();
-        });
+    private void wireNavigationActions() {
+        refreshButton.addActionListener(e -> refreshAllSections());
 
         profileButton.addActionListener(e -> {
             new myProfile(newsFeed.getCurrentUser());
@@ -83,19 +76,17 @@ public class NewsFeedWindow extends JFrame {
 
         logOutButton.addActionListener(e -> {
             try {
-
-                newsFeed.fetchAllUsers();
-                newsFeed.getCurrentUser().setStatus("Offline");
-                newsFeed.getUserDatabase().saveUsersToFile(newsFeed.getAllUsers());
+                markCurrentUserOffline();
                 new LoginWindow();
                 dispose();
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         });
+    }
 
+    private void wireContentActions() {
         postButton.addActionListener(e -> {
-            // Add a new post
             newsFeed.addPost(PostContantField.getText(), PostPhotoPathLable.getText());
             PostPhotoPathLable.setText("");
             PostContantField.setText("");
@@ -113,27 +104,11 @@ public class NewsFeedWindow extends JFrame {
             StoryContantField.setText("");
         });
 
-        PostPhotoButton.addActionListener(e -> {
-            // Open a file chooser to select a photo
-            JFileChooser fileChooser = new JFileChooser();
-            int returnValue = fileChooser.showOpenDialog(null);
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                // Get the selected file
-                String imagePath = fileChooser.getSelectedFile().getAbsolutePath();
-                // Set the image path in the PostContentField
-                PostPhotoPathLable.setText(imagePath);
-            }
-        });
+        PostPhotoButton.addActionListener(e -> PostPhotoPathLable.setText(chooseImagePath()));
+        StoryPhotoButton.addActionListener(e -> StoryPhotoPathLable.setText(chooseImagePath()));
+    }
 
-        StoryPhotoButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            int returnValue = fileChooser.showOpenDialog(null);
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                String imagePath = fileChooser.getSelectedFile().getAbsolutePath();
-                StoryPhotoPathLable.setText(imagePath);
-            }
-        });
-
+    private void wireInputActions() {
         PostContantField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -149,7 +124,28 @@ public class NewsFeedWindow extends JFrame {
                 StoryContantField.setText("");
             }
         });
+    }
 
+    private void refreshAllSections() {
+        loadFriendStatus();
+        loadStories();
+        loadPosts();
+        loadFriendSuggestions();
+    }
+
+    private void markCurrentUserOffline() {
+        newsFeed.fetchAllUsers();
+        newsFeed.getCurrentUser().setStatus("Offline");
+        newsFeed.getUserDatabase().saveUsersToFile(newsFeed.getAllUsers());
+    }
+
+    private String chooseImagePath() {
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile().getAbsolutePath();
+        }
+        return "";
     }
 
     private void loadFriendStatus() {

@@ -1,10 +1,7 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 public class LoginWindow extends JFrame {
@@ -13,7 +10,8 @@ public class LoginWindow extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton signupButton;
-    private String emailFormat="^[\\w.-]+@[a-zA-Z\\d.-]+\\.[a-zA-Z]{2,6}$";
+    private final UserDatabase userDatabase;
+    private final AccountManagement accountManagement;
 
     public LoginWindow() throws IOException {
         setContentPane(Container);
@@ -23,56 +21,66 @@ public class LoginWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        UserDatabase userDatabase = UserDatabase.getInstance();
-        ArrayList<User> users=userDatabase.readUsersFromFile();
-        Map<String,String> emailPasswordMap=userDatabase.readMapFromUsers();
-        AccountManagement accountManagement = new AccountManagement(userDatabase);
+        userDatabase = UserDatabase.getInstance();
+        accountManagement = new AccountManagement(userDatabase);
 
+        loginButton.addActionListener(e -> handleLogin());
+        signupButton.addActionListener(e -> openSignUp());
+    }
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = emailField.getText();
-                String password = new String(passwordField.getPassword());
-                if (!email.matches(emailFormat)) JOptionPane.showMessageDialog(null, "Please Enter a Valid email address", "Invalid email address", JOptionPane.INFORMATION_MESSAGE);// error message -> invalid email format
-                else if (!emailPasswordMap.containsKey(email))  JOptionPane.showMessageDialog(null, "No account with this email address exists", "Invalid email address", JOptionPane.INFORMATION_MESSAGE);
-                else if (password.isEmpty() || password.equals("")) JOptionPane.showMessageDialog(null, "Please enter password", "Invalid Password", JOptionPane.INFORMATION_MESSAGE);
-                else {
-                    try {
-                       if (HashPassword.hashPassword(password).equals(emailPasswordMap.get(email))) {
-                            accountManagement.login(email,password);
-                            //window to appear after login
-                           User currentUser = null;
-                            for (User user : users){
-                                if (user.getEmail().equals(email)){
-                                    currentUser=user;
-                                    break;
-                                }
-                            }
-                            currentUser.setStatus("Online");
-                            userDatabase.saveUsersToFile(users);
-                            new NewsFeedWindow(currentUser);
-                            dispose();
-                        }
-                        else {JOptionPane.showMessageDialog(null, "please enter correct password", "Invalid Password", JOptionPane.INFORMATION_MESSAGE);}
-                    } catch (NoSuchAlgorithmException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
+    private void handleLogin() {
+        String email = emailField.getText();
+        String password = new String(passwordField.getPassword());
+        Map<String, String> emailPasswordMap = userDatabase.readMapFromUsers();
+
+        if (!com.connecthub.util.ValidationUtils.isValidEmail(email)) {
+            JOptionPane.showMessageDialog(this, "Please Enter a Valid email address", "Invalid email address", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (!emailPasswordMap.containsKey(email)) {
+            JOptionPane.showMessageDialog(this, "No account with this email address exists", "Invalid email address", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter password", "Invalid Password", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        try {
+            if (!HashPassword.hashPassword(password).equals(emailPasswordMap.get(email)) || !accountManagement.login(email, password)) {
+                JOptionPane.showMessageDialog(this, "please enter correct password", "Invalid Password", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
-        });
-        signupButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    new SignUpWindow();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                dispose();
+            ArrayList<User> users = userDatabase.readUsersFromFile();
+            User currentUser = findUserByEmail(users, email);
+            if (currentUser == null) {
+                JOptionPane.showMessageDialog(this, "Unable to locate user profile.", "Login Error", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
-        });
+            currentUser.setStatus("Online");
+            userDatabase.saveUsersToFile(users);
+            new NewsFeedWindow(currentUser);
+            dispose();
+        } catch (NoSuchAlgorithmException | IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private User findUserByEmail(ArrayList<User> users, String email) {
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private void openSignUp() {
+        try {
+            new SignUpWindow();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        dispose();
     }
 }

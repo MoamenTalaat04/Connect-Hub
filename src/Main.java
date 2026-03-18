@@ -2,9 +2,6 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.List;
-
-import static java.awt.SystemColor.window;
 
 public class Main {
     public static void main(String[] args) throws IOException {

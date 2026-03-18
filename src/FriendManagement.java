@@ -1,140 +1,76 @@
 import java.util.*;
 
 public class FriendManagement {
-    private ArrayList<User> allUsers;  // Store User objects, with userId as key
-    private User currentUser;  // The current user
-    private UserDatabase userDatabase;
+    private ArrayList<User> allUsers;
+    private User currentUser;
+    private final UserDatabase userDatabase;
+    private final com.connecthub.service.FriendService friendService;
 
     public FriendManagement(User currentUser) {
-        this.userDatabase =UserDatabase.getInstance();
+        this.userDatabase = UserDatabase.getInstance();
+        this.friendService = ConnectHubContext.factory().friendService();
         this.allUsers = userDatabase.readUsersFromFile();
         this.currentUser = getUserById(currentUser.getUserId());
     }
 
     // Send Friend Request
     public boolean sendFriendRequest(User receiver) {
+        boolean result = friendService.sendFriendRequest(getCurrentUser().getUserId(), receiver.getUserId());
         fetchAllUsers();
-        receiver = getUserById(receiver.getUserId());
-        // Check if already friends or blocked
-        if (getCurrentUser().getFriends().contains(receiver.getUserId())) {
-            return false;
-        }
-        if (receiver.getBlocked().contains(getCurrentUser().getUserId())) {
-            return false;
-        }
-        // Add to pending requests
-        getUserById(receiver.getUserId()).getPendingRequests().add(getCurrentUser().getUserId());
-        userDatabase.saveUsersToFile(allUsers);
-        return true;
+        return result;
     }
 
     public ArrayList<User> SentRequestsFromUser() {
-        fetchAllUsers();
-        ArrayList<User> sentRequests = new ArrayList<>();
-        for(User user : allUsers)
-        {
-            if(user.getPendingRequests().contains(getCurrentUser().getUserId()))
-            {
-                sentRequests.add(user);
-            }
-        }
-        return sentRequests;
+        return LegacyMapper.toLegacyUsers(friendService.sentRequests(getCurrentUser().getUserId()));
     }
     public ArrayList<User> ReceivedRequestsForUser() {
-        return getUsersById(getCurrentUser().getPendingRequests());
+        return LegacyMapper.toLegacyUsers(friendService.receivedRequests(getCurrentUser().getUserId()));
     }
 
     // Accept Friend Request
     public boolean acceptFriendRequest(User sender) {
+        boolean result = friendService.acceptFriendRequest(getCurrentUser().getUserId(), sender.getUserId());
         fetchAllUsers();
-        sender = getUserById(sender.getUserId());
-        // Check if there is a pending request
-        if (!getCurrentUser().getPendingRequests().contains(sender.getUserId())) {
-            System.out.println("No pending friend request from " + sender.getUserId());
-            return false;
-        }
-        // Add to friends list
-        getCurrentUser().getFriends().add(sender.getUserId());
-        sender.getFriends().add(getCurrentUser().getUserId());
-        // Remove from pending requests
-        getCurrentUser().getPendingRequests().remove(sender.getUserId());
-        userDatabase.saveUsersToFile(allUsers);
-        return true;
+        return result;
     }
 
     public boolean rejectFriendRequest(User sender) {
+        boolean result = friendService.rejectFriendRequest(getCurrentUser().getUserId(), sender.getUserId());
         fetchAllUsers();
-        sender = getUserById(sender.getUserId());
-        if (getCurrentUser().getPendingRequests().remove(sender.getUserId())) {
-            userDatabase.saveUsersToFile(allUsers);
-            return true;
-        }
-        return false;
+        return result;
     }
 
     // Remove Friend
     public boolean removeFriend(User friend) {
+        boolean result = friendService.removeFriend(getCurrentUser().getUserId(), friend.getUserId());
         fetchAllUsers();
-        friend = getUserById(friend.getUserId());
-        boolean removedFromCurrentUser = getCurrentUser().getFriends().remove(friend.getUserId());
-        boolean removedFromFriend = friend.getFriends().remove(getCurrentUser().getUserId());
-        userDatabase.saveUsersToFile(allUsers);
-        return removedFromCurrentUser && removedFromFriend;
+        return result;
     }
     // Block User
     public boolean blockUser(User blocked) {
+        boolean result = friendService.blockUser(getCurrentUser().getUserId(), blocked.getUserId());
         fetchAllUsers();
-        blocked = getUserById(blocked.getUserId());
-        if (getCurrentUser().getBlocked().contains(blocked.getUserId())) {
-            System.out.println(blocked.getUserId() + " is already blocked by " + getCurrentUser().getUserId());
-            return false;
-        }
-        // Add to blocked list
-        getCurrentUser().getBlocked().add(blocked.getUserId());
-        // Remove from friends if present
-        removeFriend(blocked);
-        userDatabase.saveUsersToFile(allUsers);
-        return true;
+        return result;
     }
 
     public boolean unblockUser(User unblocked) {
+        boolean result = friendService.unblockUser(getCurrentUser().getUserId(), unblocked.getUserId());
         fetchAllUsers();
-        unblocked = getUserById(unblocked.getUserId());
-        if (getCurrentUser().getBlocked().remove(unblocked.getUserId())) {
-            userDatabase.saveUsersToFile(allUsers);
-            return true;
-        }
-        return false;
+        return result;
     }
     public boolean cancelFriendRequest(User receiver) {
+        boolean result = friendService.cancelFriendRequest(getCurrentUser().getUserId(), receiver.getUserId());
         fetchAllUsers();
-        receiver = getUserById(receiver.getUserId());
-        if (receiver.getPendingRequests().remove(getCurrentUser().getUserId())) {
-            userDatabase.saveUsersToFile(allUsers);
-            return true;
-        }
-        return false;
+        return result;
     }
 
     // Suggest Friends
     public ArrayList<User> suggestFriends() {
-        fetchAllUsers();
-        ArrayList<User> suggestedFriends = new ArrayList<>(allUsers);
-        // Remove current user, his friends, and blocked users
-        suggestedFriends.remove(getCurrentUser()); // Remove the current user himself
-        suggestedFriends.removeAll(getUsersById(getCurrentUser().getFriends())); // Remove friends
-        suggestedFriends.removeAll(getUsersById(getCurrentUser().getBlocked())); // Remove blocked users
-
-        return suggestedFriends;
+        return LegacyMapper.toLegacyUsers(friendService.suggestions(getCurrentUser().getUserId()));
     }
 
     public ArrayList<String> FriendStatus() {
-        fetchAllUsers();
-        ArrayList<String> friendStatus = new ArrayList<>();
-        for (User friend : getUsersById(getCurrentUser().getFriends())) {
-            friendStatus.add(friend.getUsername() + " is " + friend.getStatus());
-        }
-        return friendStatus;
+        return new ArrayList<>(friendService.friendStatus(getCurrentUser().getUserId()));
     }
 
     public ArrayList<User> getAllUsers() {
